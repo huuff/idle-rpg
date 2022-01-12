@@ -15,6 +15,7 @@ const player: Actor = {
   stats: {
     maxHealth: 50,
     strength: 12,
+    agility: 8,
   },
   actions: [ new BasicAttack() ]
 }

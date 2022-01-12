@@ -1,13 +1,17 @@
 import { Actor, isAlive } from "./actor";
 import { chooseRandom } from "@/util/random";
+import { calculateTurns } from "./turns";
 
 export class Battle {
   private interval: ReturnType<typeof setInterval> | undefined;
+  private turns: Actor[];
   
   constructor(
     private readonly goodGuys: Actor[],
     private readonly badGuys: Actor[],
-  ) {}
+  ) {
+    this.turns = calculateTurns([...goodGuys, ...badGuys]);
+  }
 
   private tick(): void {
     const aliveGoodGuys = this.goodGuys.filter(isAlive);
@@ -16,13 +20,18 @@ export class Battle {
     if (this.checkForFinalization(aliveGoodGuys, aliveBadGuys))
       return;
 
-    const attacker = chooseRandom([ ...aliveGoodGuys, ...aliveBadGuys ]);
+    if (this.turns.length === 0)
+      this.turns = calculateTurns([ ...aliveGoodGuys, ...aliveBadGuys]);
+
+    const attacker = this.turns.pop()!;
     const target = this.badGuys.includes(attacker) ? chooseRandom(aliveGoodGuys) : chooseRandom(aliveBadGuys);
 
     chooseRandom(attacker.actions).execute(attacker, target);
 
-    if (target.currentHealth <= 0) 
+    if (target.currentHealth <= 0) {
+      this.turns = this.turns.filter(isAlive);
       console.log(`${attacker.name} killed ${target.name}!`)
+    }
   }
 
   public start(): void {

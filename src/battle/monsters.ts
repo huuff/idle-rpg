@@ -6,7 +6,8 @@ export const makeSlime = (id?: number): Actor => ({
   currentHealth: 20,
   stats: {
     maxHealth: 20,
-    strength: 4
+    strength: 4,
+    agility: 2,
   },
   actions: [ new BasicAttack() ],
 })
