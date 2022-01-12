@@ -7,3 +7,7 @@ export interface Actor {
   stats: Stats;
   actions: Action[];
 }
+
+export function isAlive(actor: Actor): boolean {
+  return actor.currentHealth > 0;
+}

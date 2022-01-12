@@ -3,10 +3,10 @@
 </template>
 
 <script setup lang="ts">
-import { onUnmounted } from "vue";
+import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
 import { BasicAttack } from "@/battle/basic-attack";
-import { chooseRandom } from "@/util/random";
+import { Battle } from "@/battle/battle";
 
 const player: Actor = {
   name: "Player",
@@ -28,11 +28,8 @@ const slime: Actor = {
   actions: [ new BasicAttack() ]
 }
 
-const game = setInterval(() => {
-  const executor = chooseRandom([ player, slime ]);
-  const target = executor === player ? slime : player;
-  chooseRandom(executor.actions).execute(executor, target);
-}, 1000)
+const battle = new Battle([ player ], [ slime ]);
 
-onUnmounted(() => clearInterval(game));
+onMounted(() => battle.start())
+onUnmounted(() => battle.stop());
 </script>
