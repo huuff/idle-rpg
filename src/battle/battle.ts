@@ -17,13 +17,16 @@ export class Battle {
       return;
 
     const attacker = chooseRandom([ ...aliveGoodGuys, ...aliveBadGuys ]);
-    const target = this.badGuys.includes(attacker) ? chooseRandom(this.goodGuys) : chooseRandom(this.badGuys);
+    const target = this.badGuys.includes(attacker) ? chooseRandom(aliveGoodGuys) : chooseRandom(aliveBadGuys);
 
     chooseRandom(attacker.actions).execute(attacker, target);
+
+    if (target.currentHealth <= 0) 
+      console.log(`${attacker.name} killed ${target.name}!`)
   }
 
   public start(): void {
-    this.interval = setInterval(() => this.tick(), 1000);
+    this.interval = setInterval(() => this.tick(), 500);
   }
 
   public stop(): void {

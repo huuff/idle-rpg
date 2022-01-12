@@ -7,28 +7,19 @@ import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
 import { BasicAttack } from "@/battle/basic-attack";
 import { Battle } from "@/battle/battle";
+import { makeSlime } from "@/battle/monsters";
 
 const player: Actor = {
   name: "Player",
-  currentHealth: 100,
+  currentHealth: 50,
   stats: {
-    maxHealth: 100,
+    maxHealth: 50,
     strength: 12,
   },
   actions: [ new BasicAttack() ]
 }
 
-const slime: Actor = {
-  name: "Slime",
-  currentHealth: 20,
-  stats: {
-    maxHealth: 20,
-    strength: 4
-  },
-  actions: [ new BasicAttack() ]
-}
-
-const battle = new Battle([ player ], [ slime ]);
+const battle = new Battle([ player ], [ makeSlime(1), makeSlime(2), makeSlime(3) ]);
 
 onMounted(() => battle.start())
 onUnmounted(() => battle.stop());
