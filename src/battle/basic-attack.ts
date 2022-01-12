@@ -3,10 +3,10 @@ import { Actor } from "./actor";
 import { randomBetween } from "@/util/random";
 
 export class BasicAttack implements Action {
-  execute(executor: Actor, target: Actor): void {
+  execute(executor: Actor, target: Actor): string {
     const damage = this.calculateDamage(executor);
     target.currentHealth -= damage;
-    console.log(`${executor.name} attacks ${target.name} for ${damage}!`)
+    return `${executor.name} attacks ${target.name} for ${damage}!`;
   }
 
   // The damage varies by a 10% of the executor's strength

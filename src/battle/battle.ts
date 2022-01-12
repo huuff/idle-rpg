@@ -1,3 +1,4 @@
+import { Ref } from "vue";
 import { Actor, isAlive } from "./actor";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
@@ -9,6 +10,7 @@ export class Battle {
   constructor(
     private readonly goodGuys: Actor[],
     private readonly badGuys: Actor[],
+    private readonly battleLog: Ref<string[]>,
   ) {
     this.turns = calculateTurns([...goodGuys, ...badGuys]);
   }
@@ -26,11 +28,11 @@ export class Battle {
     const attacker = this.turns.pop()!;
     const target = this.badGuys.includes(attacker) ? chooseRandom(aliveGoodGuys) : chooseRandom(aliveBadGuys);
 
-    chooseRandom(attacker.actions).execute(attacker, target);
+    this.battleLog.value.push(chooseRandom(attacker.actions).execute(attacker, target));
 
     if (target.currentHealth <= 0) {
       this.turns = this.turns.filter(isAlive);
-      console.log(`${attacker.name} killed ${target.name}!`)
+      this.battleLog.value.push(`${attacker.name} killed ${target.name}!`)
     }
   }
 
@@ -45,7 +47,7 @@ export class Battle {
   private checkForFinalization(aliveGoodGuys: Actor[], aliveBadGuys: Actor[]): boolean {
     if (aliveBadGuys.length === 0 || aliveGoodGuys.length === 0) {
       const message = aliveBadGuys.length === 0 ? "You won!" : "You lost";
-      console.log(message);
+      this.battleLog.value.push(message);
       this.stop();
       return true;
     } else {
