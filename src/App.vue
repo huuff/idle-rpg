@@ -6,7 +6,7 @@
 import { onUnmounted } from "vue";
 import { Actor } from "@/battle/actor";
 import { BasicAttack } from "@/battle/basic-attack";
-import { choose } from "@/util/choose";
+import { chooseRandom } from "@/util/random";
 
 const player: Actor = {
   name: "Player",
@@ -23,15 +23,15 @@ const slime: Actor = {
   currentHealth: 20,
   stats: {
     maxHealth: 20,
-    strength: 8
+    strength: 4
   },
   actions: [ new BasicAttack() ]
 }
 
 const game = setInterval(() => {
-  const executor = choose([ player, slime ]);
+  const executor = chooseRandom([ player, slime ]);
   const target = executor === player ? slime : player;
-  choose(executor.actions).execute(executor, target);
+  chooseRandom(executor.actions).execute(executor, target);
 }, 1000)
 
 onUnmounted(() => clearInterval(game));
