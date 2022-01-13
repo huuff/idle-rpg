@@ -1,12 +1,11 @@
+import { Scene } from "@/scene";
 import { BattleLog } from "./battle-log";
 import { Actor, } from "./actor";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
 import { executeAction } from "./action";
 
-export type BattleResult = "WON" | "LOST";
-
-export class Battle {
+export class Battle implements Scene {
   private turns: Actor[];
   
   constructor(
@@ -17,21 +16,9 @@ export class Battle {
     this.turns = calculateTurns([...goodGuys, ...badGuys]);
   }
 
-  public tick(): BattleResult | "CONTINUE" {
+  public tick() {
     const aliveGoodGuys = this.goodGuys.filter(a => a.isAlive());
     const aliveBadGuys = this.badGuys.filter(a => a.isAlive());
-
-    if (this.isOver()) {
-      const winner = this.winner();
-      if (winner === "PLAYER") {
-        this.battleLog.push("You won!");
-        this.shareExp();
-        return "WON";
-      } else if (winner === "ENEMY") {
-        this.battleLog.push("You lost!");
-        return "LOST";
-      }
-    }
 
     if (this.turns.length === 0)
       this.turns = calculateTurns([ ...aliveGoodGuys, ...aliveBadGuys]);
@@ -46,12 +33,22 @@ export class Battle {
       this.turns = this.turns.filter(a => a.isAlive());
       this.battleLog.push(`${attacker.name} killed ${target.name}!`)
     }
-
-    return "CONTINUE";
   }
 
-  private isOver(): boolean {
-    return !!this.winner();
+  public isOver(): boolean {
+    const winner = this.winner();
+    if (!winner)
+      return false
+    else {
+      const winner = this.winner();
+      if (winner === "PLAYER") {
+        this.battleLog.push("You won!");
+        this.shareExp();
+      } else if (winner === "ENEMY") {
+        this.battleLog.push("You lost!");
+      }
+      return true;
+    }
   }
 
   private winner(): "PLAYER" | "ENEMY" | undefined {

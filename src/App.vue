@@ -38,10 +38,10 @@ import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
 import { BattleLogImpl } from "@/battle/battle-log";
 import { BasicAttack } from "@/battle/basic-attack";
-import { Battle, BattleResult } from "@/battle/battle";
+import { Battle, } from "@/battle/battle";
 import { makeSlime } from "@/battle/monsters";
-import { BattleTicker } from "@/battle-ticker";
-import { RestTicker } from "@/rest-ticker";
+import { Ticker } from "@/ticker";
+import { Rest } from "@/rest-scene";
 import { Stats } from "@/battle/stats";
 import { randomInt } from "@/util/random";
 import range from "@/util/range";
@@ -67,9 +67,8 @@ const player: Actor = reactive(new Actor(
   playerProgression,
 ));
 const playerRequiredExp = computed(() => player.requiredExp());
-const restTicker = new RestTicker(2);
+const ticker = new Ticker(2);
 
-const battleTicker = new BattleTicker(2);
 const battleLog = reactive(new BattleLogImpl());
 
 let enemies: Ref<Actor[]> = ref([]);
@@ -79,22 +78,18 @@ function newEncounter() {
   return new Battle([ player ], enemies.value, battleLog);
 }
 
-function startBattle() {
+function nextScene() {
   battleLog.clear();
-  battleTicker.startBattle(newEncounter(), (result: BattleResult) => {
-    if (result === "WON") {
-      if (player.healthRatio < 0.15) {
-        restTicker.startResting(player, () => startBattle())
-      } else {
-        startBattle();
-      }
-    }
+  ticker.startScene(newEncounter(), () => {
+    if (player.currentHealth <= 0)
+      return; // Game over
+    else if (player.healthRatio <= 0.15)
+      ticker.startScene(new Rest(player), nextScene);
+    else
+      nextScene();
   });
 }
 
-onMounted(() => startBattle());
-onUnmounted(() => {
-  battleTicker.stop();
-  restTicker.stop();
-});
+onMounted(() => nextScene());
+onUnmounted(() => ticker.stop());
 </script>
