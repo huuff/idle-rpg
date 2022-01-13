@@ -8,8 +8,11 @@
           <actor-health :actor="player" />
         </div>
         <div class="tile is-child box">
-          <p class="title has-text-dark">Two</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p>
+          <p class="title has-text-dark">Enemies</p>
+          <template v-for="enemy in enemies" :key="enemy.name">
+            <span>{{enemy.name}}</span>
+            <actor-health :actor="enemy" />
+          </template>
         </div>
       </div>
       <div class="tile is-parent">
@@ -45,8 +48,14 @@ const player: Actor = reactive({
   actions: [ new BasicAttack() ]
 });
 
+const enemies = [
+  reactive(makeSlime(1)),
+  reactive(makeSlime(2)),
+  reactive(makeSlime(3)),
+];
+
 const battleLog = ref<string[]>([]);
-const battle = new Battle([ player ], [ makeSlime(1), makeSlime(2), makeSlime(3) ], battleLog);
+const battle = new Battle([ player ], enemies, battleLog);
 
 onMounted(() => battle.start())
 onUnmounted(() => battle.stop());
