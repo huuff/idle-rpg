@@ -6,17 +6,6 @@ export class Actor {
   public _currentExp: number;
   public level: number;
 
-  public get currentExp() {
-    return this._currentExp;
-  }
-  public set currentExp(newExp: number) {
-    this._currentExp = newExp > 0 ? newExp : 0;
-  }
-
-  public get healthRatio() {
-    return this.currentHealth / this.stats.maxHealth;
-  }
-
   constructor(
     public readonly name: string,
     public stats: Stats,
@@ -27,8 +16,18 @@ export class Actor {
     this._currentExp = 0;
     this.level = 1;
   }
-  // TODO: Should this be a getter?
-  public requiredExp(): number {
+
+  public get currentExp() {
+    return this._currentExp;
+  }
+  public set currentExp(newExp: number) {
+    this._currentExp = newExp > 0 ? newExp : 0;
+  }
+
+  public get healthRatio() {
+    return this.currentHealth / this.stats.maxHealth;
+  }
+  public get requiredExp() {
     return this.level * 100;
   }
 
@@ -37,8 +36,8 @@ export class Actor {
   }
 
   public adjustLevel(): void {
-    if (this.currentExp >= this.requiredExp()) {
-      const excedingExp = this.currentExp - this.requiredExp();
+    if (this.currentExp >= this.requiredExp) {
+      const excedingExp = this.currentExp - this.requiredExp;
       this.level++;
       this.stats = addStats(this.stats, this.levelProgression);
       this.currentExp = excedingExp;

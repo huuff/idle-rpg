@@ -1,5 +1,5 @@
 <template>
-<div class="hero is-fullheight is-primary is-bold">
+<div class="hero is-fullheight is-info is-bold">
   <div class="hero-body">
     <div class="tile is-ancestor">
       <div class="tile is-4 is-vertical is-parent">
@@ -9,7 +9,7 @@
           <span>Health</span>
           <health-bar :actor="player" />
           <span>Experience</span>
-          <animated-bar :current="player.currentExp" :max="playerRequiredExp" class="is-info"/>
+          <animated-bar :current="player.currentExp" :max="player.requiredExp" class="is-info"/>
         </div>
         <div class="tile is-child box">
           <p class="title has-text-dark">Enemies</p>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, ref, Ref } from "vue";
+import { reactive, ref, Ref } from "vue";
 import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
 import { BattleLogImpl } from "@/battle/battle-log";
@@ -66,7 +66,6 @@ const player: Actor = reactive(new Actor(
   [new BasicAttack()],
   playerProgression,
 ));
-const playerRequiredExp = computed(() => player.requiredExp());
 const ticker = new Ticker(2);
 
 const battleLog = reactive(new BattleLogImpl());
