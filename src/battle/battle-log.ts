@@ -1,12 +1,12 @@
 export interface BattleLog {
-  messages: () => string[];
+  messages: () => Readonly<string[]>;
   push(message: string): void;
 }
 
 export class BattleLogImpl {
   private _messages: string[] = [];
 
-  get messages() {
+  public messages(): Readonly<string[]> {
     return this._messages;
   }
 
