@@ -1,15 +1,17 @@
-import { Battle } from "@/battle/battle";
+import { Battle, BattleResult } from "@/battle/battle";
+
+export type BattleEndCallback = (battle: Battle, result: BattleResult) => void;
 
 export class Ticker {
   private currentBattle: Battle | undefined;
-  private onEnd: ((battle: Battle) => void) | undefined; // TODO: This in a type declaration
+  private onEnd: BattleEndCallback | undefined;
   private timer: number | undefined;
 
   constructor(
     private readonly frameRate: number,
   ) {}
 
-  public startBattle(battle: Battle, onEnd: (battle: Battle) => void) {
+  public startBattle(battle: Battle, onEnd: BattleEndCallback) {
     this.currentBattle = battle;
     this.onEnd = onEnd;
     this.timer = setTimeout(this.battleTick.bind(this), this.tickDuration());
@@ -25,7 +27,7 @@ export class Ticker {
       if (tickResult === "CONTINUE")
         this.timer = setTimeout(this.battleTick.bind(this), this.tickDuration());
       else 
-        this.onEnd && this.onEnd(this.currentBattle);
+        this.onEnd && this.onEnd(this.currentBattle, tickResult);
     }
   }
 

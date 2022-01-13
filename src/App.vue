@@ -37,7 +37,7 @@ import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
 import { BattleLogImpl } from "@/battle/battle-log";
 import { BasicAttack } from "@/battle/basic-attack";
-import { Battle } from "@/battle/battle";
+import { Battle, BattleResult } from "@/battle/battle";
 import { makeSlime } from "@/battle/monsters";
 import { Ticker } from "@/ticker";
 import { Stats } from "@/battle/stats";
@@ -61,7 +61,15 @@ const ticker = new Ticker(2);
 const battleLog = reactive(new BattleLogImpl());
 const battle = new Battle([ player ], enemies, battleLog);
 
-// TODO: Use onEnd callback to increase player's exp
-onMounted(() => ticker.startBattle(battle, (battle: Battle) => console.log("finished battle")));
+onMounted(() => ticker.startBattle(battle, (battle: Battle, result: BattleResult) => {
+
+  if (result === "WON") {
+    const totalExp = enemies
+      .map(e => e.stats.challenge)
+      .reduce((a, b) => (a ?? 0) + (b ?? 0));
+
+    player.currentExp += totalExp ?? 0;
+  }
+}));
 onUnmounted(() => ticker.stop());
 </script>
