@@ -19,7 +19,7 @@
         <div class="tile is-child box">
           <p class="title has-text-dark">Battle Log</p>
           <ul>
-            <li v-for="(msg, i) in battleLog" :key="`${msg}-${i}`">{{ msg }}</li>
+            <li v-for="(msg, i) in battleLog.messages" :key="`${msg}-${i}`">{{ msg }}</li>
           </ul>
         </div>
       </div>
@@ -29,9 +29,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { reactive } from "vue";
 import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
+import { BattleLog } from "@/battle/battle-log";
 import { BasicAttack } from "@/battle/basic-attack";
 import { Battle } from "@/battle/battle";
 import { makeSlime } from "@/battle/monsters";
@@ -54,7 +55,7 @@ const enemies = [
   reactive(makeSlime(3)),
 ];
 
-const battleLog = ref<string[]>([]);
+const battleLog = reactive(new BattleLog());
 const battle = new Battle([ player ], enemies, battleLog);
 
 onMounted(() => battle.start())
