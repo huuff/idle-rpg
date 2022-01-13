@@ -1,6 +1,6 @@
 import { Battle, BattleResult } from "@/battle/battle";
 
-export type BattleEndCallback = (battle: Battle, result: BattleResult) => void;
+export type BattleEndCallback = (result: BattleResult) => void;
 
 export class Ticker {
   private currentBattle: Battle | undefined;
@@ -27,7 +27,7 @@ export class Ticker {
       if (tickResult === "CONTINUE")
         this.timer = setTimeout(this.battleTick.bind(this), this.tickDuration());
       else 
-        this.onEnd && this.onEnd(this.currentBattle, tickResult);
+        this.onEnd && this.onEnd(tickResult);
     }
   }
 

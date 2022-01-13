@@ -37,7 +37,7 @@ import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
 import { BattleLogImpl } from "@/battle/battle-log";
 import { BasicAttack } from "@/battle/basic-attack";
-import { Battle, BattleResult } from "@/battle/battle";
+import { Battle, } from "@/battle/battle";
 import { makeSlime } from "@/battle/monsters";
 import { Ticker } from "@/ticker";
 import { Stats } from "@/battle/stats";
@@ -61,15 +61,8 @@ const ticker = new Ticker(2);
 const battleLog = reactive(new BattleLogImpl());
 const battle = new Battle([ player ], enemies, battleLog);
 
-onMounted(() => ticker.startBattle(battle, (battle: Battle, result: BattleResult) => {
-
-  if (result === "WON") {
-    const totalExp = enemies
-      .map(e => e.stats.challenge)
-      .reduce((a, b) => (a ?? 0) + (b ?? 0));
-
-    player.currentExp += totalExp ?? 0;
-  }
+onMounted(() => ticker.startBattle(battle, (result) => {
+  console.log(result);
 }));
 onUnmounted(() => ticker.stop());
 </script>

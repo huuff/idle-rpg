@@ -25,6 +25,7 @@ export class Battle {
       const winner = this.winner();
       if (winner === "PLAYER") {
         this.battleLog.push("You won!");
+        this.shareExp();
         return "WON";
       } else if (winner === "ENEMY") {
         this.battleLog.push("You lost!");
@@ -58,5 +59,12 @@ export class Battle {
       return "ENEMY";
     else if (this.badGuys.filter(isAlive).length === 0)
       return "PLAYER";
+  }
+
+  private shareExp(): void {
+    this.goodGuys[0].currentExp += this.badGuys
+      .map(actor => actor.stats.challenge ?? 0)
+      .reduce((acc, challenge) => acc + challenge)
+      ;
   }
 }
