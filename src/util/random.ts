@@ -7,5 +7,5 @@ export function randomBetween(min: number, max: number): number {
 }
 
 export function randomInt(max: number): number {
-  return Math.floor(Math.random() * max);
+  return Math.ceil(Math.random() * max);
 }

@@ -61,10 +61,12 @@ export class Battle {
       return "PLAYER";
   }
 
+  // FUTURE: Shoul work for several good guys
   private shareExp(): void {
     this.goodGuys[0].currentExp += this.badGuys
       .map(actor => actor.stats.challenge ?? 0)
       .reduce((acc, challenge) => acc + challenge)
       ;
+    this.goodGuys.map(a => a.adjustLevel());
   }
 }

@@ -5,6 +5,7 @@
       <div class="tile is-4 is-vertical is-parent">
         <div class="tile is-child box">
           <p class="title has-text-dark">Player</p>
+          <p class="subtitle has-text-dark">Level {{ player.level }}</p>
           <span>Health</span>
           <animated-bar :current="player.currentHealth" :max="player.stats.maxHealth" />
           <span>Experience</span>
@@ -50,7 +51,18 @@ const basePlayerStats: Stats = {
     strength: 12,
     agility: 8,
 };
-const player: Actor = reactive(new Actor("Player", basePlayerStats, [ new BasicAttack() ]));
+
+const playerProgression: Stats = {
+    maxHealth: 5,
+    strength: 2,
+    agility: 1
+};
+const player: Actor = reactive(new Actor(
+  "Player", 
+  basePlayerStats, 
+  [new BasicAttack()],
+  playerProgression,
+));
 const playerRequiredExp = computed(() => player.requiredExp());
 
 const ticker = new Ticker(2);
@@ -59,7 +71,7 @@ const battleLog = reactive(new BattleLogImpl());
 let enemies: Ref<Actor[]> = ref([]);
 
 function newEncounter() {
-  enemies.value = range(randomInt(4) + 1).map(i => makeSlime(i + 1));
+  enemies.value = range(randomInt(3)).map(i => makeSlime(i+1));
   return new Battle([ player ], enemies.value, battleLog);
 }
 
