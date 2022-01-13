@@ -3,24 +3,36 @@ import { Actor, isAlive } from "./actor";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
 
+export type BattleResult = "WON" | "LOST";
+
+
+type BattleLogInterface = { [K in keyof BattleLog ]: BattleLog[K]};
+
 export class Battle {
-  private interval: ReturnType<typeof setInterval> | undefined;
   private turns: Actor[];
   
   constructor(
     private readonly goodGuys: Actor[],
     private readonly badGuys: Actor[],
-    private readonly battleLog: BattleLog,
+    private readonly battleLog: BattleLogInterface,
   ) {
     this.turns = calculateTurns([...goodGuys, ...badGuys]);
   }
 
-  private tick(): void {
+  public tick(): BattleResult | "CONTINUE" {
     const aliveGoodGuys = this.goodGuys.filter(isAlive);
     const aliveBadGuys = this.badGuys.filter(isAlive);
 
-    if (this.checkForFinalization(aliveGoodGuys, aliveBadGuys))
-      return;
+    if (this.isOver()) {
+      const winner = this.winner();
+      if (winner === "PLAYER") {
+        this.battleLog.push("You won!");
+        return "WON";
+      } else if (winner === "ENEMY") {
+        this.battleLog.push("You lost!");
+        return "LOST";
+      }
+    }
 
     if (this.turns.length === 0)
       this.turns = calculateTurns([ ...aliveGoodGuys, ...aliveBadGuys]);
@@ -34,24 +46,18 @@ export class Battle {
       this.turns = this.turns.filter(isAlive);
       this.battleLog.push(`${attacker.name} killed ${target.name}!`)
     }
+
+    return "CONTINUE";
   }
 
-  public start(): void {
-    this.interval = setInterval(() => this.tick(), 500);
+  private isOver(): boolean {
+    return !!this.winner();
   }
 
-  public stop(): void {
-    clearInterval(this.interval);
-  }
-
-  private checkForFinalization(aliveGoodGuys: Actor[], aliveBadGuys: Actor[]): boolean {
-    if (aliveBadGuys.length === 0 || aliveGoodGuys.length === 0) {
-      const message = aliveBadGuys.length === 0 ? "You won!" : "You lost";
-      this.battleLog.push(message);
-      this.stop();
-      return true;
-    } else {
-      return false;
-    }
+  private winner(): "PLAYER" | "ENEMY" | undefined {
+    if (this.goodGuys.filter(isAlive).length === 0)
+      return "ENEMY";
+    else if (this.badGuys.filter(isAlive).length === 0)
+      return "PLAYER";
   }
 }

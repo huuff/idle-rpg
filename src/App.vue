@@ -36,6 +36,7 @@ import { BattleLog } from "@/battle/battle-log";
 import { BasicAttack } from "@/battle/basic-attack";
 import { Battle } from "@/battle/battle";
 import { makeSlime } from "@/battle/monsters";
+import { Ticker } from "@/ticker";
 import ActorHealth from "./components/ActorHealth.vue";
 
 const player: Actor = reactive({
@@ -55,9 +56,10 @@ const enemies = [
   reactive(makeSlime(3)),
 ];
 
+const ticker = new Ticker(2);
 const battleLog = reactive(new BattleLog());
 const battle = new Battle([ player ], enemies, battleLog);
 
-onMounted(() => battle.start())
-onUnmounted(() => battle.stop());
+onMounted(() => ticker.startBattle(battle));
+onUnmounted(() => ticker.stop());
 </script>
