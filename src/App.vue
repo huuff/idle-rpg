@@ -7,7 +7,7 @@
           <p class="title has-text-dark">Player</p>
           <p class="subtitle has-text-dark">Level {{ player.level }}</p>
           <span>Health</span>
-          <animated-bar :current="player.currentHealth" :max="player.stats.maxHealth" />
+          <health-bar :actor="player" />
           <span>Experience</span>
           <animated-bar :current="player.currentExp" :max="playerRequiredExp" class="is-info"/>
         </div>
@@ -15,7 +15,7 @@
           <p class="title has-text-dark">Enemies</p>
           <template v-for="enemy in enemies" :key="enemy.name">
             <span>{{enemy.name}}</span>
-            <animated-bar :current="enemy.currentHealth" :max="enemy.stats.maxHealth" />
+            <health-bar :actor="enemy" />
           </template>
         </div>
       </div>
@@ -45,6 +45,7 @@ import { Stats } from "@/battle/stats";
 import { randomInt } from "@/util/random";
 import range from "@/util/range";
 import AnimatedBar from "./components/AnimatedBar.vue";
+import HealthBar from "./components/HealthBar.vue";
 
 const basePlayerStats: Stats = {
     maxHealth: 50,
