@@ -2,11 +2,9 @@ import { BattleLog } from "./battle-log";
 import { Actor, isAlive } from "./actor";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
+import { executeAction } from "./action";
 
 export type BattleResult = "WON" | "LOST";
-
-
-type BattleLogInterface = { [K in keyof BattleLog ]: BattleLog[K]};
 
 export class Battle {
   private turns: Actor[];
@@ -14,7 +12,7 @@ export class Battle {
   constructor(
     private readonly goodGuys: Actor[],
     private readonly badGuys: Actor[],
-    private readonly battleLog: BattleLogInterface,
+    private readonly battleLog: BattleLog,
   ) {
     this.turns = calculateTurns([...goodGuys, ...badGuys]);
   }
@@ -40,7 +38,8 @@ export class Battle {
     const attacker = this.turns.pop()!;
     const target = this.badGuys.includes(attacker) ? chooseRandom(aliveGoodGuys) : chooseRandom(aliveBadGuys);
 
-    this.battleLog.push(chooseRandom(attacker.actions).execute(attacker, target));
+    const action = chooseRandom(attacker.possibleActions).create(attacker, target);
+    executeAction(action, this.battleLog);
 
     if (target.currentHealth <= 0) {
       this.turns = this.turns.filter(isAlive);

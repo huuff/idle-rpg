@@ -9,5 +9,5 @@ export const makeSlime = (id?: number): Actor => ({
     strength: 4,
     agility: 2,
   },
-  actions: [ new BasicAttack() ],
+  possibleActions: [ new BasicAttack() ],
 })

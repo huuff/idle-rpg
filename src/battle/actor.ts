@@ -1,11 +1,11 @@
 import { Stats } from "./stats";
-import { Action } from "./action";
+import { ActionFactory } from "./action";
 
 export interface Actor {
   name: string;
   currentHealth: number;
   stats: Stats;
-  actions: Action[];
+  possibleActions: ActionFactory[];
 }
 
 export function isAlive(actor: Actor): boolean {

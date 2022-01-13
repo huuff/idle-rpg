@@ -32,7 +32,7 @@
 import { reactive } from "vue";
 import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
-import { BattleLog } from "@/battle/battle-log";
+import { BattleLogImpl } from "@/battle/battle-log";
 import { BasicAttack } from "@/battle/basic-attack";
 import { Battle } from "@/battle/battle";
 import { makeSlime } from "@/battle/monsters";
@@ -47,7 +47,7 @@ const player: Actor = reactive({
     strength: 12,
     agility: 8,
   },
-  actions: [ new BasicAttack() ]
+  possibleActions: [ new BasicAttack() ]
 });
 
 const enemies = [
@@ -57,7 +57,7 @@ const enemies = [
 ];
 
 const ticker = new Ticker(2);
-const battleLog = reactive(new BattleLog());
+const battleLog = reactive(new BattleLogImpl());
 const battle = new Battle([ player ], enemies, battleLog);
 
 onMounted(() => ticker.startBattle(battle));

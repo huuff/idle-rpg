@@ -1,12 +1,14 @@
-import { Action } from "./action";
+import { Action, ActionFactory } from "./action";
 import { Actor } from "./actor";
 import { randomBetween } from "@/util/random";
 
-export class BasicAttack implements Action {
-  execute(executor: Actor, target: Actor): string {
-    const damage = this.calculateDamage(executor);
-    target.currentHealth -= damage;
-    return `${executor.name} attacks ${target.name} for ${damage}!`;
+export class BasicAttack implements ActionFactory {
+  create(executor: Actor, target: Actor): Action {
+    return { 
+      executor, target,
+      damage: this.calculateDamage(executor),
+      description: "attacks"
+    }
   }
 
   // The damage varies by a 10% of the executor's strength
