@@ -1,5 +1,5 @@
 <template>
-  <progress class="progress-is-primary" :value="actor.currentHealth" :max="actor.stats.maxHealth">
+  <progress class="progress is-primary" :value="actor.currentHealth" :max="actor.stats.maxHealth">
     {{ actor.currentHealth }}
   </progress>
 </template>
