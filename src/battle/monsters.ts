@@ -1,13 +1,15 @@
 import { Actor } from "@/battle/actor";
 import { BasicAttack } from "@/battle/basic-attack";
+import { Stats } from "@/battle/stats";
 
-export const makeSlime = (id?: number): Actor => ({
-  name: id !== undefined ? `Slime ${id.toString()}` : "Slime",
-  currentHealth: 20,
-  stats: {
+const slimeBaseStats: Stats = {
     maxHealth: 20,
     strength: 4,
     agility: 2,
-  },
-  possibleActions: [ new BasicAttack() ],
-})
+};
+
+export const makeSlime = (id?: number): Actor => new Actor(
+  id !== undefined ? `Slime ${id.toString()}` : "Slime",
+  slimeBaseStats,
+  [ new BasicAttack() ],
+)

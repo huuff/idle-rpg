@@ -18,7 +18,6 @@ export class Ticker {
   }
 
   private battleTick(): void {
-    console.log("TICKING");
     if (this.currentBattle) {
       const tickResult = this.currentBattle.tick();
       if (tickResult === "CONTINUE")

@@ -19,7 +19,7 @@
         <div class="tile is-child box">
           <p class="title has-text-dark">Battle Log</p>
           <ul>
-            <li v-for="(msg, i) in battleLog.messages" :key="`${msg}-${i}`">{{ msg }}</li>
+            <li v-for="(msg, i) in battleLog.messages()" :key="`${msg}-${i}`">{{ msg }}</li>
           </ul>
         </div>
       </div>
@@ -37,18 +37,15 @@ import { BasicAttack } from "@/battle/basic-attack";
 import { Battle } from "@/battle/battle";
 import { makeSlime } from "@/battle/monsters";
 import { Ticker } from "@/ticker";
+import { Stats } from "@/battle/stats";
 import ActorHealth from "./components/ActorHealth.vue";
 
-const player: Actor = reactive({
-  name: "Player",
-  currentHealth: 50,
-  stats: {
+const basePlayerStats: Stats = {
     maxHealth: 50,
     strength: 12,
     agility: 8,
-  },
-  possibleActions: [ new BasicAttack() ]
-});
+};
+const player: Actor = reactive(new Actor("Player", basePlayerStats, [ new BasicAttack() ]));
 
 const enemies = [
   reactive(makeSlime(1)),
