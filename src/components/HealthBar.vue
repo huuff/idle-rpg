@@ -15,14 +15,10 @@ const props = defineProps<{
   actor: Actor;
 }>();
 
-const healthRatio = computed(() => {
-  return props.actor.currentHealth / props.actor.stats.maxHealth;
-});
-
 const color = computed(() => {
-  if (healthRatio.value < 0.1)
+  if (props.actor.healthRatio < 0.1)
     return "danger";
-  else if (healthRatio.value < 0.25)
+  else if (props.actor.healthRatio < 0.25)
     return "warning";
   else
     return "primary";

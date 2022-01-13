@@ -13,6 +13,10 @@ export class Actor {
     this._currentExp = newExp > 0 ? newExp : 0;
   }
 
+  public get healthRatio() {
+    return this.currentHealth / this.stats.maxHealth;
+  }
+
   constructor(
     public readonly name: string,
     public stats: Stats,

@@ -2,11 +2,13 @@ import { Battle, BattleResult } from "@/battle/battle";
 
 export type BattleEndCallback = (result: BattleResult) => void;
 
-export class Ticker {
+export class BattleTicker {
   private currentBattle: Battle | undefined;
   private onEnd: BattleEndCallback | undefined;
   private timer: number | undefined;
 
+  // TODO: Receive object to simulate named parameters because
+  // new BattleTicker(2) is obscure
   constructor(
     private readonly frameRate: number,
   ) {}

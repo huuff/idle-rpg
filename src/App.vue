@@ -40,7 +40,8 @@ import { BattleLogImpl } from "@/battle/battle-log";
 import { BasicAttack } from "@/battle/basic-attack";
 import { Battle, BattleResult } from "@/battle/battle";
 import { makeSlime } from "@/battle/monsters";
-import { Ticker } from "@/ticker";
+import { BattleTicker } from "@/battle-ticker";
+import { RestTicker } from "@/rest-ticker";
 import { Stats } from "@/battle/stats";
 import { randomInt } from "@/util/random";
 import range from "@/util/range";
@@ -58,6 +59,7 @@ const playerProgression: Stats = {
     strength: 2,
     agility: 1
 };
+
 const player: Actor = reactive(new Actor(
   "Player", 
   basePlayerStats, 
@@ -65,8 +67,9 @@ const player: Actor = reactive(new Actor(
   playerProgression,
 ));
 const playerRequiredExp = computed(() => player.requiredExp());
+const restTicker = new RestTicker(2);
 
-const ticker = new Ticker(2);
+const battleTicker = new BattleTicker(2);
 const battleLog = reactive(new BattleLogImpl());
 
 let enemies: Ref<Actor[]> = ref([]);
@@ -78,12 +81,20 @@ function newEncounter() {
 
 function startBattle() {
   battleLog.clear();
-  ticker.startBattle(newEncounter(), (result: BattleResult) => {
-    if (result === "WON")
-      startBattle();
+  battleTicker.startBattle(newEncounter(), (result: BattleResult) => {
+    if (result === "WON") {
+      if (player.healthRatio < 0.15) {
+        restTicker.startResting(player, () => startBattle())
+      } else {
+        startBattle();
+      }
+    }
   });
 }
 
 onMounted(() => startBattle());
-onUnmounted(() => ticker.stop());
+onUnmounted(() => {
+  battleTicker.stop();
+  restTicker.stop();
+});
 </script>
