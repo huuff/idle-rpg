@@ -38,7 +38,7 @@ import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
 import { BattleLogImpl } from "@/battle/battle-log";
 import { BasicAttack } from "@/battle/basic-attack";
-import { Battle, } from "@/battle/battle";
+import { Battle, BattleResult } from "@/battle/battle";
 import { makeSlime } from "@/battle/monsters";
 import { Ticker } from "@/ticker";
 import { Stats } from "@/battle/stats";
@@ -78,7 +78,10 @@ function newEncounter() {
 
 function startBattle() {
   battleLog.clear();
-  ticker.startBattle(newEncounter(), (_) => startBattle());
+  ticker.startBattle(newEncounter(), (result: BattleResult) => {
+    if (result === "WON")
+      startBattle();
+  });
 }
 
 onMounted(() => startBattle());
