@@ -1,6 +1,7 @@
 export interface BattleLog {
   messages: () => Readonly<string[]>;
   push(message: string): void;
+  clear(): void;
 }
 
 export class BattleLogImpl {
@@ -12,5 +13,9 @@ export class BattleLogImpl {
 
   public push(message: string): void {
     this._messages.push(message);
+  }
+
+  public clear(): void {
+   this._messages = []; 
   }
 }

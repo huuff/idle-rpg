@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed } from "vue";
+import { reactive, computed, ref, Ref } from "vue";
 import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
 import { BattleLogImpl } from "@/battle/battle-log";
@@ -41,6 +41,8 @@ import { Battle, } from "@/battle/battle";
 import { makeSlime } from "@/battle/monsters";
 import { Ticker } from "@/ticker";
 import { Stats } from "@/battle/stats";
+import { randomInt } from "@/util/random";
+import range from "@/util/range";
 import AnimatedBar from "./components/AnimatedBar.vue";
 
 const basePlayerStats: Stats = {
@@ -51,18 +53,21 @@ const basePlayerStats: Stats = {
 const player: Actor = reactive(new Actor("Player", basePlayerStats, [ new BasicAttack() ]));
 const playerRequiredExp = computed(() => player.requiredExp());
 
-const enemies = [
-  reactive(makeSlime(1)),
-  reactive(makeSlime(2)),
-  reactive(makeSlime(3)),
-];
-
 const ticker = new Ticker(2);
 const battleLog = reactive(new BattleLogImpl());
-const battle = new Battle([ player ], enemies, battleLog);
 
-onMounted(() => ticker.startBattle(battle, (result) => {
-  console.log(result);
-}));
+let enemies: Ref<Actor[]> = ref([]);
+
+function newEncounter() {
+  enemies.value = range(randomInt(4) + 1).map(i => makeSlime(i + 1));
+  return new Battle([ player ], enemies.value, battleLog);
+}
+
+function startBattle() {
+  battleLog.clear();
+  ticker.startBattle(newEncounter(), (_) => startBattle());
+}
+
+onMounted(() => startBattle());
 onUnmounted(() => ticker.stop());
 </script>
