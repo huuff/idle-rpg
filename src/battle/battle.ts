@@ -1,5 +1,5 @@
 import { BattleLog } from "./battle-log";
-import { Actor, isAlive } from "./actor";
+import { Actor, } from "./actor";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
 import { executeAction } from "./action";
@@ -18,8 +18,8 @@ export class Battle {
   }
 
   public tick(): BattleResult | "CONTINUE" {
-    const aliveGoodGuys = this.goodGuys.filter(isAlive);
-    const aliveBadGuys = this.badGuys.filter(isAlive);
+    const aliveGoodGuys = this.goodGuys.filter(a => a.isAlive());
+    const aliveBadGuys = this.badGuys.filter(a => a.isAlive());
 
     if (this.isOver()) {
       const winner = this.winner();
@@ -43,7 +43,7 @@ export class Battle {
     executeAction(action, this.battleLog);
 
     if (target.currentHealth <= 0) {
-      this.turns = this.turns.filter(isAlive);
+      this.turns = this.turns.filter(a => a.isAlive());
       this.battleLog.push(`${attacker.name} killed ${target.name}!`)
     }
 
@@ -55,9 +55,9 @@ export class Battle {
   }
 
   private winner(): "PLAYER" | "ENEMY" | undefined {
-    if (this.goodGuys.filter(isAlive).length === 0)
+    if (this.goodGuys.filter(a => a.isAlive()).length === 0)
       return "ENEMY";
-    else if (this.badGuys.filter(isAlive).length === 0)
+    else if (this.badGuys.filter(a => a.isAlive()).length === 0)
       return "PLAYER";
   }
 

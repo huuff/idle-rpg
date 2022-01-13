@@ -10,17 +10,18 @@ export class Actor {
     public readonly name: string,
     public readonly stats: Stats,
     public readonly possibleActions: ActionFactory[], 
+    public readonly levelProgression?: Stats,
   ) {
     this.currentHealth = stats.maxHealth;
     this.currentExp = 0;
     this.currentLevel = 1;
   }
-
+  // TODO: Should this be a getter?
   public requiredExp(): number {
     return this.currentLevel * 100;
   }
-}
 
-export function isAlive(actor: Actor): boolean {
-  return actor.currentHealth > 0;
+  public isAlive(): boolean {
+    return this.currentHealth > 0;
+  }
 }
