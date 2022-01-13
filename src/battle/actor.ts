@@ -3,6 +3,8 @@ import { ActionFactory } from "./action";
 
 export class Actor {
   public currentHealth: number;
+  public currentExp: number;
+  public currentLevel: number;
 
   constructor(
     public readonly name: string,
@@ -10,6 +12,12 @@ export class Actor {
     public readonly possibleActions: ActionFactory[], 
   ) {
     this.currentHealth = stats.maxHealth;
+    this.currentExp = 0;
+    this.currentLevel = 1;
+  }
+
+  public requiredExp(): number {
+    return this.currentLevel * 100;
   }
 }
 

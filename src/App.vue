@@ -5,13 +5,16 @@
       <div class="tile is-4 is-vertical is-parent">
         <div class="tile is-child box">
           <p class="title has-text-dark">Player</p>
-          <actor-health :actor="player" />
+          <span>Health</span>
+          <animated-bar :current="player.currentHealth" :max="player.stats.maxHealth" />
+          <span>Experience</span>
+          <animated-bar :current="player.currentExp" :max="playerRequiredExp" class="is-info"/>
         </div>
         <div class="tile is-child box">
           <p class="title has-text-dark">Enemies</p>
           <template v-for="enemy in enemies" :key="enemy.name">
             <span>{{enemy.name}}</span>
-            <actor-health :actor="enemy" />
+            <animated-bar :current="enemy.currentHealth" :max="enemy.stats.maxHealth" />
           </template>
         </div>
       </div>
@@ -29,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
 import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
 import { BattleLogImpl } from "@/battle/battle-log";
@@ -38,7 +41,7 @@ import { Battle } from "@/battle/battle";
 import { makeSlime } from "@/battle/monsters";
 import { Ticker } from "@/ticker";
 import { Stats } from "@/battle/stats";
-import ActorHealth from "./components/ActorHealth.vue";
+import AnimatedBar from "./components/AnimatedBar.vue";
 
 const basePlayerStats: Stats = {
     maxHealth: 50,
@@ -46,6 +49,7 @@ const basePlayerStats: Stats = {
     agility: 8,
 };
 const player: Actor = reactive(new Actor("Player", basePlayerStats, [ new BasicAttack() ]));
+const playerRequiredExp = computed(() => player.requiredExp());
 
 const enemies = [
   reactive(makeSlime(1)),
@@ -57,6 +61,7 @@ const ticker = new Ticker(2);
 const battleLog = reactive(new BattleLogImpl());
 const battle = new Battle([ player ], enemies, battleLog);
 
-onMounted(() => ticker.startBattle(battle));
+// TODO: Use onEnd callback to increase player's exp
+onMounted(() => ticker.startBattle(battle, (battle: Battle) => console.log("finished battle")));
 onUnmounted(() => ticker.stop());
 </script>

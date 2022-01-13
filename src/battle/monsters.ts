@@ -6,6 +6,7 @@ const slimeBaseStats: Stats = {
     maxHealth: 20,
     strength: 4,
     agility: 2,
+    challenge: 20,
 };
 
 export const makeSlime = (id?: number): Actor => new Actor(
