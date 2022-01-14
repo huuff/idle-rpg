@@ -5,11 +5,15 @@ import range from "@/util/range";
 import { randomInt } from "@/util/random";
 
 export interface Zone {
-  enemyToFrequency: Map<Species, number>
+  name: string;
+  stages: number;
+  enemyToFrequency: Map<Species, number>;
   newEncounter(player: Creature): Battle;
 }
 
 export const plains: Zone = {
+  name: "Plains",
+  stages: 5,
   enemyToFrequency: new Map([
     [slime, 1] ,
   ]),
