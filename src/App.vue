@@ -11,7 +11,7 @@
           <span>Experience</span>
           <animated-bar :current="player.currentExp" :max="player.requiredExp" class="is-info"/>
         </div>
-        <div class="tile is-child box">
+        <div v-if="currentScene?.secondaryView" class="tile is-child box">
           <secondary-view />
         </div>
       </div>
@@ -51,7 +51,7 @@ function nextScene() {
   ticker.startScene(currentScene.value, () => {
     if (player.currentHealth <= 0) {
       return; // Game over
-    } else if (player.healthRatio <= 0.20) {
+    } else if (player.healthRatio <= 0.50) {
       currentScene.value = new Rest(player);
       ticker.startScene(currentScene.value, nextScene);
     } else {
