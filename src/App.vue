@@ -12,16 +12,12 @@
           <animated-bar :current="player.currentExp" :max="player.requiredExp" class="is-info"/>
         </div>
         <div class="tile is-child box">
-          <p class="title has-text-dark">Enemies</p>
-          <template v-for="enemy in enemies" :key="enemy.name">
-            <span>{{enemy.name}}</span>
-            <health-bar :actor="enemy" />
-          </template>
+          <secondary-view />
         </div>
       </div>
       <div class="tile is-parent">
         <div class="tile is-child box">
-          <current-scene-view /> 
+          <main-view /> 
         </div>
       </div>
     </div>
@@ -33,54 +29,29 @@
 import { reactive, ref, Ref, } from "vue";
 import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
-import { BasicAttack } from "@/battle/basic-attack";
-import { Battle, } from "@/battle/battle";
-import { makeSlime } from "@/battle/monsters";
 import { Ticker } from "@/ticker";
 import { Rest } from "@/rest-scene";
-import { Stats } from "@/battle/stats";
-import { randomInt } from "@/util/random";
 import { Scene } from "@/scene";
-import range from "@/util/range";
+import { human, createActor } from "@/actors/species";
+import { Zone, plains } from "@/zones/zone";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 
-const basePlayerStats: Stats = {
-    maxHealth: 50,
-    strength: 12,
-    agility: 8,
-};
-
-const playerProgression: Stats = {
-    maxHealth: 5,
-    strength: 2,
-    agility: 1
-};
-
-const player: Actor = reactive(new Actor(
-  "Player", 
-  basePlayerStats, 
-  [new BasicAttack()],
-  playerProgression,
-));
+const player: Actor = reactive(createActor(human));
 const ticker = new Ticker(3);
 
-let enemies: Ref<Actor[]> = ref([]);
-
 let currentScene: Ref<Scene | undefined> = ref(undefined);
-const currentSceneView = () => currentScene.value && currentScene.value.mainView();
+const mainView = () => currentScene.value && currentScene.value.mainView();
+const secondaryView = () => currentScene.value && currentScene.value.secondaryView && currentScene.value.secondaryView();
 
-function newEncounter() {
-  enemies.value = range(randomInt(3)).map(i => makeSlime(i+1));
-  return new Battle([ player ], enemies.value);
-}
+let currentZone: Zone = plains; 
 
 function nextScene() {
-  currentScene.value = newEncounter();
+  currentScene.value = currentZone?.newEncounter(player);
   ticker.startScene(currentScene.value, () => {
     if (player.currentHealth <= 0) {
       return; // Game over
-    } else if (player.healthRatio <= 0.15) {
+    } else if (player.healthRatio <= 0.20) {
       currentScene.value = new Rest(player);
       ticker.startScene(currentScene.value, nextScene);
     } else {

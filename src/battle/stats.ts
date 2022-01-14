@@ -7,6 +7,7 @@ export function addStats(augend1: Stats, augend2: Stats): Stats {
   };
 }
 
+// TODO: Some way to auto-calculate challenge
 export interface Stats {
   maxHealth: number;
   strength: number;

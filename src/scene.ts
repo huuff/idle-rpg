@@ -4,4 +4,5 @@ export interface Scene {
   tick: () => void;
   isOver: () => boolean;
   mainView: () => VNode;
+  secondaryView?: () => VNode;
 }

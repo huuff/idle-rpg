@@ -6,6 +6,7 @@ import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
 import { executeAction } from "./action";
 import BattleView from "@/components/scenes/BattleView.vue";
+import EnemyHealth from "@/components/scenes/EnemyHealth.vue";
 
 export class Battle implements Scene {
   private turns: Actor[];
@@ -39,6 +40,10 @@ export class Battle implements Scene {
 
   public mainView(): VNode {
     return h(BattleView, { log: reactive(this.battleLog) });
+  }
+
+  public secondaryView(): VNode {
+    return h(EnemyHealth, { enemies: reactive(this.badGuys)}) ;
   }
 
   public isOver(): boolean {
