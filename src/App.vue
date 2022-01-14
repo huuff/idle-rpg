@@ -37,10 +37,8 @@ import { Zone, plains } from "@/zones/zone";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 
-const delayBetweenScenes = 1000;
-
 const player: Actor = reactive(createActor(human));
-const ticker = new Ticker(3);
+const ticker = new Ticker(3, 1000);
 
 const currentScene: Ref<Scene | undefined> = ref(undefined);
 const mainView = () => currentScene.value && currentScene.value.mainView();
@@ -50,21 +48,19 @@ let currentZone: Zone = plains;
 
 function nextScene() {
   currentScene.value = currentZone?.newEncounter(player);
-  setTimeout(() => {
-    // TODO: A starting scene would prevent currentScene
-    // from ever being undefined. I can use this one to
-    // choose a class
-    ticker.startScene(currentScene.value!, () => {
-      if (player.currentHealth <= 0) {
-        return; // Game over
-      } else if (player.healthRatio <= 0.50) {
-        currentScene.value = new Rest(player);
-        ticker.startScene(currentScene.value, nextScene);
-      } else {
-        setTimeout(nextScene, delayBetweenScenes);
-      }
-    });
-  }, delayBetweenScenes);
+  // TODO: A starting scene would prevent currentScene
+  // from ever being undefined. I can use this one to
+  // choose a class
+  ticker.startScene(currentScene.value!, () => {
+    if (player.currentHealth <= 0) {
+      return; // Game over
+    } else if (player.healthRatio <= 0.50) {
+      currentScene.value = new Rest(player);
+      ticker.startScene(currentScene.value, nextScene);
+    } else {
+      nextScene();
+    }
+  });
 }
 
 onMounted(() => nextScene());
