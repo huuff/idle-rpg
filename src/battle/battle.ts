@@ -16,6 +16,10 @@ export class Battle implements Scene {
     private readonly goodGuys: Actor[],
     private readonly badGuys: Actor[],
   ) {
+    const enemyNames = badGuys
+                        .map(a => a.name)
+                        .join(", ");
+    this.battleLog.push(`${enemyNames} appear!`)
     this.turns = calculateTurns([...goodGuys, ...badGuys]);
   }
 
