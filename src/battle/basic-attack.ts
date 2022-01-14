@@ -1,9 +1,9 @@
 import { Action, ActionFactory } from "./action";
-import { Actor } from "./actor";
+import { Creature } from "@/creatures/creature";
 import { randomBetween } from "@/util/random";
 
 export class BasicAttack implements ActionFactory {
-  create(executor: Actor, target: Actor): Action {
+  create(executor: Creature, target: Creature): Action {
     return { 
       executor, target,
       damage: this.calculateDamage(executor),
@@ -12,11 +12,11 @@ export class BasicAttack implements ActionFactory {
   }
 
   // The damage varies by a 10% of the executor's strength
-  private calculateVariability(executor: Actor): number {
+  private calculateVariability(executor: Creature): number {
     return Math.round(Math.random() * (executor.stats.strength * 0.1));
   }
 
-  private calculateDamage(executor: Actor): number {
+  private calculateDamage(executor: Creature): number {
     const variability = this.calculateVariability(executor);
     const min = executor.stats.strength - variability;
     const max = executor.stats.strength + variability;

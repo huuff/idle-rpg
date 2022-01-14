@@ -1,12 +1,12 @@
-import { Actor } from "@/battle/actor";
+import { Creature } from "@/creatures/creature";
 import { Battle } from "@/battle/battle";
-import { Species, createActor, slime } from "@/actors/species";
+import { Species, createCreature, slime } from "@/creatures/species";
 import range from "@/util/range";
 import { randomInt } from "@/util/random";
 
 export interface Zone {
   enemyToFrequency: Map<Species, number>
-  newEncounter(player: Actor): Battle;
+  newEncounter(player: Creature): Battle;
 }
 
 export const plains: Zone = {
@@ -17,8 +17,8 @@ export const plains: Zone = {
   // TODO: Generalize this for any zone
   // use frequency to generate an appropriate number
   // of enemies
-  newEncounter(player: Actor): Battle {
-    const enemies = range(randomInt(3)).map(i => createActor(slime, i+1))
+  newEncounter(player: Creature): Battle {
+    const enemies = range(randomInt(3)).map(i => createCreature(slime, i+1))
 
     return new Battle([ player ], enemies);
   }

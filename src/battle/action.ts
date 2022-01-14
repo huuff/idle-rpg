@@ -1,13 +1,13 @@
 import { BattleLog } from "./battle-log";
-import { Actor } from "./actor";
+import { Creature } from "@/creatures/creature";
 
 export interface ActionFactory {
-  create(executor: Actor, target: Actor): Action;
+  create(executor: Creature, target: Creature): Action;
 }
 
 export interface Action {
-  executor: Actor;
-  target: Actor;
+  executor: Creature;
+  target: Creature;
   damage: number;
   description: string;
 }

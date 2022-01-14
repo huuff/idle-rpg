@@ -1,7 +1,7 @@
 import { Stats, addStats, zeroStats } from "./stats";
-import { ActionFactory } from "./action";
+import { ActionFactory } from "@/battle/action";
 
-export class Actor {
+export class Creature {
   public currentHealth: number;
   public _currentExp: number;
   public level: number;

@@ -1,7 +1,7 @@
 import { Scene } from "@/scene";
 import {h, VNode, reactive } from "vue";
 import { BattleLogImpl } from "./battle-log";
-import { Actor, } from "./actor";
+import { Creature, } from "@/creatures/creature";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
 import { executeAction } from "./action";
@@ -9,12 +9,12 @@ import BattleView from "@/components/scenes/BattleView.vue";
 import EnemyHealth from "@/components/scenes/EnemyHealth.vue";
 
 export class Battle implements Scene {
-  private turns: Actor[];
+  private turns: Creature[];
   private readonly battleLog = new BattleLogImpl();
   
   constructor(
-    private readonly goodGuys: Actor[],
-    private readonly badGuys: Actor[],
+    private readonly goodGuys: Creature[],
+    private readonly badGuys: Creature[],
   ) {
     const enemyNames = badGuys
                         .map(a => a.name)

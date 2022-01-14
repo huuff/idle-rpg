@@ -28,16 +28,16 @@
 <script setup lang="ts">
 import { reactive, ref, Ref, } from "vue";
 import { onUnmounted, onMounted } from "vue";
-import { Actor } from "@/battle/actor";
+import { Creature } from "@/creatures/creature";
 import { Ticker } from "@/ticker";
 import { Rest } from "@/rest-scene";
 import { Scene } from "@/scene";
-import { human, createActor } from "@/actors/species";
+import { human, createCreature } from "@/creatures/species";
 import { Zone, plains } from "@/zones/zone";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 
-const player: Actor = reactive(createActor(human));
+const player: Creature = reactive(createCreature(human));
 const ticker = new Ticker(3, 1000);
 
 const currentScene: Ref<Scene | undefined> = ref(undefined);

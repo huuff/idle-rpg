@@ -1,7 +1,7 @@
-import { Stats } from "@/battle/stats";
+import { Stats } from "@/creatures/stats";
 import { ActionFactory } from "@/battle/action";
 import { BasicAttack } from "@/battle/basic-attack";
-import { Actor } from "@/battle/actor";
+import { Creature } from "@/creatures/creature";
 
 
 export interface Species {
@@ -11,8 +11,8 @@ export interface Species {
   naturalActions:  ActionFactory[];
 }
 
-export function createActor(species: Species, identifier?: number) {
-  return new Actor(
+export function createCreature(species: Species, identifier?: number) {
+  return new Creature(
     identifier ? species.name + ` ${identifier}` : species.name,
     species.baseStats,
     species.naturalActions,
