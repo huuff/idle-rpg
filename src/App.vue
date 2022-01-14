@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, Ref, computed, h } from "vue";
+import { reactive, ref, Ref, } from "vue";
 import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
 import { BasicAttack } from "@/battle/basic-attack";
