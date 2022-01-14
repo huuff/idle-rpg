@@ -63,12 +63,12 @@ const player: Actor = reactive(new Actor(
   [new BasicAttack()],
   playerProgression,
 ));
-const ticker = new Ticker(2);
+const ticker = new Ticker(3);
 
 let enemies: Ref<Actor[]> = ref([]);
 
 let currentScene: Ref<Scene | undefined> = ref(undefined);
-const currentSceneView = () => h("div", {}, currentScene.value && currentScene.value.mainView());
+const currentSceneView = () => currentScene.value && currentScene.value.mainView();
 
 function newEncounter() {
   enemies.value = range(randomInt(3)).map(i => makeSlime(i+1));
