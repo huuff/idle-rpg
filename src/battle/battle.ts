@@ -1,17 +1,19 @@
 import { Scene } from "@/scene";
-import { BattleLog } from "./battle-log";
+import {h, VNode, reactive } from "vue";
+import { BattleLogImpl } from "./battle-log";
 import { Actor, } from "./actor";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
 import { executeAction } from "./action";
+import BattleView from "@/components/scenes/BattleView.vue";
 
 export class Battle implements Scene {
   private turns: Actor[];
+  private readonly battleLog = new BattleLogImpl();
   
   constructor(
     private readonly goodGuys: Actor[],
     private readonly badGuys: Actor[],
-    private readonly battleLog: BattleLog,
   ) {
     this.turns = calculateTurns([...goodGuys, ...badGuys]);
   }
@@ -33,6 +35,10 @@ export class Battle implements Scene {
       this.turns = this.turns.filter(a => a.isAlive());
       this.battleLog.push(`${attacker.name} killed ${target.name}!`)
     }
+  }
+
+  public mainView(): VNode {
+    return h(BattleView, { log: reactive(this.battleLog) });
   }
 
   public isOver(): boolean {
@@ -58,7 +64,7 @@ export class Battle implements Scene {
       return "PLAYER";
   }
 
-  // FUTURE: Shoul work for several good guys
+  // FUTURE: Should work for several good guys
   private shareExp(): void {
     this.goodGuys[0].currentExp += this.badGuys
       .map(actor => actor.stats.challenge ?? 0)

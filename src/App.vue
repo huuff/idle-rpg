@@ -21,10 +21,7 @@
       </div>
       <div class="tile is-parent">
         <div class="tile is-child box">
-          <p class="title has-text-dark">Battle Log</p>
-          <ul>
-            <li v-for="(msg, i) in battleLog.messages()" :key="`${msg}-${i}`">{{ msg }}</li>
-          </ul>
+          <current-scene-view /> 
         </div>
       </div>
     </div>
@@ -33,10 +30,9 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, Ref } from "vue";
+import { reactive, ref, Ref, computed, h } from "vue";
 import { onUnmounted, onMounted } from "vue";
 import { Actor } from "@/battle/actor";
-import { BattleLogImpl } from "@/battle/battle-log";
 import { BasicAttack } from "@/battle/basic-attack";
 import { Battle, } from "@/battle/battle";
 import { makeSlime } from "@/battle/monsters";
@@ -44,6 +40,7 @@ import { Ticker } from "@/ticker";
 import { Rest } from "@/rest-scene";
 import { Stats } from "@/battle/stats";
 import { randomInt } from "@/util/random";
+import { Scene } from "@/scene";
 import range from "@/util/range";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
@@ -68,24 +65,27 @@ const player: Actor = reactive(new Actor(
 ));
 const ticker = new Ticker(2);
 
-const battleLog = reactive(new BattleLogImpl());
-
 let enemies: Ref<Actor[]> = ref([]);
+
+let currentScene: Ref<Scene | undefined> = ref(undefined);
+const currentSceneView = () => h("div", {}, currentScene.value && currentScene.value.mainView());
 
 function newEncounter() {
   enemies.value = range(randomInt(3)).map(i => makeSlime(i+1));
-  return new Battle([ player ], enemies.value, battleLog);
+  return new Battle([ player ], enemies.value);
 }
 
 function nextScene() {
-  battleLog.clear();
-  ticker.startScene(newEncounter(), () => {
-    if (player.currentHealth <= 0)
+  currentScene.value = newEncounter();
+  ticker.startScene(currentScene.value, () => {
+    if (player.currentHealth <= 0) {
       return; // Game over
-    else if (player.healthRatio <= 0.15)
-      ticker.startScene(new Rest(player), nextScene);
-    else
+    } else if (player.healthRatio <= 0.15) {
+      currentScene.value = new Rest(player);
+      ticker.startScene(currentScene.value, nextScene);
+    } else {
       nextScene();
+    }
   });
 }
 
