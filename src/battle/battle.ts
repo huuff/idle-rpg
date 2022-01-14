@@ -47,26 +47,16 @@ export class Battle implements Scene {
   }
 
   public isOver(): boolean {
-    const winner = this.winner();
-    if (!winner)
-      return false
-    else {
-      const winner = this.winner();
-      if (winner === "PLAYER") {
-        this.battleLog.push("You won!");
-        this.shareExp();
-      } else if (winner === "ENEMY") {
-        this.battleLog.push("You lost!");
-      }
+    if (this.goodGuys.filter(a => a.isAlive()).length === 0) {
+      this.battleLog.push("You lost!");
       return true;
+    } else if (this.badGuys.filter(a => a.isAlive()).length === 0) {
+      this.battleLog.push("You won!");
+      this.shareExp();
+      return true;
+    } else {
+      return false;
     }
-  }
-
-  private winner(): "PLAYER" | "ENEMY" | undefined {
-    if (this.goodGuys.filter(a => a.isAlive()).length === 0)
-      return "ENEMY";
-    else if (this.badGuys.filter(a => a.isAlive()).length === 0)
-      return "PLAYER";
   }
 
   // FUTURE: Should work for several good guys
