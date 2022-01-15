@@ -59,7 +59,7 @@ function nextScene() {
       return; // Game over
     } else if (player.healthRatio <= 0.20) {
       currentScene.value = new Rest();
-      currentZone.reset();
+      currentZone = reactive(createPlains()) as Zone;
       ticker.startScene(currentScene.value, nextScene);
     } else {
       nextScene();

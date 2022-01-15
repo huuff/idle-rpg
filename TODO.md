@@ -6,5 +6,4 @@
 * Manual option of going to rest between battles
 * A view to show player stats
 * Maybe stats should be a class and have methods to add and multiply (also allow fractional numbers and return rounded with getters)
-* Separate zone and stage into files
 * Maybe try to make zones as immutable as possible
