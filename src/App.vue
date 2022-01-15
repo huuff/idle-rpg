@@ -2,22 +2,7 @@
 <div class="hero is-fullheight is-info is-bold">
   <div class="hero-body">
     <div class="container">
-      <div class="box columns is-vcentered">
-        <span class="is-size-4 has-text-weight-semibold column is-2"> 
-          {{ currentZone.name }} 
-        </span>
-        <div class="column is-9">
-          <ul class="steps">
-            <li v-for="i in nrange(currentZone.stages)"
-                :key="`${currentZone.name}-${i}`"
-                class="steps-segment"
-                :class="{ 'is-active': currentZone.currentStage === i}"
-                >
-              <span class="steps-marker" />
-            </li>
-          </ul>
-        </div>
-      </div>
+      <zone-progress v-if="currentZone" :current-zone="currentZone" />
       <div class="tile is-ancestor">
         <div class="tile is-4 is-vertical is-parent">
           <div class="tile is-child box">
@@ -52,9 +37,9 @@ import { Rest } from "@/rest-scene";
 import { Scene } from "@/scene";
 import { human, createCreature } from "@/creatures/species";
 import { Zone, createPlains } from "@/zones/zone";
-import { nrange } from "@/util/range";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
+import ZoneProgress from "./components/ZoneProgress.vue";
 
 const player: Creature = reactive(createCreature(human));
 const ticker = new Ticker(3, 1000);
