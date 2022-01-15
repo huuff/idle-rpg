@@ -69,7 +69,7 @@ export class Battle implements Scene {
   // FUTURE: Should work for several good guys
   private shareExp(): void {
     this.goodGuys[0].currentExp += this.badGuys
-      .map(actor => actor.stats.challenge ?? 0)
+      .map(creature => creature.stats.challenge ?? 0)
       .reduce((acc, challenge) => acc + challenge)
       ;
     this.goodGuys.map(a => a.adjustLevel());

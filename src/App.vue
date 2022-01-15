@@ -9,7 +9,7 @@
             <p class="title has-text-dark">Player</p>
             <p class="subtitle has-text-dark">Level {{ player.level }}</p>
             <span>Health</span>
-            <health-bar :actor="player" />
+            <health-bar :creature="player" />
             <span>Experience</span>
             <animated-bar :current="player.currentExp" :max="player.requiredExp" class="is-info"/>
           </div>
