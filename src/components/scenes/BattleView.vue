@@ -10,9 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import { BattleLog } from "@/battle/battle-log";
+import { useMainStore } from "@/store";
 
-const props = defineProps<{
-  log: BattleLog;
-}>();
+const { log } = useMainStore();
+
 </script>

@@ -2,11 +2,14 @@ import { h, VNode } from "vue";
 import { Scene } from "@/scene";
 import { Creature } from "@/creatures/creature";
 import { useMainStore } from "@/store";
+import { Settlement } from "@/settlements/settlement";
 
 export class Rest implements Scene {
   private readonly player: Creature;
   
-  constructor() {
+  constructor(
+    private readonly settlement: Settlement,
+  ) {
     ({ player: this.player} = useMainStore())
   }
 

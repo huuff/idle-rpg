@@ -35,12 +35,13 @@ import { Ticker } from "@/ticker";
 import { Rest } from "@/rest-scene";
 import { Scene } from "@/scene";
 import { Zone, createPlains } from "@/zones/zone";
+import { Settlement, prontera } from "@/settlements/settlement";
 import { useMainStore } from "@/store";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 import ZoneProgress from "./components/ZoneProgress.vue";
 
-const { player } = useMainStore();
+const { player, log } = useMainStore();
 const ticker = new Ticker(3, 1000);
 
 const currentScene: Ref<Scene | undefined> = ref(undefined);
@@ -48,6 +49,7 @@ const mainView = () => currentScene.value && currentScene.value.mainView();
 const secondaryView = () => currentScene.value && currentScene.value.secondaryView && currentScene.value.secondaryView();
 
 let currentZone: Zone = reactive(createPlains()) as Zone; 
+const currentSettlement = ref(prontera);
 
 function nextScene() {
   currentScene.value = currentZone?.newEncounter();
@@ -55,10 +57,11 @@ function nextScene() {
   // from ever being undefined. I can use this one to
   // choose a class
   ticker.startScene(currentScene.value!, () => {
+    log.clear();
     if (player.currentHealth <= 0) {
       return; // Game over
-    } else if (player.healthRatio <= 0.20) {
-      currentScene.value = new Rest();
+    } else if (player.healthRatio <= 0.50) {
+      currentScene.value = new Rest(currentSettlement.value);
       currentZone = reactive(createPlains()) as Zone;
       ticker.startScene(currentScene.value, nextScene);
     } else {

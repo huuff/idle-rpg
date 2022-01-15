@@ -1,10 +1,4 @@
-export interface BattleLog {
-  messages: () => Readonly<string[]>;
-  push(message: string): void;
-  clear(): void;
-}
-
-export class BattleLogImpl {
+export class SceneLog {
   private _messages: string[] = [];
 
   public messages(): Readonly<string[]> {

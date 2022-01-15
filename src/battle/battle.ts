@@ -1,6 +1,6 @@
 import { Scene } from "@/scene";
 import {h, VNode, reactive } from "vue";
-import { BattleLogImpl } from "./battle-log";
+import { useMainStore } from "@/store";
 import { Creature, } from "@/creatures/creature";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
@@ -9,8 +9,8 @@ import BattleView from "@/components/scenes/BattleView.vue";
 import EnemyHealth from "@/components/scenes/EnemyHealth.vue";
 
 export class Battle implements Scene {
+  private readonly log = useMainStore().log;
   private turns: Creature[];
-  private readonly battleLog = new BattleLogImpl();
   
   constructor(
     private readonly goodGuys: Creature[],
@@ -19,8 +19,9 @@ export class Battle implements Scene {
     const enemyNames = badGuys
                         .map(a => a.name)
                         .join(", ");
-    this.battleLog.push(`${enemyNames} appear!`)
+    this.log.push(`${enemyNames} appear!`);
     this.turns = calculateTurns([...goodGuys, ...badGuys]);
+
   }
 
   public tick() {
@@ -34,16 +35,16 @@ export class Battle implements Scene {
     const target = this.badGuys.includes(attacker) ? chooseRandom(aliveGoodGuys) : chooseRandom(aliveBadGuys);
 
     const action = chooseRandom(attacker.possibleActions).create(attacker, target);
-    executeAction(action, this.battleLog);
+    executeAction(action);
 
     if (target.currentHealth <= 0) {
       this.turns = this.turns.filter(a => a.isAlive());
-      this.battleLog.push(`${attacker.name} killed ${target.name}!`)
+      this.log.push(`${attacker.name} killed ${target.name}!`)
     }
   }
 
   public mainView(): VNode {
-    return h(BattleView, { log: reactive(this.battleLog) });
+    return h(BattleView, { });
   }
 
   public secondaryView(): VNode {
@@ -52,10 +53,10 @@ export class Battle implements Scene {
 
   public isOver(): boolean {
     if (this.goodGuys.filter(a => a.isAlive()).length === 0) {
-      this.battleLog.push("You lost!");
+      this.log.push("You lost!");
       return true;
     } else if (this.badGuys.filter(a => a.isAlive()).length === 0) {
-      this.battleLog.push("You won!");
+      this.log.push("You won!");
       this.shareExp();
       return true;
     } else {

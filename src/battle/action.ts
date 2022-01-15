@@ -1,4 +1,4 @@
-import { BattleLog } from "./battle-log";
+import { useMainStore } from "@/store";
 import { Creature } from "@/creatures/creature";
 
 export interface ActionFactory {
@@ -12,7 +12,7 @@ export interface Action {
   description: string;
 }
 
-export function executeAction(action: Action, battleLog: BattleLog) {
+export function executeAction(action: Action) {
   action.target.currentHealth -= action.damage;
-  battleLog.push(`${action.executor.name} ${action.description} ${action.target.name} for ${action.damage} damage!`);
+  useMainStore().log.push(`${action.executor.name} ${action.description} ${action.target.name} for ${action.damage} damage!`);
 }
