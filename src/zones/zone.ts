@@ -10,6 +10,7 @@ import {
 
 export class Zone {
   private readonly enemyToFrequency: [Species, number][];
+  public currentStage = 1;
 
   constructor(
     public readonly name: string,
@@ -30,6 +31,6 @@ export class Zone {
   }
 }
 
-export const plains: Zone = new Zone("Plains", 5, [
+export const createPlains = () => new Zone("Plains", 5, [
   [slime, 1],
 ]);

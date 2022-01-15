@@ -40,7 +40,7 @@ import { Ticker } from "@/ticker";
 import { Rest } from "@/rest-scene";
 import { Scene } from "@/scene";
 import { human, createCreature } from "@/creatures/species";
-import { Zone, plains } from "@/zones/zone";
+import { Zone, createPlains } from "@/zones/zone";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 
@@ -51,7 +51,7 @@ const currentScene: Ref<Scene | undefined> = ref(undefined);
 const mainView = () => currentScene.value && currentScene.value.mainView();
 const secondaryView = () => currentScene.value && currentScene.value.secondaryView && currentScene.value.secondaryView();
 
-let currentZone: Zone = plains; 
+let currentZone: Zone = createPlains(); 
 
 function nextScene() {
   currentScene.value = currentZone?.newEncounter(player);
