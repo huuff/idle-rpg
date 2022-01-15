@@ -22,9 +22,11 @@ class StageEnemy {
 
 export class Stage {
   private readonly enemyToFrequency: [StageEnemy, number][];
+  private encountersHad = 0;
 
   constructor(
     enemies: StageEnemy[],
+    private readonly encounters: number,
   ) {
     this.enemyToFrequency = normalizeFrequencies(
       enemies.map(e => e.toFrequencyTuple())
@@ -37,8 +39,17 @@ export class Stage {
       randomByNormalizedFrequency(this.enemyToFrequency).species,
       i,
     ));
+    this.encountersHad++;
 
     return new Battle([player], enemies);
+  }
+
+  public isCompleted(): boolean {
+    return this.encountersHad >= this.encounters;
+  }
+
+  public reset(): void {
+    this.encountersHad = 0;
   }
 }
    
@@ -55,11 +66,25 @@ export class Zone {
   }
 
   public newEncounter(player: Creature): Battle {
-    return this.stages[this.currentStage - 1].newEncounter(player)
+    if (this.currentStageObject().isCompleted()) {
+      this.currentStage++;
+    }
+    return this.currentStageObject().newEncounter(player)
+  }
+
+  public reset(): void {
+    this.currentStage = 1;
+    this.stages.forEach(s => s.reset());
+  }
+
+  private currentStageObject(): Stage {
+    return this.stages[this.currentStage - 1];
   }
 }
 
 export const createPlains = () => new Zone("Plains", [
-  new Stage([new StageEnemy(slime, 1, 1)]),
-  new Stage([new StageEnemy(slime, 2, 1)])
+  new Stage([new StageEnemy(slime, 1, 1)], 5),
+  new Stage([new StageEnemy(slime, 2, 1)], 5),
+  new Stage([new StageEnemy(slime, 3, 1)], 5),
+  new Stage([new StageEnemy(slime, 4, 1)], 5),
 ]);

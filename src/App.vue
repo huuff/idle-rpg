@@ -48,7 +48,7 @@ const currentScene: Ref<Scene | undefined> = ref(undefined);
 const mainView = () => currentScene.value && currentScene.value.mainView();
 const secondaryView = () => currentScene.value && currentScene.value.secondaryView && currentScene.value.secondaryView();
 
-let currentZone: Zone = createPlains(); 
+let currentZone: Zone = reactive(createPlains()) as Zone; 
 
 function nextScene() {
   currentScene.value = currentZone?.newEncounter(player);
@@ -58,8 +58,9 @@ function nextScene() {
   ticker.startScene(currentScene.value!, () => {
     if (player.currentHealth <= 0) {
       return; // Game over
-    } else if (player.healthRatio <= 0.15) {
+    } else if (player.healthRatio <= 0.20) {
       currentScene.value = new Rest(player);
+      currentZone.reset();
       ticker.startScene(currentScene.value, nextScene);
     } else {
       nextScene();
