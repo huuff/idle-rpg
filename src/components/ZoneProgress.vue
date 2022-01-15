@@ -5,7 +5,7 @@
     </span>
     <div class="column is-9">
       <ul class="steps is-horizontal">
-        <li v-for="i in nrange(currentZone.stages)"
+        <li v-for="i in nrange(currentZone.stageNumber)"
             :key="`${currentZone.name}-${i}`"
             class="steps-segment"
             :class="{ 'is-active': currentZone.currentStage === i}"

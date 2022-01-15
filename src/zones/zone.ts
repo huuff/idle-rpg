@@ -6,31 +6,60 @@ import {
   randomInt, 
   randomByNormalizedSortedFrequency,
   normalizeAndSortFrequencies, 
-   } from "@/util/random";
+} from "@/util/random";
 
-export class Zone {
-  private readonly enemyToFrequency: [Species, number][];
-  public currentStage = 1;
+class StageEnemy {
+  constructor(
+    public readonly species: Species,
+    public readonly averageLevel: number,
+    public readonly frequency: number,
+  ) {}
+
+  public toFrequencyTuple(): [StageEnemy, number] {
+    return [ this, this.frequency ];
+  }
+}
+
+export class Stage {
+  private readonly enemyToFrequency: [StageEnemy, number][];
 
   constructor(
-    public readonly name: string,
-    public readonly stages: number,
-    enemyToFrequency: [Species, number][],
+    enemies: StageEnemy[],
   ) {
-    this.enemyToFrequency = normalizeAndSortFrequencies(enemyToFrequency);
+    this.enemyToFrequency = normalizeAndSortFrequencies(
+      enemies.map(e => e.toFrequencyTuple())
+    );
   }
 
   public newEncounter(player: Creature): Battle {
     const enemies = nrange(randomInt(3))
     .map(i => createCreature(
-      randomByNormalizedSortedFrequency(this.enemyToFrequency),
+      randomByNormalizedSortedFrequency(this.enemyToFrequency).species,
       i,
     ));
 
     return new Battle([player], enemies);
   }
 }
+   
+export class Zone {
+  public currentStage = 1;
 
-export const createPlains = () => new Zone("Plains", 5, [
-  [slime, 1],
+  constructor(
+    public readonly name: string,
+    public readonly stages: Stage[],
+  ) {}
+
+  public get stageNumber(): number {
+    return this.stages.length;
+  }
+
+  public newEncounter(player: Creature): Battle {
+    return this.stages[this.currentStage - 1].newEncounter(player)
+  }
+}
+
+export const createPlains = () => new Zone("Plains", [
+  new Stage([new StageEnemy(slime, 1, 1)]),
+  new Stage([new StageEnemy(slime, 2, 1)])
 ]);
