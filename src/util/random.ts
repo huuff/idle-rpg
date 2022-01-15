@@ -30,7 +30,6 @@ export function randomByNormalizedSortedFrequency<T>(optionsToFrequencies: [T, n
   throw new Error("Exited randomByFrequency without finding an option");
 }
 
-// TODO: Test it
 // Makes an array of options to frequencies normalized
 // And sorts it in decreasing order so it can be searched
 // for a random match
@@ -38,6 +37,6 @@ export function normalizeAndSortFrequencies<T>(optionsToFrequency: [T, number][]
   const totalFrequency = optionsToFrequency.reduce((acc, [_, freq]) => acc + freq, 0);
   return optionsToFrequency
     .map(([option, freq]) => [option, freq/totalFrequency] as [T, number])
-    .sort(([_1, a], [_2, b]) => a - b)
+    .sort(([_1, a], [_2, b]) => b - a)
     ;
 }
