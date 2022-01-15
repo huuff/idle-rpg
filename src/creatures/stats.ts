@@ -1,3 +1,12 @@
+export function multiplyStats(stats: Stats, factor: number) {
+  return {
+    maxHealth: stats.maxHealth * factor,
+    strength: stats.strength * factor,
+    agility: stats.agility * factor,
+    challenge: stats.challenge ? stats.challenge * factor : undefined,
+  }
+}
+
 export function addStats(augend1: Stats, augend2: Stats): Stats {
   return {
     maxHealth: augend1.maxHealth + augend2.maxHealth,

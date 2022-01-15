@@ -35,10 +35,10 @@ export class Stage {
 
   public newEncounter(player: Creature): Battle {
     const enemies = nrange(randomInt(3))
-    .map(i => createCreature(
-      randomByNormalizedFrequency(this.enemyToFrequency).species,
-      i,
-    ));
+    .map(i => {
+      const enemy = randomByNormalizedFrequency(this.enemyToFrequency);
+      return createCreature(enemy.species, i, enemy.averageLevel)
+    });
     this.encountersHad++;
 
     return new Battle([player], enemies);

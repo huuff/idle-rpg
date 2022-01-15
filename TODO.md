@@ -5,3 +5,5 @@
 * A description for when going to rest (indicating that progress is reset)
 * Actually going somewhere (currently game breaks when finishing zone)
 * Manual option of going to rest between battles
+* A view to show player stats
+* Maybe stats should be a class and have methods to add and multiply (also allow fractional numbers and return rounded with getters)

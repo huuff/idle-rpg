@@ -1,20 +1,21 @@
-import { Stats, addStats, zeroStats } from "./stats";
+import { Stats, addStats, zeroStats, multiplyStats } from "./stats";
 import { ActionFactory } from "@/battle/action";
 
 export class Creature {
   public currentHealth: number;
+  public stats: Stats;
   public _currentExp: number;
-  public level: number;
 
   constructor(
     public readonly name: string,
-    public stats: Stats,
+    baseStats: Stats,
     public readonly possibleActions: ActionFactory[], 
+    public level = 1,
     public readonly levelProgression: Stats = zeroStats,
   ) {
-    this.currentHealth = stats.maxHealth;
+    this.stats = addStats(baseStats, multiplyStats(levelProgression, level));
+    this.currentHealth = this.stats.maxHealth;
     this._currentExp = 0;
-    this.level = 1;
   }
 
   public get currentExp() {

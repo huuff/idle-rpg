@@ -3,7 +3,6 @@ import { ActionFactory } from "@/battle/action";
 import { BasicAttack } from "@/battle/basic-attack";
 import { Creature } from "@/creatures/creature";
 
-
 export interface Species {
   name: string;
   baseStats: Stats;
@@ -11,11 +10,12 @@ export interface Species {
   naturalActions:  ActionFactory[];
 }
 
-export function createCreature(species: Species, identifier?: number) {
+export function createCreature(species: Species, identifier?: number, level = 1) {
   return new Creature(
     identifier ? species.name + ` ${identifier}` : species.name,
     species.baseStats,
     species.naturalActions,
+    level,
     species.levelProgression,
   )
 }
