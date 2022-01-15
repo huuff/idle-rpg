@@ -61,7 +61,7 @@ function nextScene() {
   ticker.startScene(currentScene.value!, () => {
     if (player.currentHealth <= 0) {
       return; // Game over
-    } else if (player.healthRatio <= 0.50) {
+    } else if (player.healthRatio <= 0.15) {
       currentScene.value = new Rest(player);
       ticker.startScene(currentScene.value, nextScene);
     } else {

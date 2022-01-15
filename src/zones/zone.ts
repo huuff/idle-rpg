@@ -2,28 +2,34 @@ import { Creature } from "@/creatures/creature";
 import { Battle } from "@/battle/battle";
 import { Species, createCreature, slime } from "@/creatures/species";
 import range from "@/util/range";
-import { randomInt } from "@/util/random";
+import { 
+  randomInt, 
+  randomByNormalizedSortedFrequency,
+  normalizeAndSortFrequencies, 
+   } from "@/util/random";
 
-export interface Zone {
-  name: string;
-  stages: number;
-  enemyToFrequency: Map<Species, number>;
-  newEncounter(player: Creature): Battle;
-}
+export class Zone {
+  private readonly enemyToFrequency: [Species, number][];
 
-export const plains: Zone = {
-  name: "Plains",
-  stages: 5,
-  enemyToFrequency: new Map([
-    [slime, 1] ,
-  ]),
+  constructor(
+    public readonly name: string,
+    public readonly stages: number,
+    enemyToFrequency: [Species, number][],
+  ) {
+    this.enemyToFrequency = normalizeAndSortFrequencies(enemyToFrequency);
+  }
 
-  // TODO: Generalize this for any zone
-  // use frequency to generate an appropriate number
-  // of enemies
-  newEncounter(player: Creature): Battle {
-    const enemies = range(randomInt(3)).map(i => createCreature(slime, i+1))
+  public newEncounter(player: Creature): Battle {
+    const enemies = range(randomInt(3))
+    .map(i => createCreature(
+      randomByNormalizedSortedFrequency(this.enemyToFrequency),
+      i + 1,
+    ));
 
-    return new Battle([ player ], enemies);
+    return new Battle([player], enemies);
   }
 }
+
+export const plains: Zone = new Zone("Plains", 5, [
+  [slime, 1],
+]);
