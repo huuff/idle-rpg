@@ -7,13 +7,13 @@ export class Ticker {
 
   constructor(
     private readonly frameRate: number,
-    private readonly delayBetweenScenes: number,
   ) {}
 
   public startScene(scene: Scene, onEnd: () => void) {
     this.scene = scene;
     this.onEnd = onEnd;
-    setTimeout(this.setTimer.bind(this), this.delayBetweenScenes);
+    scene.firstTick && scene.firstTick();
+    this.setTimer();
   }
 
   public stop(): void {
@@ -26,7 +26,7 @@ export class Ticker {
         this.scene.tick();
         this.setTimer();
       } else {
-        this.onEnd && setTimeout(this.onEnd, this.delayBetweenScenes);
+        this.onEnd && this.onEnd();
       }
     }
   }

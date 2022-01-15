@@ -16,12 +16,14 @@ export class Battle implements Scene {
     private readonly goodGuys: Creature[],
     private readonly badGuys: Creature[],
   ) {
-    const enemyNames = badGuys
+    this.turns = calculateTurns([...goodGuys, ...badGuys]);
+  }
+
+  public firstTick(): void {
+    const enemyNames = this.badGuys
                         .map(a => a.name)
                         .join(", ");
     this.log.push(`${enemyNames} appear!`);
-    this.turns = calculateTurns([...goodGuys, ...badGuys]);
-
   }
 
   public tick() {

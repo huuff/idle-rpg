@@ -42,7 +42,7 @@ import HealthBar from "./components/HealthBar.vue";
 import ZoneProgress from "./components/ZoneProgress.vue";
 
 const { player } = useMainStore();
-const ticker = new Ticker(3, 1000);
+const ticker = new Ticker(1);
 
 const currentScene: Ref<Scene | undefined> = ref(undefined);
 const mainView = () => currentScene.value && currentScene.value.mainView();

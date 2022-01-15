@@ -8,6 +8,8 @@ import {Ticker} from "./ticker";
 import {Settlement} from "./settlements/settlement";
 import { SceneLog } from "./scene-log";
 
+const delayBetweenScenes = 1000;
+
 export class SceneChanger {
   private readonly player: Creature;
   private readonly log: SceneLog;
@@ -30,18 +32,20 @@ export class SceneChanger {
 
     if (nextScene instanceof Rest) {
       this.log.push(`You feel a little tired, so you return to ${this.currentSettlement.value.name} to rest`);
-      setTimeout(() => {
-        this.log.clear();
-        this.currentScene.value = nextScene;
-        this.ticker.startScene(nextScene, this.changeScene.bind(this))
-      }, 1500)
-    } else if (nextScene){
-      this.log.clear();
-      this.currentScene.value = nextScene;
-      this.ticker.startScene(nextScene, this.changeScene.bind(this));
+      this.setSceneWithDelay(nextScene, 1500);
+    } else if (nextScene) {
+      this.setSceneWithDelay(nextScene, delayBetweenScenes);
     } else {
       return;
     }
+  }
+
+  private setSceneWithDelay(scene: Scene, delay: number) {
+    setTimeout(() => {
+      this.log.clear();
+      this.currentScene.value = scene;
+      this.ticker.startScene(scene, this.changeScene.bind(this))
+    }, delay)
   }
   
   private nextScene(): Scene | undefined {
