@@ -18,6 +18,10 @@
 </template>
 
 <script setup lang="ts">
+// TODO: I'd like to mark the way to the next stage
+// but there's no way with bulma-o-steps, so maybe I
+// should implement my own following this
+// https://ishadeed.com/article/stepper-component-html-css/
 import { Zone } from "@/zones/zone";
 import { nrange } from "@/util/range";
 
