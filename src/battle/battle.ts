@@ -1,5 +1,5 @@
 import { Scene } from "@/scene";
-import {h, VNode, reactive } from "vue";
+import {h, VNode, } from "vue";
 import { useMainStore } from "@/store";
 import { Creature, } from "@/creatures/creature";
 import { chooseRandom } from "@/util/random";
@@ -50,7 +50,7 @@ export class Battle implements Scene {
   }
 
   public secondaryView(): VNode {
-    return h(EnemyHealth, { enemies: reactive(this.badGuys)}) ;
+    return h(EnemyHealth, { enemies:this.badGuys}) ;
   }
 
   public isOver(): boolean {

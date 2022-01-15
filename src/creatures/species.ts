@@ -1,3 +1,4 @@
+import { reactive } from "vue";
 import { Stats } from "@/creatures/stats";
 import { ActionFactory } from "@/battle/action";
 import { BasicAttack } from "@/battle/basic-attack";
@@ -10,14 +11,14 @@ export interface Species {
   naturalActions:  ActionFactory[];
 }
 
-export function createCreature(species: Species, identifier?: number, level = 1) {
-  return new Creature(
+export function createCreature(species: Species, identifier?: number, level = 1): Creature {
+  return reactive(new Creature(
     identifier ? species.name + ` ${identifier}` : species.name,
     species.baseStats,
     species.naturalActions,
     level,
     species.levelProgression,
-  )
+  ));
 }
 
 export const slime: Species = {

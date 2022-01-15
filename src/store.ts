@@ -7,7 +7,7 @@ import { SceneLog } from "@/scene-log";
 
 export const useMainStore = defineStore("main", {
   state: () => ({
-    player: reactive(createCreature(human)) as Creature,
+    player: createCreature(human) as Creature,
     log: reactive(new SceneLog()) as SceneLog,
   })
 });
