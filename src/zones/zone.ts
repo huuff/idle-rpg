@@ -1,4 +1,3 @@
-import { Creature } from "@/creatures/creature";
 import { Battle } from "@/battle/battle";
 import { Species, createCreature, slime } from "@/creatures/species";
 import { nrange } from "@/util/range";
@@ -7,6 +6,7 @@ import {
   randomByNormalizedFrequency,
   normalizeFrequencies, 
 } from "@/util/random";
+import {useMainStore} from "@/store";
 
 class StageEnemy {
   constructor(
@@ -33,7 +33,8 @@ export class Stage {
     );
   }
 
-  public newEncounter(player: Creature): Battle {
+  public newEncounter(): Battle {
+    const { player } = useMainStore();
     const enemies = nrange(randomInt(3))
     .map(i => {
       const enemy = randomByNormalizedFrequency(this.enemyToFrequency);
@@ -65,11 +66,11 @@ export class Zone {
     return this.stages.length;
   }
 
-  public newEncounter(player: Creature): Battle {
+  public newEncounter(): Battle {
     if (this.currentStageObject().isCompleted()) {
       this.currentStage++;
     }
-    return this.currentStageObject().newEncounter(player)
+    return this.currentStageObject().newEncounter()
   }
 
   public reset(): void {

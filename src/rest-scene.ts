@@ -1,19 +1,21 @@
 import { h, VNode } from "vue";
 import { Scene } from "@/scene";
 import { Creature } from "@/creatures/creature";
+import { useMainStore } from "@/store";
 
 export class Rest implements Scene {
+  private readonly player: Creature;
   
-  constructor(
-    private readonly creature: Creature,
-  ) {}
+  constructor() {
+    ({ player: this.player} = useMainStore())
+  }
 
   public tick(): void {
-    this.creature.currentHealth++;
+    this.player.currentHealth++;
   }
 
   public isOver(): boolean {
-    return this.creature.currentHealth >= this.creature.stats.maxHealth;
+    return this.player.currentHealth >= this.player.stats.maxHealth;
   }
 
   public mainView(): VNode {

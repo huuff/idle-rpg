@@ -31,17 +31,16 @@
 <script setup lang="ts">
 import { reactive, ref, Ref, } from "vue";
 import { onUnmounted, onMounted } from "vue";
-import { Creature } from "@/creatures/creature";
 import { Ticker } from "@/ticker";
 import { Rest } from "@/rest-scene";
 import { Scene } from "@/scene";
-import { human, createCreature } from "@/creatures/species";
 import { Zone, createPlains } from "@/zones/zone";
+import { useMainStore } from "@/store";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 import ZoneProgress from "./components/ZoneProgress.vue";
 
-const player: Creature = reactive(createCreature(human));
+const { player } = useMainStore();
 const ticker = new Ticker(3, 1000);
 
 const currentScene: Ref<Scene | undefined> = ref(undefined);
@@ -51,7 +50,7 @@ const secondaryView = () => currentScene.value && currentScene.value.secondaryVi
 let currentZone: Zone = reactive(createPlains()) as Zone; 
 
 function nextScene() {
-  currentScene.value = currentZone?.newEncounter(player);
+  currentScene.value = currentZone?.newEncounter();
   // TODO: A starting scene would prevent currentScene
   // from ever being undefined. I can use this one to
   // choose a class
@@ -59,7 +58,7 @@ function nextScene() {
     if (player.currentHealth <= 0) {
       return; // Game over
     } else if (player.healthRatio <= 0.20) {
-      currentScene.value = new Rest(player);
+      currentScene.value = new Rest();
       currentZone.reset();
       ticker.startScene(currentScene.value, nextScene);
     } else {
