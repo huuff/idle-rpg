@@ -29,47 +29,34 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, Ref, } from "vue";
+import { ref, Ref, } from "vue";
 import { onUnmounted, onMounted } from "vue";
 import { Ticker } from "@/ticker";
-import { Rest } from "@/rest-scene";
 import { Scene } from "@/scene";
 import { Zone, createPlains } from "@/zones/zone";
-import { Settlement, prontera } from "@/settlements/settlement";
+import { prontera } from "@/settlements/settlement";
 import { useMainStore } from "@/store";
+import { SceneChanger } from "./scene-changer";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 import ZoneProgress from "./components/ZoneProgress.vue";
 
-const { player, log } = useMainStore();
+const { player } = useMainStore();
 const ticker = new Ticker(3, 1000);
 
 const currentScene: Ref<Scene | undefined> = ref(undefined);
 const mainView = () => currentScene.value && currentScene.value.mainView();
 const secondaryView = () => currentScene.value && currentScene.value.secondaryView && currentScene.value.secondaryView();
 
-let currentZone: Zone = reactive(createPlains()) as Zone; 
+const currentZone = ref(createPlains()) as Ref<Zone>;
 const currentSettlement = ref(prontera);
+const sceneChanger = new SceneChanger(
+  currentScene,
+  currentZone,
+  currentSettlement,
+  ticker
+);
 
-function nextScene() {
-  currentScene.value = currentZone?.newEncounter();
-  // TODO: A starting scene would prevent currentScene
-  // from ever being undefined. I can use this one to
-  // choose a class
-  ticker.startScene(currentScene.value!, () => {
-    log.clear();
-    if (player.currentHealth <= 0) {
-      return; // Game over
-    } else if (player.healthRatio <= 0.50) {
-      currentScene.value = new Rest(currentSettlement.value);
-      currentZone = reactive(createPlains()) as Zone;
-      ticker.startScene(currentScene.value, nextScene);
-    } else {
-      nextScene();
-    }
-  });
-}
-
-onMounted(() => nextScene());
+onMounted(() => sceneChanger.changeScene());
 onUnmounted(() => ticker.stop());
 </script>
