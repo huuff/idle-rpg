@@ -1,7 +1,7 @@
 import { Creature } from "@/creatures/creature";
 import { Battle } from "@/battle/battle";
 import { Species, createCreature, slime } from "@/creatures/species";
-import range from "@/util/range";
+import { nrange } from "@/util/range";
 import { 
   randomInt, 
   randomByNormalizedSortedFrequency,
@@ -21,10 +21,10 @@ export class Zone {
   }
 
   public newEncounter(player: Creature): Battle {
-    const enemies = range(randomInt(3))
+    const enemies = nrange(randomInt(3))
     .map(i => createCreature(
       randomByNormalizedSortedFrequency(this.enemyToFrequency),
-      i + 1,
+      i,
     ));
 
     return new Battle([player], enemies);
