@@ -16,7 +16,7 @@ export function randomInt(max: number): number {
 // element for which the accummulated frequency is larger or equal
 // to the random number.
 // Check the tests if you ever forget how this works
-export function randomByNormalizedSortedFrequency<T>(optionsToFrequencies: [T, number][]): T {
+export function randomByNormalizedFrequency<T>(optionsToFrequencies: [T, number][]): T {
   const target = Math.random();
 
   let accummulatedFrequency = 0;
@@ -33,7 +33,7 @@ export function randomByNormalizedSortedFrequency<T>(optionsToFrequencies: [T, n
 // Makes an array of options to frequencies normalized
 // And sorts it in decreasing order so it can be searched
 // for a random match
-export function normalizeAndSortFrequencies<T>(optionsToFrequency: [T, number][]): [T, number][] {
+export function normalizeFrequencies<T>(optionsToFrequency: [T, number][]): [T, number][] {
   const totalFrequency = optionsToFrequency.reduce((acc, [_, freq]) => acc + freq, 0);
   return optionsToFrequency
     .map(([option, freq]) => [option, freq/totalFrequency] as [T, number])

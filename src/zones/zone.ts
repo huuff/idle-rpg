@@ -4,8 +4,8 @@ import { Species, createCreature, slime } from "@/creatures/species";
 import { nrange } from "@/util/range";
 import { 
   randomInt, 
-  randomByNormalizedSortedFrequency,
-  normalizeAndSortFrequencies, 
+  randomByNormalizedFrequency,
+  normalizeFrequencies, 
 } from "@/util/random";
 
 class StageEnemy {
@@ -26,7 +26,7 @@ export class Stage {
   constructor(
     enemies: StageEnemy[],
   ) {
-    this.enemyToFrequency = normalizeAndSortFrequencies(
+    this.enemyToFrequency = normalizeFrequencies(
       enemies.map(e => e.toFrequencyTuple())
     );
   }
@@ -34,7 +34,7 @@ export class Stage {
   public newEncounter(player: Creature): Battle {
     const enemies = nrange(randomInt(3))
     .map(i => createCreature(
-      randomByNormalizedSortedFrequency(this.enemyToFrequency).species,
+      randomByNormalizedFrequency(this.enemyToFrequency).species,
       i,
     ));
 
