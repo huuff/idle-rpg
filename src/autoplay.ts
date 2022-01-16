@@ -53,7 +53,7 @@ export class Autoplay {
             action: "arrived",
           }
         }
-        else if (this.store.player.healthRatio <= 0.70) {
+        else if (this.store.player.healthRatio <= 0.15) {
           return {
             status: {
               type: "resting",

@@ -39,7 +39,7 @@ import ZoneProgress from "./components/location/ZoneProgress.vue";
 import { Autoplay } from "@/autoplay";
 
 const { player, scene: currentScene } = storeToRefs(useMainStore());
-const ticker = new Ticker(2);
+const ticker = new Ticker(3);
 
 // TODO: These as store getters
 const mainView = () => currentScene.value && currentScene.value.mainView();
