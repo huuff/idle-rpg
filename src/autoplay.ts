@@ -14,6 +14,11 @@ type NextStatus = {
 // when appropriate, but this should also be done when not on
 // autoplay
 
+// TODO: Even if this was the autoplay handler, it mixes serveral
+// responsibilities
+// For example, telling whether you arrived somewhere or returned to rest might be a responsibility of some watcher for scene changes
+// But the need to have a delay for it makes it hard for me to find where to put these.
+
 export class Autoplay {
   private readonly store = useMainStore();
 
