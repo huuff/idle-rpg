@@ -22,11 +22,15 @@ const props = defineProps<{
 }>();
 
 const store = useMainStore();
-const { map, } = storeToRefs(store);
+const { map, autoplay } = storeToRefs(store);
 
 const possibleDestinations = computed(() => map.value.optionsFrom(props.location));
 
 function goTo(destination: TravelOption): void {
+  if (autoplay.value === "enabled") {
+    autoplay.value = destination;
+  }
+
   store.setMapStatus({
     type: "travelling",
     from: (store.mapStatus as RestingStatus).in,

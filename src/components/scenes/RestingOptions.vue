@@ -1,12 +1,7 @@
 <template>
-<label class="checkbox">
-  <input type="checkbox" v-model="autoplay"/>
-  Autoplay
-</label>
+<autoplay-checkbox />
 </template>
 
 <script setup lang="ts">
-import { useMainStore } from "@/store";
-
-const { autoplay } = useMainStore();
+import AutoplayCheckbox from "@/components/AutoplayCheckbox.vue";
 </script>

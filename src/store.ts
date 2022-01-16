@@ -11,6 +11,7 @@ import {createPlains} from "./zones/zone";
 import { Rest } from "@/rest-scene";
 import {Scene} from "./scene";
 import {sceneFromMapStatus} from "./scenes/scene-from-map-status";
+import { Autoplay } from "@/autoplay";
 
 export type StoreState = {
   player: Creature;
@@ -18,7 +19,7 @@ export type StoreState = {
   mapStatus: MapStatus;
   map: GameMap;
   scene: Scene;
-  autoplay: boolean;
+  autoplay: Autoplay;
   tickDuration: number;
 }
 
@@ -38,7 +39,7 @@ export const useMainStore = defineStore("main", {
         ]
       ),
       scene: new Rest(prontera),
-      autoplay: false,
+      autoplay: "disabled",
       tickDuration: 250,
     } as StoreState;
   }, 

@@ -29,14 +29,14 @@
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, onMounted, watch } from "vue";
+import { onUnmounted, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { Ticker } from "@/ticker";
 import { useMainStore } from "@/store";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 import ZoneProgress from "./components/location/ZoneProgress.vue";
-import { Autoplay } from "@/autoplay";
+import { AutoTraveller } from "./autotraveller";
 
 const { player, scene: currentScene } = storeToRefs(useMainStore());
 const ticker = new Ticker();
@@ -45,7 +45,7 @@ const ticker = new Ticker();
 const mainView = () => currentScene.value && currentScene.value.mainView();
 const secondaryView = () => currentScene.value && currentScene.value.secondaryView && currentScene.value.secondaryView();
 
-const autoplay = new Autoplay();
+const autoplay = new AutoTraveller();
 
 watch(currentScene, () => {
   ticker.startScene(currentScene.value, autoplay.changeStatus.bind(autoplay));

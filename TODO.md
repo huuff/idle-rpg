@@ -6,3 +6,4 @@
 * Maybe stats should be a class and have methods to add and multiply (also allow fractional numbers and return rounded with getters)
 * Actual game over
 * Setting some getter that says whether travelling is over?
+* Maybe put scenes stuff in the scenes folder
