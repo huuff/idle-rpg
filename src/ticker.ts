@@ -1,4 +1,4 @@
-import { Scene } from "@/scene";
+import { Scene } from "@/scenes/scene";
 import { useMainStore } from "@/store";
 
 export class Ticker {

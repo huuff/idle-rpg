@@ -1,4 +1,4 @@
-import { Scene } from "@/scene";
+import { Scene } from "@/scenes/scene";
 import {h, VNode, } from "vue";
 import { useMainStore } from "@/store";
 import { Creature, } from "@/creatures/creature";
@@ -8,6 +8,9 @@ import { executeAction } from "./action";
 import BattleView from "@/components/scenes/BattleView.vue";
 import EnemyHealth from "@/components/scenes/EnemyHealth.vue";
 
+// TODO: This should take the responsibility of naming the
+// enemies (as 1, 2, 3, etc) instead of doing it in the stage
+// Since it's a property that's only for presentation
 export class Battle implements Scene {
   private readonly log = useMainStore().log;
   private turns: Creature[];

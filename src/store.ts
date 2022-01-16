@@ -3,13 +3,13 @@ import { defineStore } from "pinia";
 import { Creature } from "@/creatures/creature";
 import { human } from "@/creatures/species";
 import {createCreature} from "@/creatures/species";
-import { SceneLog } from "@/scene-log";
+import { SceneLog } from "@/scenes/scene-log";
 import {aldebaran, prontera} from "@/map/settlements";
 import { MapStatus, } from "@/map/map-status";
 import {GameMap} from "./map/game-map";
 import {createPlains} from "./zones/zone";
 import { Rest } from "@/rest-scene";
-import {Scene} from "./scene";
+import {Scene} from "@/scenes/scene";
 import {sceneFromMapStatus} from "./scenes/scene-from-map-status";
 import { Autoplay } from "@/autoplay";
 
@@ -25,7 +25,7 @@ export type StoreState = {
 
 export const useMainStore = defineStore("main", {
   state: () => ({
-      player: createCreature(human) as Creature,
+      player: createCreature(human),
       log: reactive(new SceneLog()) as SceneLog,
       mapStatus: { 
         type: "resting",

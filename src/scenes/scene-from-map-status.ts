@@ -1,4 +1,4 @@
-import { Scene } from "@/scene";
+import { Scene } from "./scene";
 import { MapStatus, matchMapStatus } from "@/map/map-status";
 import { Rest } from "@/rest-scene";
 

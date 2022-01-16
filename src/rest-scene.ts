@@ -1,5 +1,5 @@
 import { h, VNode } from "vue";
-import { Scene } from "@/scene";
+import { Scene } from "@/scenes/scene";
 import { Creature } from "@/creatures/creature";
 import { useMainStore } from "@/store";
 import { MapLocation } from "@/map/game-map";
@@ -13,7 +13,7 @@ export class Rest implements Scene {
     private readonly location: MapLocation,
   ) {
     const store = useMainStore();
-    this.player = store.player as Creature; //TODO: Maybe I should pass this in the constructor
+    this.player = store.player; //TODO: Maybe I should pass this in the constructor
   }
 
   public tick(): void {

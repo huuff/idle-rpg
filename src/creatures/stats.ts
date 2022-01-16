@@ -1,10 +1,18 @@
-export interface StatsInput {
+// Separated into an interface and implementation because
+// Vue's `reactive` of a `StatsImpl` only returns a type
+// that's only compatible on the public properties, so, a
+// Stats
+
+export interface Stats {
   maxHealth: number;
   strength: number;
   agility: number;
+  challenge: number;
+  plus(augend: Stats): Stats;
+  times(factor: number): Stats;
 }
 
-export class Stats {
+export class StatsImpl implements Stats {
   private readonly _maxHealth: number;
   private readonly _strength: number;
   private readonly _agility: number;
@@ -40,15 +48,18 @@ export class Stats {
   }
 
   public plus(augend: Stats): Stats {
-    return new Stats({
-      maxHealth: this._maxHealth + augend._maxHealth,
-      strength: this._strength + augend._strength,
-      agility: this._agility + augend._agility
-    });
+    if (augend instanceof StatsImpl)
+      return new StatsImpl({
+        maxHealth: this._maxHealth + augend._maxHealth,
+        strength: this._strength + augend._strength,
+        agility: this._agility + augend._agility
+      });
+    else
+      return this.plus(new StatsImpl(augend));
   }
 
   public times(factor: number): Stats {
-    return new Stats({
+    return new StatsImpl({
       maxHealth: this._maxHealth * factor,
       strength: this._strength * factor,
       agility: this._agility * factor,
@@ -56,7 +67,7 @@ export class Stats {
   }
 }
 
-export const zeroStats: Stats = new Stats({
+export const zeroStats: Stats = new StatsImpl({
   maxHealth: 0,
   strength: 0,
   agility: 0,
