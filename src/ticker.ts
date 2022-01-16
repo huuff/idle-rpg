@@ -10,6 +10,7 @@ export class Ticker {
   ) {}
 
   public startScene(scene: Scene, onEnd: () => void) {
+    clearTimeout(this.timer);
     this.scene = scene;
     this.onEnd = onEnd;
     scene.firstTick && scene.firstTick();

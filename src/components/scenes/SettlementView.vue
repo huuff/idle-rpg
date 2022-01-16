@@ -21,18 +21,18 @@ const props = defineProps<{
   location: MapLocation;
 }>();
 
-const { map, mapStatus } = storeToRefs(useMainStore());
+const store = useMainStore();
+const { map, } = storeToRefs(store);
 
 const possibleDestinations = computed(() => map.value.optionsFrom(props.location));
 
 function goTo(destination: TravelOption): void {
-  mapStatus.value = {
+  store.setMapStatus({
     type: "travelling",
-    from: (mapStatus.value as RestingStatus).in,
+    from: (store.mapStatus as RestingStatus).in,
     to: destination.to,
     encounters: 0,
     through: destination.through(),
-  }
-
+  })
 }
 </script>

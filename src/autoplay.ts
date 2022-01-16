@@ -2,6 +2,7 @@ import { Ref } from "vue";
 import { Creature } from "@/creatures/creature";
 import { SceneLog } from "./scene-log";
 import { MapStatus, matchMapStatus } from "./map/map-status";
+import { useMainStore } from "@/store";
 
 const delayBetweenScenes = 1500;
 
@@ -11,13 +12,15 @@ type NextStatus = {
   status: MapStatus;
   action: NextStatusAction;
 }
+// TODO: This isn't actually autoplay! (or is it?)
+// this just goes to next encounter/stage/rest/location
+// when appropriate, but this should also be done when not on
+// autoplay
+
+// TODO: It's not returning to rest correctly
 
 export class Autoplay {
-  constructor(
-    private readonly status: Ref<MapStatus>,
-    private readonly player: Ref<Creature>,
-    private readonly log: Ref<SceneLog>,
-  ) {}
+  private readonly store = useMainStore();
 
   public changeStatus(): void {
     const nextStatus = this.nextStatus();
@@ -25,23 +28,24 @@ export class Autoplay {
     if (nextStatus.action === "arrived"
         && nextStatus.status.type === "resting"
        ) {
-      this.log.value.push(`You arrived at ${nextStatus.status.in}`)
+      this.store.log.push(`You arrived at ${nextStatus.status.in}`)
     } else if (nextStatus.action === "rest"
               && nextStatus.status.type === "resting") {
-      this.log.value.push(`You feel tired. You return to ${nextStatus.status.in} to rest`);
+      this.store.log.push(`You feel tired. You return to ${nextStatus.status.in.name} to rest`);
     }
 
+    console.log("Changing status in a delay")
     this.setStatusWithDelay(nextStatus.status, delayBetweenScenes);
   }
 
   private nextStatus(): NextStatus {
-    return matchMapStatus<NextStatus>(this.status.value, 
+    return matchMapStatus<NextStatus>(this.store.mapStatus as MapStatus, 
       (resting) => ({
         status: resting,
         action: "continue",
       }),
       (travelling) => {
-        if (this.player.value.currentHealth <= 0.5) {
+        if (this.store.player.currentHealth <= 0.5) {
           return {
             status: {
               type: "resting",
@@ -70,8 +74,8 @@ export class Autoplay {
 
   private setStatusWithDelay(status: MapStatus, delay: number): void {
     setTimeout(() => {
-      this.log.value.clear();
-      this.status.value = status;
+      this.store.log.clear();
+      this.store.setMapStatus(status)
     }, delay)
   }
 }

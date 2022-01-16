@@ -29,32 +29,26 @@
 </template>
 
 <script setup lang="ts">
-import { computed, Ref } from "vue";
 import { storeToRefs } from "pinia";
 import { onUnmounted, watch } from "vue";
 import { Ticker } from "@/ticker";
 import { useMainStore } from "@/store";
-import { sceneFromMapStatus } from "@/scenes/scene-from-map-status";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 import ZoneProgress from "./components/location/ZoneProgress.vue";
-import { SceneLog } from "@/scene-log";
 import { Autoplay } from "@/autoplay";
-import {MapStatus} from "./map/map-status";
 
-// TODO: All these type assertions...
-
-const { player, mapStatus, log } = storeToRefs(useMainStore());
+const { player, scene: currentScene } = storeToRefs(useMainStore());
 const ticker = new Ticker(2);
 
-const currentScene = computed(() => sceneFromMapStatus(mapStatus.value as MapStatus));
+// TODO: These as store getters
 const mainView = () => currentScene.value && currentScene.value.mainView();
 const secondaryView = () => currentScene.value && currentScene.value.secondaryView && currentScene.value.secondaryView();
 
-const autoplay = new Autoplay(mapStatus as Ref<MapStatus>, player, log as Ref<SceneLog>);
+const autoplay = new Autoplay();
 
 watch(currentScene, () => {
-  ticker.startScene(currentScene.value, () => autoplay.changeStatus());
+  ticker.startScene(currentScene.value, autoplay.changeStatus.bind(autoplay));
 })
 
 onUnmounted(() => ticker.stop());

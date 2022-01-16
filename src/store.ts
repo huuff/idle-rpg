@@ -8,12 +8,16 @@ import {aldebaran, prontera} from "@/map/settlements";
 import { MapStatus, } from "@/map/map-status";
 import {GameMap} from "./map/game-map";
 import {createPlains} from "./zones/zone";
+import { Rest } from "@/rest-scene";
+import {Scene} from "./scene";
+import {sceneFromMapStatus} from "./scenes/scene-from-map-status";
 
-type StoreState = {
+export type StoreState = {
   player: Creature;
   log: SceneLog;
   mapStatus: MapStatus;
   map: GameMap;
+  scene: Scene;
   autoplay: boolean;
 }
 
@@ -21,7 +25,7 @@ export const useMainStore = defineStore("main", {
   state(): StoreState {
     return {
       player: createCreature(human),
-      log: reactive(new SceneLog()),
+      log: reactive(new SceneLog()) as SceneLog,
       mapStatus: { 
         type: "resting",
         in: prontera,
@@ -32,7 +36,14 @@ export const useMainStore = defineStore("main", {
           { locations: [ prontera, aldebaran ], through: createPlains }
         ]
       ),
+      scene: new Rest(prontera),
       autoplay: false,
     } as StoreState;
+  }, 
+  actions: {
+    setMapStatus(newStatus: MapStatus) {
+      this.mapStatus = newStatus;
+      this.scene = sceneFromMapStatus(newStatus);
+    }
   }
 });
