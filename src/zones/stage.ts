@@ -1,5 +1,6 @@
 import { Battle } from "@/battle/battle";
 import { Species, createCreature } from "@/creatures/species";
+import { Creature } from"@/creatures/creature";
 import {
   randomByNormalizedFrequency,
   normalizeFrequencies,
@@ -40,6 +41,6 @@ export class Stage {
       return createCreature(enemy.species, i, enemy.averageLevel)
     });
 
-    return new Battle([player], enemies);
+    return new Battle([player as Creature], enemies);
   }
 }

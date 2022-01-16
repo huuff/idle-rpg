@@ -25,7 +25,7 @@ export type StoreState = {
 
 export const useMainStore = defineStore("main", {
   state: () => ({
-      player: createCreature(human),
+      player: createCreature(human) as Creature,
       log: reactive(new SceneLog()) as SceneLog,
       mapStatus: { 
         type: "resting",

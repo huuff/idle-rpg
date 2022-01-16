@@ -1,4 +1,4 @@
-import { Stats, addStats, zeroStats, multiplyStats } from "./stats";
+import { Stats, zeroStats, } from "./stats";
 import { ActionFactory } from "@/battle/action";
 
 export class Creature {
@@ -13,7 +13,7 @@ export class Creature {
     public level = 1,
     public readonly levelProgression: Stats = zeroStats,
   ) {
-    this.stats = addStats(baseStats, multiplyStats(levelProgression, level));
+    this.stats = baseStats.plus(levelProgression.times(level))
     this.currentHealth = this.stats.maxHealth;
     this._currentExp = 0;
   }
@@ -40,7 +40,7 @@ export class Creature {
     if (this.currentExp >= this.requiredExp) {
       const excedingExp = this.currentExp - this.requiredExp;
       this.level++;
-      this.stats = addStats(this.stats, this.levelProgression);
+      this.stats = this.stats.plus(this.levelProgression);
       this.currentExp = excedingExp;
       this.currentHealth += this.levelProgression.maxHealth;
     }

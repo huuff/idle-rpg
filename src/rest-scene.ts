@@ -12,7 +12,8 @@ export class Rest implements Scene {
   constructor(
     private readonly location: MapLocation,
   ) {
-    ({ player: this.player} = useMainStore())
+    const store = useMainStore();
+    this.player = store.player as Creature; //TODO: Maybe I should pass this in the constructor
   }
 
   public tick(): void {
