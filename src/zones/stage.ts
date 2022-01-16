@@ -22,11 +22,10 @@ export class StageEnemy {
 
 export class Stage {
   private readonly enemyToFrequency: [StageEnemy, number][];
-  private encountersHad = 0;
 
   constructor(
     enemies: StageEnemy[],
-    private readonly encounters: number,
+    public readonly encounters: number,
   ) {
     this.enemyToFrequency = normalizeFrequencies(
       enemies.map(e => e.toFrequencyTuple())
@@ -40,12 +39,7 @@ export class Stage {
       const enemy = randomByNormalizedFrequency(this.enemyToFrequency);
       return createCreature(enemy.species, i, enemy.averageLevel)
     });
-    this.encountersHad++;
 
     return new Battle([player], enemies);
-  }
-
-  public isCompleted(): boolean {
-    return this.encountersHad >= this.encounters;
   }
 }

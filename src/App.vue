@@ -29,34 +29,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, } from "vue";
-import { onUnmounted, onMounted } from "vue";
+import { computed, Ref } from "vue";
+import { storeToRefs } from "pinia";
+import { onUnmounted, onMounted, watch } from "vue";
 import { Ticker } from "@/ticker";
-import { Scene } from "@/scene";
-import { Zone, createPlains } from "@/zones/zone";
-import { prontera } from "@/settlements/settlement";
 import { useMainStore } from "@/store";
-import { SceneChanger } from "./scene-changer";
+import { sceneFromMapStatus } from "@/scenes/scene-from-map-status";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 import ZoneProgress from "./components/ZoneProgress.vue";
+import { SceneLog } from "@/scene-log";
+import { Autoplay } from "@/autoplay";
+import {MapStatus} from "./map/map-status";
 
-const { player } = useMainStore();
+// TODO: All these type assertions...
+
+const { player, mapStatus, log } = storeToRefs(useMainStore());
 const ticker = new Ticker(1);
 
-const currentScene: Ref<Scene | undefined> = ref(undefined);
+const currentScene = computed(() => sceneFromMapStatus(mapStatus.value as MapStatus));
 const mainView = () => currentScene.value && currentScene.value.mainView();
 const secondaryView = () => currentScene.value && currentScene.value.secondaryView && currentScene.value.secondaryView();
 
-const currentZone = ref(createPlains()) as Ref<Zone>;
-const currentSettlement = ref(prontera);
-const sceneChanger = new SceneChanger(
-  currentScene,
-  currentZone,
-  currentSettlement,
-  ticker
-);
+const currentZone = computed(() => mapStatus.value.type === "travelling" && mapStatus.value.through);
 
-onMounted(() => sceneChanger.changeScene());
+const autoplay = new Autoplay(mapStatus as Ref<MapStatus>, player, log as Ref<SceneLog>);
+
+watch(currentScene, () => {
+  ticker.startScene(currentScene.value, () => autoplay.changeStatus());
+})
+
 onUnmounted(() => ticker.stop());
 </script>

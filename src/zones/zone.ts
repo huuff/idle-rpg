@@ -3,8 +3,6 @@ import { slime } from "@/creatures/species";
 import { Stage, StageEnemy } from "./stage";
    
 export class Zone {
-  public currentStage = 1;
-
   constructor(
     public readonly name: string,
     public readonly stages: Stage[],
@@ -14,15 +12,23 @@ export class Zone {
     return this.stages.length;
   }
 
-  public newEncounter(): Battle {
-    if (this.currentStageObject().isCompleted()) {
-      this.currentStage++;
-    }
-    return this.currentStageObject().newEncounter()
+  public newEncounter(encountersHad: number): Battle {
+    const stage = this.stageFromEncounterNumber(encountersHad);
+    return this.stages[stage].newEncounter()
   }
 
-  private currentStageObject(): Stage {
-    return this.stages[this.currentStage - 1];
+  public stageFromEncounterNumber(encounters: number): number {
+    let result = 0;
+    let accStages = 0;
+    for (const stage of this.stages) {
+      accStages += stage.encounters;
+      if (encounters < accStages)
+        return result;
+      else
+        result++;
+    }
+
+    throw new Error(`Called stageFromEncounterNumber with ${encounters} encounters, which means this zone is complete!`)
   }
 }
 

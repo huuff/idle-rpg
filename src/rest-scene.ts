@@ -2,11 +2,16 @@ import { h, VNode } from "vue";
 import { Scene } from "@/scene";
 import { Creature } from "@/creatures/creature";
 import { useMainStore } from "@/store";
+import { MapLocation } from "@/map/game-map";
+import SettlementView from "@/components/scenes/SettlementView.vue";
+import RestingOptions from "@/components/scenes/RestingOptions.vue";
 
 export class Rest implements Scene {
   private readonly player: Creature;
   
-  constructor() {
+  constructor(
+    private readonly location: MapLocation,
+  ) {
     ({ player: this.player} = useMainStore())
   }
 
@@ -19,6 +24,13 @@ export class Rest implements Scene {
   }
 
   public mainView(): VNode {
-    return h("h1", {}, "You are resting");
+    return h(
+      SettlementView,
+      { location: this.location }
+    );
+  }
+
+  public secondaryView(): VNode {
+    return h(RestingOptions, {});
   }
 }
