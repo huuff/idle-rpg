@@ -14,8 +14,6 @@ type NextStatus = {
 // when appropriate, but this should also be done when not on
 // autoplay
 
-// TODO: It's not returning to rest correctly
-
 export class Autoplay {
   private readonly store = useMainStore();
 
@@ -28,7 +26,7 @@ export class Autoplay {
     if (nextStatus.action === "arrived"
         && nextStatus.status.type === "resting"
        ) {
-      this.store.log.push(`You arrived at ${nextStatus.status.in}`)
+      this.store.log.push(`You arrived at ${nextStatus.status.in.name}`)
     } else if (nextStatus.action === "rest"
               && nextStatus.status.type === "resting") {
       this.store.log.push(`You feel tired. You return to ${nextStatus.status.in.name} to rest`);
@@ -44,7 +42,9 @@ export class Autoplay {
         action: "continue",
       }),
       (travelling) => {
-        if (travelling.through.isComplete(travelling.encounters)) {
+        // We just come from travelling so we assume we've had one encounter
+        const encountersHad = travelling.encounters + 1;
+        if (travelling.through.isComplete(encountersHad)) {
           return {
             status: {
               type: "resting",
@@ -63,7 +63,7 @@ export class Autoplay {
           };
         } else {
           return {
-            status: { ...travelling, encounters: travelling.encounters+1},
+            status: { ...travelling, encounters: encountersHad},
             action: "continue",
           };
         }
