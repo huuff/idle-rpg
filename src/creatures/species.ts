@@ -29,9 +29,9 @@ export const slime: Species = {
     agility: 2,
   }),
   levelProgression: new Stats({
-    maxHealth: 3,
-    strength: 1,
-    agility: 0,
+    maxHealth: 5,
+    strength: 0.5,
+    agility: 0.2,
   }),
   naturalActions: [ new BasicAttack() ],
 }
