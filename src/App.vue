@@ -29,8 +29,8 @@
 </template>
 
 <script setup lang="ts">
+import { onUnmounted, onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
-import { onUnmounted, watch } from "vue";
 import { Ticker } from "@/ticker";
 import { useMainStore } from "@/store";
 import AnimatedBar from "./components/AnimatedBar.vue";
@@ -51,5 +51,6 @@ watch(currentScene, () => {
   ticker.startScene(currentScene.value, autoplay.changeStatus.bind(autoplay));
 })
 
+/*onMounted(() => ticker.startScene(currentScene.value, autoplay.changeStatus.bind(autoplay)));*/
 onUnmounted(() => ticker.stop());
 </script>

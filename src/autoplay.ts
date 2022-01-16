@@ -1,6 +1,3 @@
-import { Ref } from "vue";
-import { Creature } from "@/creatures/creature";
-import { SceneLog } from "./scene-log";
 import { MapStatus, matchMapStatus } from "./map/map-status";
 import { useMainStore } from "@/store";
 
@@ -25,6 +22,9 @@ export class Autoplay {
   public changeStatus(): void {
     const nextStatus = this.nextStatus();
 
+    if (nextStatus.action === "continue" && nextStatus.status.type === "resting")
+      return;
+
     if (nextStatus.action === "arrived"
         && nextStatus.status.type === "resting"
        ) {
@@ -34,7 +34,6 @@ export class Autoplay {
       this.store.log.push(`You feel tired. You return to ${nextStatus.status.in.name} to rest`);
     }
 
-    console.log("Changing status in a delay")
     this.setStatusWithDelay(nextStatus.status, delayBetweenScenes);
   }
 
@@ -45,16 +44,7 @@ export class Autoplay {
         action: "continue",
       }),
       (travelling) => {
-        if (this.store.player.currentHealth <= 0.5) {
-          return {
-            status: {
-              type: "resting",
-              in: travelling.from,
-            },
-            action: "rest",
-          };
-          // TODO: Solve this
-        } else if (false) { //eslint-disable-line
+        if (travelling.through.isComplete(travelling.encounters)) {
           return {
             status: {
               type: "resting",
@@ -62,6 +52,15 @@ export class Autoplay {
             },
             action: "arrived",
           }
+        }
+        else if (this.store.player.healthRatio <= 0.70) {
+          return {
+            status: {
+              type: "resting",
+              in: travelling.from,
+            },
+            action: "rest",
+          };
         } else {
           return {
             status: { ...travelling, encounters: travelling.encounters+1},

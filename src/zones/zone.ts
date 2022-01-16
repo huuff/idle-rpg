@@ -12,6 +12,10 @@ export class Zone {
     return this.stages.length;
   }
 
+  public isComplete(encountersHad: number): boolean {
+    return encountersHad >= this.stages.reduce((acc, stage) => acc + stage.encounters, 0);
+  }
+
   public newEncounter(encountersHad: number): Battle {
     const stage = this.stageFromEncounterNumber(encountersHad);
     return this.stages[stage].newEncounter()
