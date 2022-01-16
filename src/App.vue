@@ -2,7 +2,7 @@
 <div class="hero is-fullheight is-info is-bold">
   <div class="hero-body">
     <div class="container">
-      <zone-progress v-if="currentZone" :current-zone="currentZone" />
+      <zone-progress />
       <div class="tile is-ancestor">
         <div class="tile is-4 is-vertical is-parent">
           <div class="tile is-child box">
@@ -31,13 +31,13 @@
 <script setup lang="ts">
 import { computed, Ref } from "vue";
 import { storeToRefs } from "pinia";
-import { onUnmounted, onMounted, watch } from "vue";
+import { onUnmounted, watch } from "vue";
 import { Ticker } from "@/ticker";
 import { useMainStore } from "@/store";
 import { sceneFromMapStatus } from "@/scenes/scene-from-map-status";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
-import ZoneProgress from "./components/ZoneProgress.vue";
+import ZoneProgress from "./components/location/ZoneProgress.vue";
 import { SceneLog } from "@/scene-log";
 import { Autoplay } from "@/autoplay";
 import {MapStatus} from "./map/map-status";
@@ -45,13 +45,11 @@ import {MapStatus} from "./map/map-status";
 // TODO: All these type assertions...
 
 const { player, mapStatus, log } = storeToRefs(useMainStore());
-const ticker = new Ticker(1);
+const ticker = new Ticker(2);
 
 const currentScene = computed(() => sceneFromMapStatus(mapStatus.value as MapStatus));
 const mainView = () => currentScene.value && currentScene.value.mainView();
 const secondaryView = () => currentScene.value && currentScene.value.secondaryView && currentScene.value.secondaryView();
-
-const currentZone = computed(() => mapStatus.value.type === "travelling" && mapStatus.value.through);
 
 const autoplay = new Autoplay(mapStatus as Ref<MapStatus>, player, log as Ref<SceneLog>);
 
