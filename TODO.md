@@ -1,4 +1,5 @@
 # Tasks
+* For the top "travel bar", show either resing (and where) or traveling and from where, to where and through where
 * It's likely that Scenes should control the duration of the initial tick (e.g. displaying the encounter in Battler) and of the end tick (e.g. displaying whether you won or lost). For the end tick, I could return it from the method. No idea for the initial tick unfortunately
 * Actually going somewhere (currently game breaks when finishing zone)
 * Manual option of going to rest between battles

@@ -1,5 +1,6 @@
 import { MapStatus, matchMapStatus } from "./map/map-status";
 import { useMainStore } from "@/store";
+import {hasDestination} from "./autoplay";
 
 type NextStatusAction = "continue" | "arrived" | "rest";
 
@@ -9,6 +10,7 @@ type NextStatus = {
 }
 // TODO: This mixes a lot of concerns, especially, it manages choosing the next mapStatus, but also makes autoplay work (decides whether to do an action automatically)
 // Also, gives the messages related to travel (arriving at a place, retreating)
+// TODO: Adding two todos because the logic is a real clusterfuck here. Maybe I should use FSM or something?
 
 export class AutoTraveller {
   private readonly store = useMainStore();
@@ -23,6 +25,16 @@ export class AutoTraveller {
 
     if (nextStatus.action === "continue" && nextStatus.status.type === "resting")
       return;
+
+    if ( nextStatus.action === "arrived" 
+        && nextStatus.status.type === "resting"
+        && hasDestination(this.store.autoplay) 
+        && nextStatus.status.in === this.store.autoplay.to
+       ) {
+        // Autoplay arrived at destination, remove it
+         // as an objective
+        this.store.autoplay = "enabled";
+       }
 
     if (nextStatus.action === "arrived"
         && nextStatus.status.type === "resting"
@@ -45,13 +57,8 @@ export class AutoTraveller {
             action: "continue",
           }
         } else {
-          // TODO: Maybe autoplay should be some class that
-          // takes instances of some "Goal" interface
-          // that would decide what's the next action to
-          // take?
-          // These checks to know if it's a TravelOption
-          // are cumbersome
-          if (this.store.autoplay !== "disabled" && this.store.autoplay !== "enabled") {
+
+          if (hasDestination(this.store.autoplay)) {
             return {
               status: {
                 type: "travelling",
@@ -60,7 +67,7 @@ export class AutoTraveller {
                 through: this.store.autoplay.through(),
                 encounters: 0
               },
-              action: "continue", // TODO: Actually, depart or something?
+              action: "continue",
             }
           } else {
             return {
