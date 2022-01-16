@@ -19,6 +19,7 @@ export type StoreState = {
   map: GameMap;
   scene: Scene;
   autoplay: boolean;
+  tickDuration: number;
 }
 
 export const useMainStore = defineStore("main", {
@@ -38,6 +39,7 @@ export const useMainStore = defineStore("main", {
       ),
       scene: new Rest(prontera),
       autoplay: false,
+      tickDuration: 250,
     } as StoreState;
   }, 
   actions: {

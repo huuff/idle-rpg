@@ -1,13 +1,15 @@
 import { Scene } from "@/scene";
+import { useMainStore } from "@/store";
 
 export class Ticker {
+  private readonly tickDuration: number;
   private scene: Scene | undefined;
   private timer: ReturnType<typeof setTimeout> | undefined;
   private onEnd: (() => void) | undefined;
 
-  constructor(
-    private readonly frameRate: number,
-  ) {}
+  constructor() {
+    ({tickDuration: this.tickDuration} = useMainStore());
+  }
 
   public startScene(scene: Scene, onEnd: () => void) {
     clearTimeout(this.timer);
@@ -33,10 +35,7 @@ export class Ticker {
   }
 
   private setTimer(): void {
-    this.timer = setTimeout(this.tick.bind(this), this.tickDuration());
+    this.timer = setTimeout(this.tick.bind(this), this.tickDuration);
   }
 
-  private tickDuration(): number {
-    return Math.ceil(1000 / this.frameRate);
-  }
 }

@@ -1,8 +1,6 @@
 import { MapStatus, matchMapStatus } from "./map/map-status";
 import { useMainStore } from "@/store";
 
-const delayBetweenScenes = 1500;
-
 type NextStatusAction = "continue" | "arrived" | "rest";
 
 type NextStatus = {
@@ -21,6 +19,11 @@ type NextStatus = {
 
 export class Autoplay {
   private readonly store = useMainStore();
+  private readonly delayBetweenScenes: number;
+
+  constructor() {
+    this.delayBetweenScenes = Math.round(this.store.tickDuration * 1.5);
+  }
 
   public changeStatus(): void {
     const nextStatus = this.nextStatus();
@@ -37,7 +40,7 @@ export class Autoplay {
       this.store.log.push(`You feel tired. You return to ${nextStatus.status.in.name} to rest`);
     }
 
-    this.setStatusWithDelay(nextStatus.status, delayBetweenScenes);
+    this.setStatusWithDelay(nextStatus.status, this.delayBetweenScenes);
   }
 
   private nextStatus(): NextStatus {

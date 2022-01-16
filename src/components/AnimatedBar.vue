@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 import { watch, ref } from "vue";
+import { useMainStore } from "@/store";
 import animejs from "animejs";
 
 const props = defineProps<{
@@ -14,11 +15,13 @@ const props = defineProps<{
 }>();
 
 const shownValue = ref(props.current);
+const { tickDuration } = useMainStore();
 
 watch(() => props.current, (newValue) => animejs(({
   targets: shownValue,
   value: newValue,
   easing: "linear",
   autoplay: true,
+  duration: tickDuration,
 })));
 </script>
