@@ -24,8 +24,7 @@ export type StoreState = {
 }
 
 export const useMainStore = defineStore("main", {
-  state(): StoreState {
-    return {
+  state: () => ({
       player: createCreature(human),
       log: reactive(new SceneLog()) as SceneLog,
       mapStatus: { 
@@ -41,8 +40,11 @@ export const useMainStore = defineStore("main", {
       scene: new Rest(prontera),
       autoplay: "disabled",
       tickDuration: 250,
-    } as StoreState;
-  }, 
+    }) as StoreState,
+  getters: {
+    sceneMainView: (state) => state.scene.mainView.bind(state.scene),
+    sceneSecondaryView: (state) => state.scene.secondaryView && state.scene.secondaryView.bind(state.scene),
+  },
   actions: {
     setMapStatus(newStatus: MapStatus) {
       this.mapStatus = newStatus;

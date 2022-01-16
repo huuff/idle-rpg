@@ -13,7 +13,7 @@
             <span>Experience</span>
             <animated-bar :current="player.currentExp" :max="player.requiredExp" class="is-info"/>
           </div>
-          <div v-if="currentScene?.secondaryView" class="tile is-child box">
+          <div v-if="secondaryView" class="tile is-child box">
             <secondary-view />
           </div>
         </div>
@@ -38,17 +38,19 @@ import HealthBar from "./components/HealthBar.vue";
 import ZoneProgress from "./components/location/ZoneProgress.vue";
 import { AutoTraveller } from "./autotraveller";
 
-const { player, scene: currentScene } = storeToRefs(useMainStore());
+const store = useMainStore();
+const { 
+  player, 
+  scene,
+  sceneMainView: mainView,
+  sceneSecondaryView: secondaryView,
+  } = storeToRefs(store);
+
 const ticker = new Ticker();
-
-// TODO: These as store getters
-const mainView = () => currentScene.value && currentScene.value.mainView();
-const secondaryView = () => currentScene.value && currentScene.value.secondaryView && currentScene.value.secondaryView();
-
 const autoplay = new AutoTraveller();
 
-watch(currentScene, () => {
-  ticker.startScene(currentScene.value, autoplay.changeStatus.bind(autoplay));
+watch(scene, () => {
+  ticker.startScene(scene.value, autoplay.changeStatus.bind(autoplay));
 })
 
 /*onMounted(() => ticker.startScene(currentScene.value, autoplay.changeStatus.bind(autoplay)));*/
