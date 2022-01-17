@@ -52,11 +52,10 @@ export const useMainStore = defineStore("main", {
     sceneMainView(_): () => VNode { // TODO
       return (this.scene && this.scene.mainView.bind(this.scene)) ?? (() => h("p", {}, "nothing"));
     },
-    sceneSecondaryView(_): () => VNode { // TODO
+    sceneSecondaryView(_): (() => VNode) | undefined { 
       return (this.scene 
               && this.scene.sideView 
-              && this.scene.sideView.bind(this.scene))
-             ?? (() => h("p", {}, "nothing"));
+              && this.scene.sideView.bind(this.scene));
     },
   },
 });

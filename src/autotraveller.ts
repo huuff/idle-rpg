@@ -14,7 +14,6 @@ export class AutoTraveller {
 
   public updateStatus(): void {
     const currentStatus = this.store.mapStatus as TravellingStatus; // TODO fix it
-    console.log(`Encounters had: ${currentStatus.encounters}`)
     const player = this.store.player;
     const nextAction = this.resolveAction(currentStatus, player);
 

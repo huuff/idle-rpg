@@ -27,7 +27,7 @@
 // should implement my own following this
 // https://ishadeed.com/article/stepper-component-html-css/
 // TODO: Looks ugly on a smaller viewport, use flexbox instead of columns
-import { computed, toRefs } from "vue";
+import { computed, } from "vue";
 import { range } from "@/util/range";
 import {TravellingStatus} from "@/map/map-status";
 
@@ -35,17 +35,13 @@ const props = defineProps<{
   status: TravellingStatus;
 }>();
 
-const { 
-  through: zone,
-  to,
-  from,
-  encounters
-} = toRefs(props.status)
+const zone = computed(() => props.status.through);
+const to = computed(() => props.status.to);
+const from = computed(() => props.status.from);
+const encounters = computed(() => props.status.encounters);
 
 const currentStage = computed(() => {
-  const stage = zone.value.stageFromEncounterNumber(encounters.value)
-  console.log(`stage: ${stage}`);
-  return stage;
+  return zone.value.stageFromEncounterNumber(encounters.value)
 });
 
 </script>
