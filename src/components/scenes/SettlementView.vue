@@ -15,7 +15,6 @@ import { computed } from "vue";
 import { MapLocation, TravelOption } from "@/map/game-map";
 import { storeToRefs } from "pinia";
 import { useMainStore, } from "@/store";
-import {RestingStatus} from "@/map/map-status";
 
 const props = defineProps<{
   location: MapLocation;
@@ -33,7 +32,7 @@ function goTo(destination: TravelOption): void {
 
   store.setMapStatus({
     type: "travelling",
-    from: (store.mapStatus as RestingStatus).in,
+    from: props.location,
     to: destination.to,
     encounters: 0,
     through: destination.through(),
