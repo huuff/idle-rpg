@@ -2,7 +2,7 @@
 <div class="hero is-fullheight is-info is-bold">
   <div class="hero-body">
     <div class="container">
-      <zone-progress />
+      <location-indicator />
       <div class="tile is-ancestor">
         <div class="tile is-4 is-vertical is-parent">
           <div class="tile is-child box">
@@ -35,7 +35,7 @@ import { Ticker } from "@/ticker";
 import { useMainStore } from "@/store";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
-import ZoneProgress from "./components/location/ZoneProgress.vue";
+import LocationIndicator from "@/components/location/LocationIndicator.vue";
 import { AutoTraveller } from "./autotraveller";
 
 const store = useMainStore();

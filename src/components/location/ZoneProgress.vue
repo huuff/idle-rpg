@@ -1,13 +1,13 @@
 <template>
-  <div v-if="currentZone"
-    class="box columns is-vcentered">
-    <span class="is-size-4 has-text-weight-semibold column is-2"> 
-      {{ currentZone.name }} 
+  <div class="columns is-vcentered">
+    <span class="is-size-3 has-text-weight-semibold column is-2 has-text-centered mt-3"> 
+      {{ from.name }} 
     </span>
-    <div class="column is-9">
+    <div class="column is-8">
+      <p class="has-text-centered is-size-5 has-text-weight-semibold"> {{ zone.name }} </p>
       <ul class="steps is-horizontal">
-        <li v-for="i in range(currentZone.stageNumber)"
-            :key="`${currentZone.name}-${i}`"
+        <li v-for="i in range(zone.stageNumber)"
+            :key="`${zone.name}-${i}`"
             class="steps-segment"
             :class="{ 'is-active': currentStage === i}"
             >
@@ -15,6 +15,9 @@
         </li>
       </ul>
     </div>
+    <span class="is-size-3 has-text-weight-semibold column is-2 has-text-centered mt-3"> 
+      {{ to.name }} 
+    </span>
   </div>
 </template>
 
@@ -23,29 +26,22 @@
 // but there's no way with bulma-o-steps, so maybe I
 // should implement my own following this
 // https://ishadeed.com/article/stepper-component-html-css/
-import { computed } from "vue";
+import { computed, toRefs } from "vue";
 import { range } from "@/util/range";
-import { useMainStore } from "@/store";
-import { storeToRefs } from "pinia";
 import {TravellingStatus} from "@/map/map-status";
 
-const { mapStatus } = storeToRefs(useMainStore());
+const props = defineProps<{
+  status: TravellingStatus;
+}>();
 
-const currentZone = computed(() => {
-  if (mapStatus.value.type === "travelling") {
-    return mapStatus.value.through;
-  } else {
-    return undefined;
-  }
-})
+const { 
+  through: zone,
+  to,
+  from,
+  encounters
+} = toRefs(props.status)
 
-const currentStage = computed(() => {
-  if (currentZone.value) {
-    const encounters = (mapStatus.value as TravellingStatus).encounters;
-    return currentZone.value.stageFromEncounterNumber(encounters)
-  } else {
-    return undefined;
-  }
-})
+const currentStage = computed(() => zone.value
+  .stageFromEncounterNumber(encounters.value));
 
 </script>
