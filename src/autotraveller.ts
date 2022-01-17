@@ -1,11 +1,8 @@
-import { MapStatus, matchMapStatus } from "./map/map-status";
+import { MapStatus, } from "./map/map-status";
 import { useMainStore } from "@/store";
-import { hasDestination } from "./autoplay";
-import { resolveMapStatusChange, mapStatusChangeToString } from "@/map/map-status-change";
-
-// TODO: This mixes a lot of concerns, especially, it manages choosing the next mapStatus, but also makes autoplay work (decides whether to do an action automatically)
-// TODO: Adding two todos because the logic is a real clusterfuck here. Maybe I should use FSM or something?
-// TODO: Maybe just call it traveller and manage returning or advancing?
+import { resolveNextStatus, TravelAction } from "@/travel-action";
+import { TravellingStatus } from "@/map/map-status";
+import { Creature } from "@/creatures/creature";
 
 export class AutoTraveller {
   private readonly store = useMainStore();
@@ -15,67 +12,24 @@ export class AutoTraveller {
     this.delayBetweenScenes = Math.round(this.store.tickDuration * 1.5);
   }
 
-  // TODO: Maybe name it update status
-  public changeStatus(): void {
-    const nextStatus = this.nextStatus();
-    const statusChange = resolveMapStatusChange(this.store.mapStatus, nextStatus);
+  public updateStatus(): void {
+    const currentStatus = this.store.mapStatus as TravellingStatus; // TODO fix it
+    const player = this.store.player;
+    const nextAction = this.resolveAction(currentStatus, player);
 
-    if (statusChange.type === "continue" && statusChange.status.type === "resting")
-      return;
-
-    // TODO: This should be governed by some autoplay standalone handler
-    if (hasDestination(this.store.autoplay)
-        && statusChange.type === "arrival" 
-        && statusChange.at === this.store.autoplay.to) {
-        // Autoplay arrived at destination, remove it
-       // as an objective
-        this.store.autoplay = "enabled";
-       }
-
-    const statusChangeDescription = mapStatusChangeToString(statusChange);
-    if (statusChangeDescription)
-      this.store.log.push(statusChangeDescription);
+    const nextStatus = resolveNextStatus(currentStatus, nextAction);
 
     this.setStatusWithDelay(nextStatus, this.delayBetweenScenes);
   }
 
-  private nextStatus(): MapStatus {
-    return matchMapStatus<MapStatus>(this.store.mapStatus, 
-      (resting) => {
-        if (this.store.player.healthRatio < 1) {
-          return resting;
-        } else {
-          if (hasDestination(this.store.autoplay)) {
-            return {
-                type: "travelling",
-                from: resting.in,
-                to: this.store.autoplay.to,
-                through: this.store.autoplay.through(),
-                encounters: 0
-            };
-          } else {
-            return resting;
-          }
-        }
-      },
-      (travelling) => {
-        // We just come from travelling so we assume we've had one encounter
-        const encountersHad = travelling.encounters + 1;
-        if (travelling.through.isComplete(encountersHad)) {
-          return {
-              type: "resting",
-              in: travelling.to,
-            };
-          } else if (this.store.player.healthRatio <= 0.15) {
-          return {
-              type: "resting",
-              in: travelling.from,
-            };
-        } else {
-          return  { ...travelling, encounters: encountersHad};
-        }
-      }
-    );
+  public resolveAction(status: TravellingStatus, player: Creature): TravelAction {
+    if (status.through.isComplete(status.encounters)) {
+      return "arrive";
+    } else if (player.healthRatio < 0.15) {
+      return "retreat";
+    } else {
+      return "continue";
+    }
   }
 
   private setStatusWithDelay(status: MapStatus, delay: number): void {

@@ -43,13 +43,16 @@ const {
   scene,
   sceneMainView: mainView,
   sceneSecondaryView: secondaryView,
+  mapStatus,
   } = storeToRefs(useMainStore());
 
 const ticker = new Ticker();
-const autoplay = new AutoTraveller();
+const autotraveller = new AutoTraveller();
 
 watch(scene, () => {
-  ticker.startScene(scene.value, autoplay.changeStatus.bind(autoplay));
+  // eslint-disable-next-line
+  const onEnd = mapStatus.value.type === "resting" ? () => {} : autotraveller.updateStatus.bind(autotraveller);
+  ticker.startScene(scene.value, onEnd);
 })
 
 onUnmounted(() => ticker.stop());

@@ -13,7 +13,7 @@ export type TravellingStatus = {
 
 export type RestingStatus = {
   type: "resting";
-  in: MapLocation;
+  in: MapLocation; // TODO: Should be called "at"?
 };
 
 export type MapStatus = TravellingStatus | RestingStatus;
