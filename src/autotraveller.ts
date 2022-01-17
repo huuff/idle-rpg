@@ -1,7 +1,9 @@
 import { MapStatus, matchMapStatus } from "./map/map-status";
 import { useMainStore } from "@/store";
 import {hasDestination} from "./autoplay";
+import { MapStatusChange, resolveMapStatusChange, mapStatusChangeToString } from "@/map/map-status-change";
 
+  // TODO: NextStatusActions no longer needed since MapStatusChange will tell us
 type NextStatusAction = "continue" | "arrived" | "rest";
 
 type NextStatus = {
@@ -20,30 +22,26 @@ export class AutoTraveller {
     this.delayBetweenScenes = Math.round(this.store.tickDuration * 1.5);
   }
 
+  // TODO: Maybe name it update status
   public changeStatus(): void {
     const nextStatus = this.nextStatus();
+    const statusChange = resolveMapStatusChange(this.store.mapStatus as MapStatus, nextStatus.status);
 
-    if (nextStatus.action === "continue" && nextStatus.status.type === "resting")
+    if (statusChange.type === "continue" && statusChange.status.type === "resting")
       return;
 
-    if ( nextStatus.action === "arrived" 
-        && nextStatus.status.type === "resting"
-        && hasDestination(this.store.autoplay) 
-        && nextStatus.status.in === this.store.autoplay.to
-       ) {
+    // TODO: This should be governed by some autoplay standalone handler
+    if (hasDestination(this.store.autoplay)
+        && statusChange.type === "arrival" 
+        && statusChange.at === this.store.autoplay.to) {
         // Autoplay arrived at destination, remove it
-         // as an objective
+       // as an objective
         this.store.autoplay = "enabled";
        }
 
-    if (nextStatus.action === "arrived"
-        && nextStatus.status.type === "resting"
-       ) {
-      this.store.log.push(`You arrived at ${nextStatus.status.in.name}`)
-    } else if (nextStatus.action === "rest"
-              && nextStatus.status.type === "resting") {
-      this.store.log.push(`You feel tired. You return to ${nextStatus.status.in.name} to rest`);
-    }
+    const statusChangeDescription = mapStatusChangeToString(statusChange);
+    if (statusChangeDescription)
+      this.store.log.push(statusChangeDescription);
 
     this.setStatusWithDelay(nextStatus.status, this.delayBetweenScenes);
   }

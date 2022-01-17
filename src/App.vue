@@ -38,13 +38,12 @@ import HealthBar from "./components/HealthBar.vue";
 import LocationIndicator from "@/components/location/LocationIndicator.vue";
 import { AutoTraveller } from "./autotraveller";
 
-const store = useMainStore();
 const { 
   player, 
   scene,
   sceneMainView: mainView,
   sceneSecondaryView: secondaryView,
-  } = storeToRefs(store);
+  } = storeToRefs(useMainStore());
 
 const ticker = new Ticker();
 const autoplay = new AutoTraveller();
@@ -53,6 +52,5 @@ watch(scene, () => {
   ticker.startScene(scene.value, autoplay.changeStatus.bind(autoplay));
 })
 
-/*onMounted(() => ticker.startScene(currentScene.value, autoplay.changeStatus.bind(autoplay)));*/
 onUnmounted(() => ticker.stop());
 </script>

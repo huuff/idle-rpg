@@ -26,6 +26,7 @@
 // but there's no way with bulma-o-steps, so maybe I
 // should implement my own following this
 // https://ishadeed.com/article/stepper-component-html-css/
+// TODO: Looks ugly on a smaller viewport, use flexbox instead of columns
 import { computed, toRefs } from "vue";
 import { range } from "@/util/range";
 import {TravellingStatus} from "@/map/map-status";
