@@ -1,9 +1,9 @@
-import { Scene } from "@/scenes/scene";
+import { Tickable } from "@/scenes/tickable";
 import { useMainStore } from "@/store";
 
 export class Ticker {
   private readonly tickDuration: number;
-  private scene: Scene | undefined;
+  private tickable: Tickable | undefined;
   private timer: ReturnType<typeof setTimeout> | undefined;
   private onEnd: (() => void) | undefined;
 
@@ -11,11 +11,11 @@ export class Ticker {
     ({tickDuration: this.tickDuration} = useMainStore());
   }
 
-  public startScene(scene: Scene, onEnd: () => void) {
+  public start(tickable: Tickable, onEnd: () => void) {
     clearTimeout(this.timer);
-    this.scene = scene;
+    this.tickable = tickable;
     this.onEnd = onEnd;
-    scene.firstTick && scene.firstTick();
+    tickable.firstTick && tickable.firstTick();
     this.setTimer();
   }
 
@@ -24,9 +24,9 @@ export class Ticker {
   }
 
   private tick(): void {
-    if (this.scene) {
-      if (!this.scene.isOver()) {
-        this.scene.tick();
+    if (this.tickable) {
+      if (!this.tickable.isOver()) {
+        this.tickable.tick();
         this.setTimer();
       } else {
         this.onEnd && this.onEnd();

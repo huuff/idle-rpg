@@ -42,7 +42,10 @@ const {
   encounters
 } = toRefs(props.status)
 
-const currentStage = computed(() => zone.value
-  .stageFromEncounterNumber(encounters.value));
+const currentStage = computed(() => {
+  const stage = zone.value.stageFromEncounterNumber(encounters.value)
+  console.log(`stage: ${stage}`);
+  return stage;
+});
 
 </script>

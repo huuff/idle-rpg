@@ -6,7 +6,7 @@ export function resolveNextStatus(current: TravellingStatus, action: TravelActio
   if (action === "continue") {
     return {
       ...current,
-      encounters: current.encounters + 1,
+      encounters: current.encounters + 1, // TODO: Maybe not the concern of resolveNextStatus
     }
   } else if (action === "retreat") {
     return {

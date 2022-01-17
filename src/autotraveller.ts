@@ -14,6 +14,7 @@ export class AutoTraveller {
 
   public updateStatus(): void {
     const currentStatus = this.store.mapStatus as TravellingStatus; // TODO fix it
+    console.log(`Encounters had: ${currentStatus.encounters}`)
     const player = this.store.player;
     const nextAction = this.resolveAction(currentStatus, player);
 
@@ -22,7 +23,7 @@ export class AutoTraveller {
     this.setStatusWithDelay(nextStatus, this.delayBetweenScenes);
   }
 
-  public resolveAction(status: TravellingStatus, player: Creature): TravelAction {
+  private resolveAction(status: TravellingStatus, player: Creature): TravelAction {
     if (status.through.isComplete(status.encounters)) {
       return "arrive";
     } else if (player.healthRatio < 0.15) {
@@ -35,7 +36,7 @@ export class AutoTraveller {
   private setStatusWithDelay(status: MapStatus, delay: number): void {
     setTimeout(() => {
       this.store.log.clear();
-      this.store.setMapStatus(status)
+      this.store.mapStatus = status;
     }, delay)
   }
 }

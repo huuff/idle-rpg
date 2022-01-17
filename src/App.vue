@@ -37,23 +37,28 @@ import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 import LocationIndicator from "@/components/location/LocationIndicator.vue";
 import { AutoTraveller } from "./autotraveller";
+import { Rest } from "@/rest";
 
 const { 
   player, 
-  scene,
   sceneMainView: mainView,
   sceneSecondaryView: secondaryView,
+  battle,
   mapStatus,
   } = storeToRefs(useMainStore());
 
 const ticker = new Ticker();
 const autotraveller = new AutoTraveller();
 
-watch(scene, () => {
-  // eslint-disable-next-line
-  const onEnd = mapStatus.value.type === "resting" ? () => {} : autotraveller.updateStatus.bind(autotraveller);
-  ticker.startScene(scene.value, onEnd);
-})
+watch(mapStatus, (newValue) => {
+  if (newValue.type === "resting") {
+    battle.value = undefined;
+    ticker.start(new Rest(), () => {}); // eslint-disable-line
+  } else {
+    battle.value = newValue.through.newEncounter(newValue.encounters);
+    ticker.start(battle.value!, autotraveller.updateStatus.bind(autotraveller));
+  }
+});
 
 onUnmounted(() => ticker.stop());
 </script>

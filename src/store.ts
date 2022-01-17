@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, VNode, h } from "vue";
 import { defineStore } from "pinia";
 import { Creature } from "@/creatures/creature";
 import { human } from "@/creatures/species";
@@ -8,9 +8,9 @@ import {aldebaran, prontera} from "@/map/settlements";
 import { MapStatus, } from "@/map/map-status";
 import {GameMap} from "./map/game-map";
 import {createPlains} from "./zones/zone";
-import { Rest } from "@/rest-scene";
 import {Scene} from "@/scenes/scene";
-import {sceneFromMapStatus} from "./scenes/scene-from-map-status";
+import { Battle } from "@/battle/battle"
+import { BattleScene } from "@/scenes/battle-scene";
 import { Autoplay } from "@/autoplay";
 
 export type StoreState = {
@@ -18,8 +18,8 @@ export type StoreState = {
   log: SceneLog;
   mapStatus: MapStatus;
   map: GameMap;
-  scene: Scene;
   autoplay: Autoplay;
+  battle: Battle | undefined;
   tickDuration: number;
 }
 
@@ -37,18 +37,26 @@ export const useMainStore = defineStore("main", {
           { locations: [ prontera, aldebaran ], through: createPlains }
         ]
       ),
-      scene: new Rest(prontera),
+      battle: undefined,
       autoplay: "disabled",
       tickDuration: 250,
     }) as StoreState,
   getters: {
-    sceneMainView: (state) => state.scene.mainView.bind(state.scene),
-    sceneSecondaryView: (state) => state.scene.secondaryView && state.scene.secondaryView.bind(state.scene),
+    scene: (state) => {
+      if (state.battle) {
+        return new BattleScene(state.battle as Battle); // TODO
+      } else if (state.mapStatus.type === "resting") {
+        return (state.mapStatus.in as unknown) as Scene; // big TODO
+      }
+    },
+    sceneMainView(_): () => VNode { // TODO
+      return (this.scene && this.scene.mainView.bind(this.scene)) ?? (() => h("p", {}, "nothing"));
+    },
+    sceneSecondaryView(_): () => VNode { // TODO
+      return (this.scene 
+              && this.scene.sideView 
+              && this.scene.sideView.bind(this.scene))
+             ?? (() => h("p", {}, "nothing"));
+    },
   },
-  actions: {
-    setMapStatus(newStatus: MapStatus) {
-      this.mapStatus = newStatus;
-      this.scene = sceneFromMapStatus(newStatus);
-    }
-  }
 });

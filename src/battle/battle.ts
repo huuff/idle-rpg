@@ -1,23 +1,20 @@
-import { Scene } from "@/scenes/scene";
-import {h, VNode, } from "vue";
 import { useMainStore } from "@/store";
 import { Creature, } from "@/creatures/creature";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
 import { executeAction } from "./action";
-import BattleView from "@/components/scenes/BattleView.vue";
-import EnemyHealth from "@/components/scenes/EnemyHealth.vue";
+import { Tickable } from "@/scenes/tickable";
 
 // TODO: This should take the responsibility of naming the
 // enemies (as 1, 2, 3, etc) instead of doing it in the stage
 // Since it's a property that's only for presentation
-export class Battle implements Scene {
+export class Battle implements Tickable {
   private readonly log = useMainStore().log;
   private turns: Creature[];
   
   constructor(
-    private readonly goodGuys: Creature[],
-    private readonly badGuys: Creature[],
+    public readonly goodGuys: Creature[],
+    public readonly badGuys: Creature[],
   ) {
     this.turns = calculateTurns([...goodGuys, ...badGuys]);
   }
@@ -46,14 +43,6 @@ export class Battle implements Scene {
       this.turns = this.turns.filter(a => a.isAlive());
       this.log.push(`${attacker.name} killed ${target.name}!`)
     }
-  }
-
-  public mainView(): VNode {
-    return h(BattleView, { });
-  }
-
-  public secondaryView(): VNode {
-    return h(EnemyHealth, { enemies:this.badGuys}) ;
   }
 
   public isOver(): boolean {

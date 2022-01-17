@@ -30,12 +30,12 @@ function goTo(destination: TravelOption): void {
     autoplay.value = destination;
   }
 
-  store.setMapStatus({
+  store.mapStatus = {
     type: "travelling",
     from: props.location,
     to: destination.to,
     encounters: 0,
     through: destination.through(),
-  })
+  }
 }
 </script>
