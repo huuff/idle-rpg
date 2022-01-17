@@ -39,7 +39,7 @@ export const useMainStore = defineStore("main", {
       ),
       scene: new Rest(prontera),
       autoplay: "disabled",
-      tickDuration: 1000,
+      tickDuration: 250,
     }) as StoreState,
   getters: {
     sceneMainView: (state) => state.scene.mainView.bind(state.scene),
