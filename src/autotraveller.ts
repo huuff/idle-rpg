@@ -4,7 +4,6 @@ import { hasDestination } from "./autoplay";
 import { resolveMapStatusChange, mapStatusChangeToString } from "@/map/map-status-change";
 
 // TODO: This mixes a lot of concerns, especially, it manages choosing the next mapStatus, but also makes autoplay work (decides whether to do an action automatically)
-// Also, gives the messages related to travel (arriving at a place, retreating)
 // TODO: Adding two todos because the logic is a real clusterfuck here. Maybe I should use FSM or something?
 // TODO: Maybe just call it traveller and manage returning or advancing?
 
@@ -19,7 +18,7 @@ export class AutoTraveller {
   // TODO: Maybe name it update status
   public changeStatus(): void {
     const nextStatus = this.nextStatus();
-    const statusChange = resolveMapStatusChange(this.store.mapStatus as MapStatus, nextStatus);
+    const statusChange = resolveMapStatusChange(this.store.mapStatus, nextStatus);
 
     if (statusChange.type === "continue" && statusChange.status.type === "resting")
       return;
