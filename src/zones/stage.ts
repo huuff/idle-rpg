@@ -20,7 +20,12 @@ export class StageEnemy {
   }
 }
 
-export class Stage {
+export interface Stage {
+  encounters: number;
+  newEncounter: () => Battle;
+}
+
+export class StageImpl implements Stage {
   private readonly enemyToFrequency: [StageEnemy, number][];
 
   constructor(

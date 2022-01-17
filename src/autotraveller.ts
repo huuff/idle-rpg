@@ -41,7 +41,7 @@ export class AutoTraveller {
   }
 
   private nextStatus(): MapStatus {
-    return matchMapStatus<MapStatus>(this.store.mapStatus as MapStatus, 
+    return matchMapStatus<MapStatus>(this.store.mapStatus, 
       (resting) => {
         if (this.store.player.healthRatio < 1) {
           return resting;

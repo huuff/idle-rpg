@@ -1,6 +1,6 @@
 import { Battle } from "@/battle/battle";
 import { slime } from "@/creatures/species";
-import { Stage, StageEnemy } from "./stage";
+import { Stage, StageEnemy, StageImpl } from "./stage";
    
 export class Zone {
   constructor(
@@ -37,8 +37,8 @@ export class Zone {
 }
 
 export const createPlains = () => new Zone("Plains", [
-  new Stage([new StageEnemy(slime, 1, 1)], 5),
-  new Stage([new StageEnemy(slime, 2, 1)], 5),
-  new Stage([new StageEnemy(slime, 3, 1)], 5),
-  new Stage([new StageEnemy(slime, 4, 1)], 5),
+  new StageImpl([new StageEnemy(slime, 1, 1)], 5),
+  new StageImpl([new StageEnemy(slime, 2, 1)], 5),
+  new StageImpl([new StageEnemy(slime, 3, 1)], 5),
+  new StageImpl([new StageEnemy(slime, 4, 1)], 5),
 ]);
