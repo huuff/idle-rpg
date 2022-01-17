@@ -14,14 +14,16 @@
 import { computed } from "vue";
 import { MapLocation, TravelOption } from "@/map/game-map";
 import { storeToRefs } from "pinia";
-import { useMainStore, } from "@/store";
+import { useTravelStore, } from "@/travel-store";
+import { useMainStore } from "@/store";
 
 const props = defineProps<{
   location: MapLocation;
 }>();
 
-const store = useMainStore();
-const { map, autoplay } = storeToRefs(store);
+const travelStore = useTravelStore();
+const { map }= storeToRefs(travelStore);
+const { autoplay } = storeToRefs(useMainStore());
 
 const possibleDestinations = computed(() => map.value.optionsFrom(props.location));
 
@@ -30,7 +32,8 @@ function goTo(destination: TravelOption): void {
     autoplay.value = destination;
   }
 
-  store.mapStatus = {
+  // TODO: Depart action
+  travelStore.mapStatus = {
     type: "travelling",
     from: props.location,
     to: destination.to,

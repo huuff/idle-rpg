@@ -38,14 +38,16 @@ import HealthBar from "./components/HealthBar.vue";
 import LocationIndicator from "@/components/location/LocationIndicator.vue";
 import { AutoTraveller } from "./autotraveller";
 import { Rest } from "@/rest";
+import {useTravelStore} from "./travel-store";
 
 const { 
   player, 
   sceneMainView: mainView,
   sceneSecondaryView: secondaryView,
   battle,
-  mapStatus,
   } = storeToRefs(useMainStore());
+
+const { mapStatus } = storeToRefs(useTravelStore());
 
 const ticker = new Ticker();
 const autotraveller = new AutoTraveller();

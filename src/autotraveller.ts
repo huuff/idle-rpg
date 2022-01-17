@@ -3,9 +3,11 @@ import { useMainStore } from "@/store";
 import { resolveNextStatus, TravelAction } from "@/travel-action";
 import { TravellingStatus } from "@/map/map-status";
 import { Creature } from "@/creatures/creature";
+import {useTravelStore} from "./travel-store";
 
 export class AutoTraveller {
   private readonly store = useMainStore();
+  private readonly travelStore = useTravelStore();
   private readonly delayBetweenScenes: number;
 
   constructor() {
@@ -13,13 +15,11 @@ export class AutoTraveller {
   }
 
   public updateStatus(): void {
-    const currentStatus = this.store.mapStatus as TravellingStatus; // TODO fix it
+    const currentStatus = this.travelStore.mapStatus as TravellingStatus; // TODO fix it
     const player = this.store.player;
     const nextAction = this.resolveAction(currentStatus, player);
 
-    const nextStatus = resolveNextStatus(currentStatus, nextAction);
-
-    this.setStatusWithDelay(nextStatus, this.delayBetweenScenes);
+    this.takeActionWithDelay(nextAction, this.delayBetweenScenes);
   }
 
   private resolveAction(status: TravellingStatus, player: Creature): TravelAction {
@@ -32,10 +32,11 @@ export class AutoTraveller {
     }
   }
 
-  private setStatusWithDelay(status: MapStatus, delay: number): void {
+  // TODO: Having delays is likely not the responsibility of the autotraveller
+  private takeActionWithDelay(action: TravelAction, delay: number): void {
     setTimeout(() => {
       this.store.log.clear();
-      this.store.mapStatus = status;
+      this.travelStore.takeAction(action);
     }, delay)
   }
 }
