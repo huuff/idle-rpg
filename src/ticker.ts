@@ -15,7 +15,6 @@ export type CallbackTickable = {
   callback?: () => void,
 }
 
-// TODO A good way of doing first tick
 export class Ticker {
   private readonly tickDuration: number;
   private timer: ReturnType<typeof setTimeout> | undefined;
@@ -26,16 +25,11 @@ export class Ticker {
   ) {
     ({tickDuration: this.tickDuration} = useMainStore());
     this.tickableStack = [ callbackTickable ];
-    this.start();
+    this.startTickable();
   }
 
   public stop(): void {
     clearTimeout(this.timer);
-  }
-
-
-  private start() {
-    this.setTimer();
   }
 
   private get isOver() {
@@ -59,11 +53,21 @@ export class Ticker {
 
     const tickResult = this.currentTickable.tickable.tick();
 
-    if (tickResult) {
+    if (tickResult) { 
       this.tickableStack.push(tickResult); 
+      this.startTickable();
+    } else {
+      this.setTimer();
     }
+  }
 
-    this.setTimer();
+  private startTickable(): void {
+    if (this.currentTickable.tickable.firstTick) {
+      this.currentTickable.tickable.firstTick();
+      this.setTimer({ duration: 2 * this.tickDuration })
+    } else {
+      this.setTimer();
+    }
   }
 
   private endTickable(): void {
