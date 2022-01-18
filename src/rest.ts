@@ -1,6 +1,6 @@
 import { Creature } from "@/creatures/creature";
 import { useMainStore } from "@/store";
-import { Tickable } from "@/scenes/tickable";
+import { Tickable } from "@/ticker";
 
 export class Rest implements Tickable {
   private readonly player: Creature;

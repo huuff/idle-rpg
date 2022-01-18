@@ -3,7 +3,7 @@ import { Creature, } from "@/creatures/creature";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
 import { executeAction } from "./action";
-import { Tickable } from "@/scenes/tickable";
+import { Tickable } from "@/ticker";
 
 // TODO: This should take the responsibility of naming the
 // enemies (as 1, 2, 3, etc) instead of doing it in the stage
