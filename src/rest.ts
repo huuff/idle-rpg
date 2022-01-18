@@ -8,6 +8,7 @@ export class Rest implements Tickable {
   constructor() {
     const store = useMainStore();
     this.player = store.player; //TODO: Maybe I should pass this in the constructor
+    console.log("Created rest");
   }
 
   public tick(): void {

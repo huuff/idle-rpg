@@ -5,6 +5,10 @@ import { calculateTurns } from "./turns";
 import { executeAction } from "./action";
 import { Tickable } from "@/ticker";
 
+function allDead(creatures: Creature[]) {
+  return creatures.every(c => !c.isAlive());
+}
+
 // TODO: This should take the responsibility of naming the
 // enemies (as 1, 2, 3, etc) instead of doing it in the stage
 // Since it's a property that's only for presentation
@@ -26,7 +30,7 @@ export class Battle implements Tickable {
     this.log.push(`${enemyNames} appear!`);
   }
 
-  public tick() {
+  public tick(): void {
     const aliveGoodGuys = this.goodGuys.filter(a => a.isAlive());
     const aliveBadGuys = this.badGuys.filter(a => a.isAlive());
 
@@ -45,17 +49,18 @@ export class Battle implements Tickable {
     }
   }
   
-  // TODO: Shouldn't have side effects and maybe be an endTick
   public isOver(): boolean {
-    if (this.goodGuys.filter(a => a.isAlive()).length === 0) {
+    return allDead(this.goodGuys) || allDead(this.badGuys);
+  }
+
+  public lastTick(): void {
+    if (allDead(this.goodGuys)) {
       this.log.push("You lost!");
-      return true;
-    } else if (this.badGuys.filter(a => a.isAlive()).length === 0) {
+    } else if (allDead(this.badGuys)) {
       this.log.push("You won!");
       this.shareExp();
-      return true;
     } else {
-      return false;
+      throw new Error("Called Battle's `endTick` but all teams are still alive!");
     }
   }
 

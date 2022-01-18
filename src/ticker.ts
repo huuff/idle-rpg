@@ -51,12 +51,28 @@ export class Ticker {
       return;
     }
 
-    const tickResult = this.currentTickable.tickable.tick();
 
     if (this.currentTickable.tickable.isOver()) {
-      this.currentTickable.callback && this.currentTickable.callback();
-      this.tickableStack.pop();
+      if (this.currentTickable.tickable.lastTick) {
+        this.currentTickable.tickable.lastTick();
+        this.setTimer({
+          func: () => {
+            this.currentTickable.callback && this.currentTickable.callback();
+            this.tickableStack.pop();
+            this.tick();
+          },
+          duration: this.tickDuration * 2,
+        }) 
+        return;
+      } else {
+        this.currentTickable.callback && this.currentTickable.callback(),
+        this.tickableStack.pop();
+        this.tick();
+        return;
+      }
     }
+
+    const tickResult = this.currentTickable.tickable.tick();
 
     if (tickResult) {
       this.tickableStack.push(tickResult); 
@@ -65,8 +81,14 @@ export class Ticker {
     this.setTimer();
   }
 
-  private setTimer(): void {
-    this.timer = setTimeout(this.tick.bind(this), this.tickDuration);
+  private setTimer({
+    func = this.tick.bind(this),
+    duration = this.tickDuration,
+  } : { 
+    func?: () => void,
+    duration?: number
+    } = {}): void {
+    this.timer = setTimeout(func, duration);
   }
 
 }
