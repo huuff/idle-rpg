@@ -16,6 +16,10 @@ import { MapLocation, TravelOption } from "@/map/game-map";
 import { storeToRefs } from "pinia";
 import { useTravelStore, } from "@/travel-store";
 import { useMainStore } from "@/store";
+import { Ticker } from "@/ticker";
+import { Travel } from "@/travel";
+import { autoTravel } from "@/autotraveller";
+import { Rest } from "@/rest";
 
 const props = defineProps<{
   location: MapLocation;
@@ -32,7 +36,10 @@ function goTo(destination: TravelOption): void {
     autoplay.value = destination;
   }
 
-  // TODO: Depart action
+  new Ticker({
+    tickable: new Travel(autoTravel),
+    callback: () => new Ticker({ tickable: new Rest() })
+  });
   travelStore.mapStatus = {
     type: "travelling",
     from: props.location,

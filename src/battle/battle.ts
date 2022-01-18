@@ -44,7 +44,8 @@ export class Battle implements Tickable {
       this.log.push(`${attacker.name} killed ${target.name}!`)
     }
   }
-
+  
+  // TODO: Shouldn't have side effects and maybe be an endTick
   public isOver(): boolean {
     if (this.goodGuys.filter(a => a.isAlive()).length === 0) {
       this.log.push("You lost!");

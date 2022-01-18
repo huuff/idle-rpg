@@ -24,7 +24,7 @@ export const useTravelStore = defineStore("travel", {
   }) as TravelStoreState,
   actions: {
     takeAction(action: TravelAction) {
-      if (this.mapStatus.type === "travelling")
+      if (this.mapStatus.type === "travelling") // TODO: Take rest into acount
         this.mapStatus = (resolveNextStatus(this.mapStatus, action));
     }
   }

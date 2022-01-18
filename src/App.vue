@@ -29,38 +29,27 @@
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, watch } from "vue";
 import { storeToRefs } from "pinia";
-import { Ticker } from "@/ticker";
 import { useMainStore } from "@/store";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 import LocationIndicator from "@/components/location/LocationIndicator.vue";
-import { AutoTraveller } from "./autotraveller";
-import { Rest } from "@/rest";
-import {useTravelStore} from "./travel-store";
 
 const { 
   player, 
   sceneMainView: mainView,
   sceneSecondaryView: secondaryView,
-  battle,
   } = storeToRefs(useMainStore());
 
-const { mapStatus } = storeToRefs(useTravelStore());
 
-const ticker = new Ticker();
-const autotraveller = new AutoTraveller();
+/*watch(mapStatus, (newValue) => {*/
+  /*if (newValue.type === "resting") {*/
+    /*battle.value = undefined;*/
+    /*ticker.start(new Rest(), () => {}); // eslint-disable-line*/
+  /*} else {*/
+    /*battle.value = newValue.through.newEncounter(newValue.encounters);*/
+    /*ticker.start(battle.value!, autotraveller.updateStatus.bind(autotraveller));*/
+  /*}*/
+/*});*/
 
-watch(mapStatus, (newValue) => {
-  if (newValue.type === "resting") {
-    battle.value = undefined;
-    ticker.start(new Rest(), () => {}); // eslint-disable-line
-  } else {
-    battle.value = newValue.through.newEncounter(newValue.encounters);
-    ticker.start(battle.value!, autotraveller.updateStatus.bind(autotraveller));
-  }
-});
-
-onUnmounted(() => ticker.stop());
 </script>

@@ -5,20 +5,27 @@ export interface Tickable {
   // A Tickable can be recursive, and thus return a
   // new Tickable that will need to be completed before
   // going on
-  tick: () => void | Ticker;
+  tick: () => void | CallbackTickable;
   lastTick?: () => void;
   isOver: () => boolean;
 }
 
+export type CallbackTickable = {
+  tickable: Tickable,
+  callback?: () => void,
+}
+
+// TODO A good way of doing first tick
 export class Ticker {
   private readonly tickDuration: number;
   private timer: ReturnType<typeof setTimeout> | undefined;
+  private tickableStack: CallbackTickable[];
 
   constructor(
-    private readonly tickable: Tickable,
-    private readonly onEnd?: () => void,
+    callbackTickable: CallbackTickable,
   ) {
     ({tickDuration: this.tickDuration} = useMainStore());
+    this.tickableStack = [ callbackTickable ];
     this.start();
   }
 
@@ -28,21 +35,38 @@ export class Ticker {
 
 
   private start() {
-    this.tickable.firstTick && this.tickable.firstTick();
-    this.setTimer(this.tickable);
+    this.setTimer();
+  }
+
+  private get isOver() {
+    return this.tickableStack.length === 0;
+  }
+
+  private get currentTickable() {
+    return this.tickableStack[this.tickableStack.length - 1];
   }
 
   private tick(): void {
-    if (!this.tickable.isOver()) {
-      const tickResult = this.tickable.tick();
-      if (tickResult) {
-        tickResult
-      }
+    if (this.isOver) {
+      return;
     }
+
+    const tickResult = this.currentTickable.tickable.tick();
+
+    if (this.currentTickable.tickable.isOver()) {
+      this.currentTickable.callback && this.currentTickable.callback();
+      this.tickableStack.pop();
+    }
+
+    if (tickResult) {
+      this.tickableStack.push(tickResult); 
+    }
+
+    this.setTimer();
   }
 
-  private setTimer(tickable: Tickable): void {
-    this.timer = setTimeout(tickable.tick.bind(tickable), this.tickDuration);
+  private setTimer(): void {
+    this.timer = setTimeout(this.tick.bind(this), this.tickDuration);
   }
 
 }

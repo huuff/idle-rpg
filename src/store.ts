@@ -22,7 +22,7 @@ export const useMainStore = defineStore("main", {
   state: () => ({
       player: createCreature(human),
       log: reactive(new SceneLog()) as SceneLog,
-      battle: undefined,
+      battle: undefined, // TODO: Should battle be in the store?
       autoplay: "disabled",
       tickDuration: 250,
     }) as StoreState,
