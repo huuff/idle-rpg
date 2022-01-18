@@ -26,7 +26,7 @@ export class Travel implements Tickable {
 
     const action = this.decisionMaker(status, this.store.player);
 
-    if (action === "continue") {
+    if (action.type === "continue") {
       const battle = status.through.newEncounter(status.encounters);
       this.store.battle = battle;
       return {

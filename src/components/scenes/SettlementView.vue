@@ -40,12 +40,10 @@ function goTo(destination: TravelOption): void {
     tickable: new Travel(autoTravel),
     callback: () => new Ticker({ tickable: new Rest() })
   });
-  travelStore.mapStatus = {
-    type: "travelling",
-    from: props.location,
+  travelStore.takeAction({
+    type: "depart",
     to: destination.to,
-    encounters: 0,
     through: destination.through(),
-  }
+  })
 }
 </script>
