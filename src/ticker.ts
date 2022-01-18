@@ -37,7 +37,11 @@ export class Ticker {
   }
 
   private get currentTickable() {
-    return this.tickableStack[this.tickableStack.length - 1];
+    return this.tickableStack[this.tickableStack.length - 1].tickable;
+  }
+
+  private get currentTickableCallback() {
+    return this.tickableStack[this.tickableStack.length - 1].callback;
   }
 
   private tick(): void {
@@ -46,12 +50,12 @@ export class Ticker {
     }
 
 
-    if (this.currentTickable.tickable.isOver()) {
+    if (this.currentTickable.isOver()) {
       this.endTickable();
       return;
     }
 
-    const tickResult = this.currentTickable.tickable.tick();
+    const tickResult = this.currentTickable.tick();
 
     if (tickResult) { 
       this.tickableStack.push(tickResult); 
@@ -62,8 +66,8 @@ export class Ticker {
   }
 
   private startTickable(): void {
-    if (this.currentTickable.tickable.firstTick) {
-      this.currentTickable.tickable.firstTick();
+    if (this.currentTickable.firstTick) {
+      this.currentTickable.firstTick();
       this.setTimer({ duration: 2 * this.tickDuration })
     } else {
       this.setTimer();
@@ -71,20 +75,18 @@ export class Ticker {
   }
 
   private endTickable(): void {
-    const tickable = this.currentTickable.tickable;
-    const callback = this.currentTickable.callback;
-    if (tickable.lastTick) {
-      tickable.lastTick();
+    if (this.currentTickable.lastTick) {
+      this.currentTickable.lastTick();
       this.setTimer({
         func: () => {
-          callback && callback();
+          this.currentTickableCallback && this.currentTickableCallback();
           this.tickableStack.pop();
           this.tick();
         },
         duration: this.tickDuration * 2,
       }) 
     } else {
-      callback && callback(),
+      this.currentTickableCallback && this.currentTickableCallback();
       this.tickableStack.pop();
       this.tick();
     }
