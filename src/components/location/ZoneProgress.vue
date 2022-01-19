@@ -1,10 +1,10 @@
 <template>
-  <div class="columns is-vcentered">
-    <span class="is-size-3 has-text-weight-semibold column is-2 has-text-centered mt-3"> 
+  <p class="has-text-centered is-size-5 has-text-weight-semibold"> {{ zone.name }} </p>
+  <div class="columns is-vcentered is-flex-direction-row is-align-items-center">
+    <span class="is-size-3 has-text-weight-semibold"> 
       {{ from.name }} 
     </span>
-    <div class="column is-8">
-      <p class="has-text-centered is-size-5 has-text-weight-semibold"> {{ zone.name }} </p>
+    <div class="is-flex-grow-1 mx-5 mt-2">
       <ul class="steps is-horizontal">
         <li v-for="i in range(zone.stageNumber)"
             :key="`${zone.name}-${i}`"
@@ -15,7 +15,7 @@
         </li>
       </ul>
     </div>
-    <span class="is-size-3 has-text-weight-semibold column is-2 has-text-centered mt-3"> 
+    <span class="is-size-3 has-text-weight-semibold"> 
       {{ to.name }} 
     </span>
   </div>
@@ -26,7 +26,6 @@
 // but there's no way with bulma-o-steps, so maybe I
 // should implement my own following this
 // https://ishadeed.com/article/stepper-component-html-css/
-// TODO: Looks ugly on a smaller viewport, use flexbox instead of columns
 import { computed, } from "vue";
 import { range } from "@/util/range";
 import {TravellingStatus} from "@/map/map-status";
