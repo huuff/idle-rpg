@@ -4,7 +4,6 @@ import { Creature } from "@/creatures/creature";
 import { human } from "@/creatures/species";
 import {createCreature} from "@/creatures/species";
 import { SceneLog } from "@/scenes/scene-log";
-import {Scene} from "@/scenes/scene";
 import { Battle } from "@/battle/battle"
 import { BattleScene } from "@/scenes/battle-scene";
 import { Autoplay } from "@/autoplay";
@@ -32,7 +31,7 @@ export const useMainStore = defineStore("main", {
       if (state.battle) {
         return new BattleScene(state.battle as Battle); // TODO
       } else if (travelStore.mapStatus.type === "resting") {
-        return (travelStore.mapStatus.in as unknown) as Scene; // big TODO
+        return travelStore.mapStatus.in;
       }
     },
     sceneMainView(_): () => VNode { // TODO

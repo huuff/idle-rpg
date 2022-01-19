@@ -1,6 +1,7 @@
 import { Zone } from "@/zones/zone";
+import { Scene } from "@/scenes/scene";
 
-export interface MapLocation {
+export interface MapLocation extends Scene {
   name: string;
 }
 
