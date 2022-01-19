@@ -1,5 +1,5 @@
 import { Creature } from "@/creatures/creature";
-import { Tickable } from "@/ticking/ticker";
+import { Tickable } from "@/ticking/async-ticker";
 
 export function makeRest(creature: Creature): Tickable {
   return {

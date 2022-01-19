@@ -14,11 +14,10 @@ import { MapLocation, TravelOption } from "@/map/game-map";
 import { storeToRefs } from "pinia";
 import { useTravelStore, } from "@/travel/travel-store";
 import { useMainStore } from "@/store";
-import { useTickStore } from "@/ticking/tick-store";
-import { Ticker } from "@/ticking/ticker";
 import { Travel } from "@/travel/travel";
 import { autoTravel } from "@/travel/autotraveller";
 import { makeRest } from "@/rest";
+import {AsyncTicker} from "@/ticking/async-ticker";
 
 const props = defineProps<{
   location: MapLocation;
@@ -27,24 +26,23 @@ const props = defineProps<{
 const travelStore = useTravelStore();
 const { map }= storeToRefs(travelStore);
 const { autoplay, player } = storeToRefs(useMainStore());
-const { ticker } = useTickStore();
 
 const possibleDestinations = computed(() => map.value.optionsFrom(props.location));
+
+const asyncTicker = new AsyncTicker();
 
 function goTo(destination: TravelOption): void {
   if (autoplay.value === "enabled") {
     autoplay.value = destination;
   }
 
-  ticker.stop();
-  ticker.start({
-    tickable: new Travel(autoTravel),
-    callback: () => ticker.start({ tickable: makeRest(player.value) }) // TODO: Maybe travel could do this
-  });
   travelStore.takeAction({
     type: "depart",
     to: destination.to,
     through: destination.through(),
   })
+  asyncTicker.run(new Travel(autoTravel))
+    .then(() => asyncTicker.run(makeRest(player.value)))  // TODO: Maybe travel should take care of this?
+  ;
 }
 </script>
