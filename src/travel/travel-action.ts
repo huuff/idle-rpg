@@ -22,10 +22,30 @@ export type Depart = {
 
 export type TravelAction = Arrive | Retreat | Continue | Depart;
 
+export function matchTravelAction<T>(
+  action: TravelAction,
+  arriveFunc: (arrive: Arrive) => T,
+  retreatFunc: (retreat: Retreat) => T,
+  continueFunc: (cont: Continue) => T,
+  departFunc: (depart: Depart) => T,
+): T {
+  if (action.type === "arrive")
+    return arriveFunc(action);
+  else if (action.type === "retreat")
+    return retreatFunc(action);
+  else if (action.type === "continue")
+    return continueFunc(action);
+  else if (action.type === "depart")
+    return departFunc(action);
+  else
+    throw new Error(`TravelAction of type ${JSON.stringify(action)} not handled in matchTravelAction`)
+}
+
 function notSupportedError(current: MapStatus, action: TravelAction): Error {
   return new Error(`TravelAction '${JSON.stringify(action)}' for status '${current.type}' not handled in resolveNextStatus`);
 }
 
+// TODO: Use matchMapStatus here?
 export function resolveNextStatus(current: MapStatus, action: TravelAction): MapStatus {
   return matchMapStatus<MapStatus>(current,
     (resting) => {
@@ -57,7 +77,6 @@ export function resolveNextStatus(current: MapStatus, action: TravelAction): Map
       } else {
         throw notSupportedError(current, action);
       }
-
     }
   );
 }

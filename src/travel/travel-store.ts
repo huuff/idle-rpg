@@ -3,7 +3,10 @@ import { prontera, aldebaran } from "@/map/settlements";
 import { GameMap } from "@/map/game-map";
 import { MapStatus } from "@/map/map-status";
 import { createPlains } from "@/zones/zone";
-import { TravelAction, resolveNextStatus } from "./travel-action";
+import { TravelAction, resolveNextStatus, matchTravelAction } from "./travel-action";
+import { runTickable } from "@/ticking/async-ticker";
+import {makeRest} from "@/rest";
+import { Travel } from "@/travel/travel";
 
 export type TravelStoreState = {
   mapStatus: MapStatus;
@@ -25,6 +28,14 @@ export const useTravelStore = defineStore("travel", {
   actions: {
     takeAction(action: TravelAction) {
         this.mapStatus = (resolveNextStatus(this.mapStatus, action));
+        matchTravelAction<void>(
+          action, 
+          (arrive) => runTickable(makeRest()), 
+          (retreat) => runTickable(makeRest()),
+          (cont) => {}, //eslint-disable-line @typescript-eslint/no-empty-function
+          (depart) => runTickable(new Travel()),
+        )
+        
     }
   }
 });

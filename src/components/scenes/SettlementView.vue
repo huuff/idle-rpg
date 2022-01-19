@@ -14,10 +14,6 @@ import { MapLocation, TravelOption } from "@/map/game-map";
 import { storeToRefs } from "pinia";
 import { useTravelStore, } from "@/travel/travel-store";
 import { useMainStore } from "@/store";
-import { Travel } from "@/travel/travel";
-import { autoTravel } from "@/travel/autotraveller";
-import { makeRest } from "@/rest";
-import { runTickable } from "@/ticking/async-ticker";
 
 const props = defineProps<{
   location: MapLocation;
@@ -38,8 +34,6 @@ function goTo(destination: TravelOption): void {
     type: "depart",
     to: destination.to,
     through: destination.through(),
-  })
-  runTickable(new Travel(autoTravel))
-  ;
+  });
 }
 </script>

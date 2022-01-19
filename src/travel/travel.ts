@@ -6,6 +6,7 @@ import { useMainStore, } from "@/store"
 import { Tickable } from "@/ticking/async-ticker";
 import { makeTickableWithEnd } from "@/ticking/tickable-with-end";
 import {makeRest} from "@/rest";
+import { autoTravel } from "@/travel/autotraveller";
 
 export type TravelDecisionMaker = (status: TravellingStatus, player: Creature) => TravelAction;
 
@@ -14,7 +15,7 @@ export class Travel implements Tickable {
   private readonly store: ReturnType<typeof useMainStore>
 
   constructor(
-    private readonly decisionMaker: TravelDecisionMaker,
+    private readonly decisionMaker: TravelDecisionMaker = autoTravel,
   ){
     this.travelStore = useTravelStore();
     this.store = useMainStore();
@@ -39,10 +40,6 @@ export class Travel implements Tickable {
     } else {
       this.travelStore.takeAction(action);
     }
-  }
-
-  public lastTick(): Tickable {
-    return makeRest(this.store.player);
   }
 
   public isOver(): boolean {
