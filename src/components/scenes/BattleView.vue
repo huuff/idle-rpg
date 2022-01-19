@@ -1,7 +1,7 @@
 <template>
 <p class="title has-text-dark">Battle log</p>
 <ul>
-  <li v-for="(msg, i) in log.messages()"
+  <li v-for="(msg, i) in log.messages"
     :key="`${msg}-${i}`"
   >
     {{ msg }}

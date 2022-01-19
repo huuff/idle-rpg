@@ -27,7 +27,7 @@ export class Battle implements Tickable {
     const enemyNames = this.badGuys
                         .map(a => a.name)
                         .join(", ");
-    this.log.push(`${enemyNames} appear!`);
+    this.log.messages.push(`${enemyNames} appear!`);
   }
 
   public tick(): void {
@@ -41,11 +41,11 @@ export class Battle implements Tickable {
     const target = this.badGuys.includes(attacker) ? chooseRandom(aliveGoodGuys) : chooseRandom(aliveBadGuys);
 
     const action = chooseRandom(attacker.possibleActions).create(attacker, target);
-    executeAction(action);
+    executeAction(action, this.log);
 
     if (target.currentHealth <= 0) {
       this.turns = this.turns.filter(a => a.isAlive());
-      this.log.push(`${attacker.name} killed ${target.name}!`)
+      this.log.messages.push(`${attacker.name} killed ${target.name}!`)
     }
   }
   
@@ -55,9 +55,9 @@ export class Battle implements Tickable {
 
   public lastTick(): void {
     if (allDead(this.goodGuys)) {
-      this.log.push("You lost!");
+      this.log.messages.push("You lost!");
     } else if (allDead(this.badGuys)) {
-      this.log.push("You won!");
+      this.log.messages.push("You won!");
       this.shareExp();
     } else {
       throw new Error("Called Battle's `endTick` but all teams are still alive!");

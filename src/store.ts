@@ -1,9 +1,9 @@
-import { reactive, VNode, h } from "vue";
+import { VNode, h } from "vue";
 import { defineStore } from "pinia";
 import { Creature } from "@/creatures/creature";
 import { human } from "@/creatures/species";
 import { createCreature } from "@/creatures/species";
-import { SceneLog } from "@/scenes/scene-log";
+import { Log, makeLog } from "@/log";
 import { Battle } from "@/battle/battle"
 import { BattleScene } from "@/scenes/battle-scene";
 import { Autoplay } from "@/autoplay";
@@ -11,7 +11,7 @@ import { useTravelStore } from "@/travel/travel-store";
 
 export type StoreState = {
   player: Creature;
-  log: SceneLog;
+  log: Log;
   autoplay: Autoplay;
   battle: Battle | undefined;
   tickDuration: number;
@@ -20,7 +20,7 @@ export type StoreState = {
 export const useMainStore = defineStore("main", {
   state: () => ({
       player: createCreature(human),
-      log: reactive(new SceneLog()) as SceneLog,
+      log: makeLog(),
       battle: undefined, // TODO: Should battle be in the store?
       autoplay: "disabled",
       tickDuration: 250,
