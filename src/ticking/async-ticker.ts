@@ -22,18 +22,17 @@ export async function runTickable(tickable: Tickable): Promise<void> {
     await asyncTimeout(async () => {
       const tickResult = tickable.tick();
       if (tickResult) {
-        await runTickable(tickResult)
-          .then(() => tickResult.onEnd && tickResult.onEnd())
+        await runTickable(tickResult);
       }
     }, tickDuration)
   }
 
   if (tickable.lastTick) {
-    const tickResult = tickable.lastTick();
+    tickable.lastTick();
     await wait(longTickDuration);
-    if (tickResult)
-      await runTickable(tickResult);
   }
+
+  tickable.onEnd && tickable.onEnd();
 }
 
 async function asyncTimeout(

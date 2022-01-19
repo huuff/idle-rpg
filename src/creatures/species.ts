@@ -41,7 +41,7 @@ export const human: Species = {
   baseStats: new StatsImpl({
     maxHealth: 50,
     strength: 12,
-    agility: 8
+    agility: 8,
   }),
   levelProgression: new StatsImpl({
     maxHealth: 5,

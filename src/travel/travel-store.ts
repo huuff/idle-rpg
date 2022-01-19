@@ -7,6 +7,8 @@ import { TravelAction, resolveNextStatus, matchTravelAction } from "./travel-act
 import { runTickable } from "@/ticking/async-ticker";
 import {makeRest} from "@/rest";
 import { Travel } from "@/travel/travel";
+import { hasDestination } from "@/autoplay";
+import { useMainStore } from "@/store";
 
 export type TravelStoreState = {
   mapStatus: MapStatus;
@@ -28,9 +30,19 @@ export const useTravelStore = defineStore("travel", {
   actions: {
     takeAction(action: TravelAction) {
         this.mapStatus = (resolveNextStatus(this.mapStatus, action));
+        const store = useMainStore();
         matchTravelAction<void>(
           action, 
-          (arrive) => runTickable(makeRest()), 
+          (arrive) => {
+            runTickable(makeRest())
+            // AUTOPLAY 
+            if (hasDestination(store.autoplay)
+                && this.mapStatus.type === "resting"
+                && this.mapStatus.at === store.autoplay.to) {
+                store.autoplay = "disabled";
+            }
+          
+          }, 
           (retreat) => runTickable(makeRest()),
           (cont) => {}, //eslint-disable-line @typescript-eslint/no-empty-function
           (depart) => runTickable(new Travel()),
