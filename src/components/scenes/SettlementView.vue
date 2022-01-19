@@ -17,7 +17,7 @@ import { useMainStore } from "@/store";
 import { Travel } from "@/travel/travel";
 import { autoTravel } from "@/travel/autotraveller";
 import { makeRest } from "@/rest";
-import {AsyncTicker} from "@/ticking/async-ticker";
+import { runTickable } from "@/ticking/async-ticker";
 
 const props = defineProps<{
   location: MapLocation;
@@ -29,8 +29,6 @@ const { autoplay, player } = storeToRefs(useMainStore());
 
 const possibleDestinations = computed(() => map.value.optionsFrom(props.location));
 
-const asyncTicker = new AsyncTicker();
-
 function goTo(destination: TravelOption): void {
   if (autoplay.value === "enabled") {
     autoplay.value = destination;
@@ -41,8 +39,8 @@ function goTo(destination: TravelOption): void {
     to: destination.to,
     through: destination.through(),
   })
-  asyncTicker.run(new Travel(autoTravel))
-    .then(() => asyncTicker.run(makeRest(player.value)))  // TODO: Maybe travel should take care of this?
+  runTickable(new Travel(autoTravel))
+    .then(() => runTickable(makeRest(player.value)))  // TODO: Maybe travel should take care of this?
   ;
 }
 </script>
