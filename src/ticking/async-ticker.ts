@@ -5,15 +5,10 @@ export interface Tickable {
   // A Tickable can be recursive, and thus return a
   // new Tickable that will need to be completed before
   // going on
-  tick: () => void | CallbackTickable;
+  tick: () => void | Tickable;
   lastTick?: () => void;
   isOver: () => boolean;
-}
-
-// TODO: Maybe merge these two interfaces?
-export type CallbackTickable = {
-  tickable: Tickable,
-  callback?: () => void,
+  onEnd?: () => void;
 }
 
 
@@ -27,8 +22,8 @@ export async function runTickable(tickable: Tickable): Promise<void> {
     await asyncTimeout(async () => {
       const tickResult = tickable.tick();
       if (tickResult) {
-        await runTickable(tickResult.tickable)
-          .then(() => tickResult.callback && tickResult.callback())
+        await runTickable(tickResult)
+          .then(() => tickResult.onEnd && tickResult.onEnd())
       }
     }, tickDuration)
   }
