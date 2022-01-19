@@ -10,6 +10,7 @@ export interface Tickable {
   isOver: () => boolean;
 }
 
+// TODO: Maybe merge these two interfaces
 export type CallbackTickable = {
   tickable: Tickable,
   callback?: () => void,
@@ -17,11 +18,13 @@ export type CallbackTickable = {
 
 export class Ticker {
   private timer: ReturnType<typeof setTimeout> | undefined;
-  private tickableStack: CallbackTickable[];
+  private tickableStack: CallbackTickable[] = [];
 
-  constructor(
-    callbackTickable: CallbackTickable,
-  ) {
+  public start(callbackTickable: CallbackTickable): void {
+    //if (!this.isOver) {
+      //throw new Error("Attempting to start a `Tickable` on a `Ticker` that is not finished!")
+    //}
+
     this.tickableStack = [ callbackTickable ];
     this.startTickable();
   }
@@ -44,6 +47,7 @@ export class Ticker {
 
   private tick(): void {
     if (this.isOver) {
+      this.stop();
       return;
     }
 
