@@ -5,7 +5,7 @@ import { human } from "@/creatures/species";
 import { createCreature } from "@/creatures/species";
 import { Log, makeLog } from "@/log";
 import { Battle } from "@/battle/battle"
-import { BattleScene } from "@/scenes/battle-scene";
+import { makeBattleScene } from "@/scenes/battle-scene";
 import { Autoplay } from "@/autoplay";
 import { useTravelStore } from "@/travel/travel-store";
 
@@ -27,7 +27,7 @@ export const useMainStore = defineStore("main", {
     scene: (state) => {
       const travelStore = useTravelStore();
       if (state.battle) {
-        return new BattleScene(state.battle as Battle); // TODO
+        return makeBattleScene(state.battle.badGuys);
       } else if (travelStore.mapStatus.type === "resting") {
         return travelStore.mapStatus.at;
       }

@@ -1,20 +1,13 @@
-import { VNode, h } from "vue";
+import { h } from "vue";
 import { Scene } from "./scene";
-import { Battle } from "@/battle/battle";
 import BattleView from "@/components/scenes/BattleView.vue";
 import EnemyHealth from "@/components/scenes/EnemyHealth.vue";
+import {Creature} from "@/creatures/creature";
 
-export class BattleScene implements Scene {
-  
-  constructor(
-    private readonly battle: Battle,
-  ) {}
-
-  public mainView(): VNode {
-    return h(BattleView, { });
-  }
-
-  public sideView(): VNode {
-    return h(EnemyHealth, { enemies: this.battle.badGuys }) ;
-  }
+export function makeBattleScene(enemies: Creature[]): Scene {
+  return {
+    mainView: () => h(BattleView, {}),
+    sideView: () => h(EnemyHealth, { enemies })
+  } 
 }
+
