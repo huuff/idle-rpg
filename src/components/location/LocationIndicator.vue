@@ -4,7 +4,7 @@
     <zone-progress :status="mapStatus"/> 
   </template>
   <template v-else-if="mapStatus.type === 'resting'">
-    <p class="has-text-centered title has-text-dark">{{ mapStatus.in.name }}</p>
+    <p class="has-text-centered title has-text-dark">{{ mapStatus.at.name }}</p>
   </template>
 </div>
 </template>

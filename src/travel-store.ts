@@ -14,7 +14,7 @@ export const useTravelStore = defineStore("travel", {
   state: () => ({
     mapStatus: {
       type: "resting",
-      in: prontera,
+      at: prontera,
     },
     map: new GameMap(
       [ prontera, aldebaran ],

@@ -31,7 +31,7 @@ export const useMainStore = defineStore("main", {
       if (state.battle) {
         return new BattleScene(state.battle as Battle); // TODO
       } else if (travelStore.mapStatus.type === "resting") {
-        return travelStore.mapStatus.in;
+        return travelStore.mapStatus.at;
       }
     },
     sceneMainView(_): () => VNode { // TODO

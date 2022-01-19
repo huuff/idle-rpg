@@ -32,7 +32,7 @@ export function resolveNextStatus(current: MapStatus, action: TravelAction): Map
       if (action.type === "depart") {
         return {
           type: "travelling",
-          from: resting.in,
+          from: resting.at,
           to: action.to,
           through: action.through,
           encounters: 0,
@@ -47,12 +47,12 @@ export function resolveNextStatus(current: MapStatus, action: TravelAction): Map
       } else if (action.type === "retreat") {
         return {
           type: "resting",
-          in: travelling.from,
+          at: travelling.from,
         }
       } else if (action.type === "arrive") {
         return {
           type: "resting",
-          in: travelling.to,
+          at: travelling.to,
         }
       } else {
         throw notSupportedError(current, action);
