@@ -1,4 +1,4 @@
-import { useMainStore } from "@/store";
+import { tickDuration, longTickDuration } from "@/tick-times";
 
 export interface Tickable {
   firstTick?: () => void;
@@ -16,14 +16,12 @@ export type CallbackTickable = {
 }
 
 export class Ticker {
-  private readonly tickDuration: number;
   private timer: ReturnType<typeof setTimeout> | undefined;
   private tickableStack: CallbackTickable[];
 
   constructor(
     callbackTickable: CallbackTickable,
   ) {
-    ({tickDuration: this.tickDuration} = useMainStore());
     this.tickableStack = [ callbackTickable ];
     this.startTickable();
   }
@@ -68,7 +66,7 @@ export class Ticker {
   private startTickable(): void {
     if (this.currentTickable.firstTick) {
       this.currentTickable.firstTick();
-      this.setTimer({ duration: 2 * this.tickDuration })
+      this.setTimer({ duration: longTickDuration })
     } else {
       this.setTimer();
     }
@@ -83,7 +81,7 @@ export class Ticker {
           this.tickableStack.pop();
           this.tick();
         },
-        duration: this.tickDuration * 2,
+        duration: longTickDuration,
       }) 
     } else {
       this.currentTickableCallback && this.currentTickableCallback();
@@ -94,7 +92,7 @@ export class Ticker {
 
   private setTimer({
     func = this.tick.bind(this),
-    duration = this.tickDuration,
+    duration = tickDuration,
   } : { 
     func?: () => void,
     duration?: number

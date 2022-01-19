@@ -14,7 +14,6 @@ export type StoreState = {
   log: Log;
   autoplay: Autoplay;
   battle: Battle | undefined;
-  tickDuration: number;
 }
 
 export const useMainStore = defineStore("main", {
@@ -23,7 +22,6 @@ export const useMainStore = defineStore("main", {
       log: makeLog(),
       battle: undefined, // TODO: Should battle be in the store?
       autoplay: "disabled",
-      tickDuration: 250,
     }) as StoreState,
   getters: {
     scene: (state) => {
