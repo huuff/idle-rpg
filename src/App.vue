@@ -41,15 +41,4 @@ const {
   sceneSecondaryView: secondaryView,
   } = storeToRefs(useMainStore());
 
-
-/*watch(mapStatus, (newValue) => {*/
-  /*if (newValue.type === "resting") {*/
-    /*battle.value = undefined;*/
-    /*ticker.start(new Rest(), () => {}); // eslint-disable-line*/
-  /*} else {*/
-    /*battle.value = newValue.through.newEncounter(newValue.encounters);*/
-    /*ticker.start(battle.value!, autotraveller.updateStatus.bind(autotraveller));*/
-  /*}*/
-/*});*/
-
 </script>
