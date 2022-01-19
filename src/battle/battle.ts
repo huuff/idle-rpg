@@ -3,7 +3,7 @@ import { Creature, } from "@/creatures/creature";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
 import { executeAction } from "./action";
-import { Tickable } from "@/ticker";
+import { Tickable } from "@/ticking/ticker";
 
 function allDead(creatures: Creature[]) {
   return creatures.every(c => !c.isAlive());

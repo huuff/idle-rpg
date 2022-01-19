@@ -14,7 +14,7 @@ import { MapLocation, TravelOption } from "@/map/game-map";
 import { storeToRefs } from "pinia";
 import { useTravelStore, } from "@/travel/travel-store";
 import { useMainStore } from "@/store";
-import { Ticker } from "@/ticker";
+import { Ticker } from "@/ticking/ticker";
 import { Travel } from "@/travel/travel";
 import { autoTravel } from "@/travel/autotraveller";
 import { makeRest } from "@/rest";

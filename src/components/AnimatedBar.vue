@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { watch, ref } from "vue";
-import { tickDuration } from "@/tick-times";
+import { tickDuration } from "@/ticking/tick-times";
 import animejs from "animejs";
 
 const props = defineProps<{

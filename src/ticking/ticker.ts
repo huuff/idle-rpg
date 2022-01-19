@@ -1,4 +1,4 @@
-import { tickDuration, longTickDuration } from "@/tick-times";
+import { tickDuration, longTickDuration } from "./tick-times";
 
 export interface Tickable {
   firstTick?: () => void;

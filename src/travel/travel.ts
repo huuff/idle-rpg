@@ -3,7 +3,7 @@ import { TravellingStatus} from "@/map/map-status";
 import {TravelAction} from "./travel-action";
 import { useTravelStore } from "./travel-store";
 import { useMainStore, } from "@/store"
-import { CallbackTickable, Tickable } from "@/ticker";
+import { CallbackTickable, Tickable } from "@/ticking/ticker";
 
 export type TravelDecisionMaker = (status: TravellingStatus, player: Creature) => TravelAction;
 
