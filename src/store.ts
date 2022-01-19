@@ -2,12 +2,12 @@ import { reactive, VNode, h } from "vue";
 import { defineStore } from "pinia";
 import { Creature } from "@/creatures/creature";
 import { human } from "@/creatures/species";
-import {createCreature} from "@/creatures/species";
+import { createCreature } from "@/creatures/species";
 import { SceneLog } from "@/scenes/scene-log";
 import { Battle } from "@/battle/battle"
 import { BattleScene } from "@/scenes/battle-scene";
 import { Autoplay } from "@/autoplay";
-import { useTravelStore } from "@/travel-store";
+import { useTravelStore } from "@/travel/travel-store";
 
 export type StoreState = {
   player: Creature;

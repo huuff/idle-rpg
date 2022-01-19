@@ -1,5 +1,5 @@
-import {Creature} from "./creatures/creature";
-import { TravellingStatus} from "./map/map-status";
+import {Creature} from "@/creatures/creature";
+import { TravellingStatus} from "@/map/map-status";
 import {TravelAction} from "./travel-action";
 import { useTravelStore } from "./travel-store";
 import { useMainStore, } from "@/store"

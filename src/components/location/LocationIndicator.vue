@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTravelStore } from "@/travel-store";
+import { useTravelStore } from "@/travel/travel-store";
 import { storeToRefs } from "pinia";
 import ZoneProgress from "./ZoneProgress.vue";
 

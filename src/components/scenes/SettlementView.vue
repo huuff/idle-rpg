@@ -14,11 +14,11 @@
 import { computed } from "vue";
 import { MapLocation, TravelOption } from "@/map/game-map";
 import { storeToRefs } from "pinia";
-import { useTravelStore, } from "@/travel-store";
+import { useTravelStore, } from "@/travel/travel-store";
 import { useMainStore } from "@/store";
 import { Ticker } from "@/ticker";
-import { Travel } from "@/travel";
-import { autoTravel } from "@/autotraveller";
+import { Travel } from "@/travel/travel";
+import { autoTravel } from "@/travel/autotraveller";
 import { makeRest } from "@/rest";
 
 const props = defineProps<{

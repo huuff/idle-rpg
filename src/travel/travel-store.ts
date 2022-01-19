@@ -3,7 +3,7 @@ import { prontera, aldebaran } from "@/map/settlements";
 import { GameMap } from "@/map/game-map";
 import { MapStatus } from "@/map/map-status";
 import { createPlains } from "@/zones/zone";
-import { TravelAction, resolveNextStatus } from "@/travel-action";
+import { TravelAction, resolveNextStatus } from "./travel-action";
 
 export type TravelStoreState = {
   mapStatus: MapStatus;

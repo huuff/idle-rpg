@@ -6,4 +6,3 @@
 * Setting some getter that says whether travelling is over?
 * Actually, now that tick length is a global through the store, I should set some standard tick lengths for things that should stay longer, like initial and final ticks
 * Scene log might not be a SceneLog, make it just `Log`
-* Travel stuff in a `travel` dir
