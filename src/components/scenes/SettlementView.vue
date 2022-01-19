@@ -25,7 +25,7 @@ const props = defineProps<{
 
 const travelStore = useTravelStore();
 const { map }= storeToRefs(travelStore);
-const { autoplay, player } = storeToRefs(useMainStore());
+const { autoplay, } = storeToRefs(useMainStore());
 
 const possibleDestinations = computed(() => map.value.optionsFrom(props.location));
 
@@ -40,7 +40,6 @@ function goTo(destination: TravelOption): void {
     through: destination.through(),
   })
   runTickable(new Travel(autoTravel))
-    .then(() => runTickable(makeRest(player.value)))  // TODO: Maybe travel should take care of this?
   ;
 }
 </script>

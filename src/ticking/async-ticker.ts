@@ -6,7 +6,7 @@ export interface Tickable {
   // new Tickable that will need to be completed before
   // going on
   tick: () => void | Tickable;
-  lastTick?: () => void;
+  lastTick?: () => void | Tickable;
   isOver: () => boolean;
   onEnd?: () => void;
 }
@@ -29,8 +29,10 @@ export async function runTickable(tickable: Tickable): Promise<void> {
   }
 
   if (tickable.lastTick) {
-    tickable.lastTick();
+    const tickResult = tickable.lastTick();
     await wait(longTickDuration);
+    if (tickResult)
+      await runTickable(tickResult);
   }
 }
 

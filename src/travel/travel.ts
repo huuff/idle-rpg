@@ -5,6 +5,7 @@ import { useTravelStore } from "./travel-store";
 import { useMainStore, } from "@/store"
 import { Tickable } from "@/ticking/async-ticker";
 import { makeTickableWithEnd } from "@/ticking/tickable-with-end";
+import {makeRest} from "@/rest";
 
 export type TravelDecisionMaker = (status: TravellingStatus, player: Creature) => TravelAction;
 
@@ -38,6 +39,10 @@ export class Travel implements Tickable {
     } else {
       this.travelStore.takeAction(action);
     }
+  }
+
+  public lastTick(): Tickable {
+    return makeRest(this.store.player);
   }
 
   public isOver(): boolean {
