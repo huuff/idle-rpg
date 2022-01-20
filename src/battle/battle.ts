@@ -17,13 +17,14 @@ function allDead(creatures: Creature[]) {
 export class Battle implements Tickable {
   public readonly scene: Scene;
 
-  private readonly log = useMainStore().log;
+  private readonly log = useMainStore().battleLog;
   private turns: Creature[];
   
   constructor(
     public readonly goodGuys: Creature[],
     public readonly badGuys: Creature[],
   ) {
+    this.log.clear();
     this.turns = calculateTurns([...goodGuys, ...badGuys]);
     this.scene = makeBattleScene(badGuys);
   }

@@ -4,4 +4,3 @@
 * Actual game over
 * Initial screen to choose a character
 * Setting some getter that says whether travelling is over?
-* Separate travel and battle logs

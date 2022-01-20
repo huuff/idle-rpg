@@ -9,7 +9,8 @@ import { Scene } from "@/scenes/scene";
 
 export type StoreState = {
   player: Creature;
-  log: Log;
+  battleLog: Log;
+  travelLog: Log;
   autoplay: Autoplay;
   battle: Battle | undefined;
   scene: Scene | undefined;
@@ -18,7 +19,8 @@ export type StoreState = {
 export const useMainStore = defineStore("main", {
   state: () => ({
       player: createCreature(human),
-      log: makeLog(),
+      travelLog: makeLog(),
+      battleLog: makeLog(),
       autoplay: "disabled",
     }) as StoreState,
 });

@@ -1,5 +1,5 @@
 import {Creature} from "@/creatures/creature";
-import { RestingStatus, TravellingStatus} from "@/map/map-status";
+import { TravellingStatus} from "@/map/map-status";
 import {TravelAction} from "./travel-action";
 import { useTravelStore } from "./travel-store";
 import { useMainStore, } from "@/store"
@@ -23,14 +23,13 @@ export class Travel implements Tickable {
   ){
     this.travelStore = useTravelStore();
     this.store = useMainStore();
+    this.store.travelLog.clear();
   }
 
   public tick(): void | Tickable {
     // By this point, isOver has been called and thus we know
     // that we must be travelling if this is being executed
     const status = this.travelStore.mapStatus as TravellingStatus;
-    this.store.log.clear();
-
     const action = this.decisionMaker(status, this.store.player);
 
     if (action.type === "continue") {
@@ -51,9 +50,9 @@ export class Travel implements Tickable {
     // Must be travelling since the last action is not yet taken
     const status = this.travelStore.mapStatus as TravellingStatus; 
     if (this.lastAction.type === "arrive") {
-      this.store.log.messages.push(`You arrived at ${status.to.name}.`)
+      this.store.travelLog.messages.push(`You arrived at ${status.to.name}.`)
     } else if (this.lastAction.type === "retreat") {
-      this.store.log.messages.push(`You feel a little tired, so you return to ${status.from.name} to rest.`)
+      this.store.travelLog.messages.push(`You feel a little tired, so you return to ${status.from.name} to rest.`)
     }
   }
 
