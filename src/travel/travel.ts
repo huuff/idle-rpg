@@ -9,9 +9,7 @@ import { autoTravel } from "@/travel/autotraveller";
 import { makeTravelScene } from "@/scenes/travel-scene";
 import {DecisionTickable} from "@/ticking/decision-tickable";
 
-export type TravelDecisionMaker = {
-  decide: (status: TravellingStatus, player: Creature) => TravelAction;
-}
+export type TravelDecisionMaker = (status: TravellingStatus, player: Creature) => TravelAction;
 
 const noLastActionError = new Error("Travel was ended without deciding a last action!");
 
@@ -35,13 +33,14 @@ export class Travel implements Tickable {
     
     const status = this.travelStore.mapStatus as TravellingStatus;
     if (status.encounters === 2) {
-      status.encounters++;
-      const decision = new DecisionTickable(10);
-      this.decisionMaker = decision;
-      return decision;
+      return new DecisionTickable(10, (decision) => {
+        if (decision.type === "retreat"){
+          this.lastAction = decision;
+        }
+      });
     }
 
-    const action = this.decisionMaker.decide(status, this.store.player);
+    const action = this.decisionMaker(status, this.store.player);
 
     if (action.type === "continue") {
       const battle = status.through.newEncounter(status.encounters);
@@ -51,6 +50,7 @@ export class Travel implements Tickable {
       })
     } else {
       this.lastAction = action;
+      status.encounters++;
     }
   }
 
