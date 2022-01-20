@@ -5,4 +5,3 @@
 * Initial screen to choose a character
 * Setting some getter that says whether travelling is over?
 * Separate travel and battle logs
-* I'm unsure whether increasing longTickDuration has an effect

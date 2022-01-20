@@ -10,6 +10,8 @@ import { makeTravelScene } from "@/scenes/travel-scene";
 
 export type TravelDecisionMaker = (status: TravellingStatus, player: Creature) => TravelAction;
 
+const noLastActionError = new Error("Travel was ended without deciding a last action!");
+
 export class Travel implements Tickable {
   public readonly scene = makeTravelScene();
   private readonly travelStore: ReturnType<typeof useTravelStore>
@@ -24,13 +26,12 @@ export class Travel implements Tickable {
   }
 
   public tick(): void | Tickable {
-    // At this point, isOver has been called and thus we know
+    // By this point, isOver has been called and thus we know
     // that we must be travelling if this is being executed
     const status = this.travelStore.mapStatus as TravellingStatus;
     this.store.log.clear();
 
     const action = this.decisionMaker(status, this.store.player);
-    this.lastAction = action; // See below todo
 
     if (action.type === "continue") {
       const battle = status.through.newEncounter(status.encounters);
@@ -39,25 +40,31 @@ export class Travel implements Tickable {
         this.travelStore.takeAction(action);
       })
     } else {
-      this.travelStore.takeAction(action);
+      this.lastAction = action;
     }
   }
 
-  // Still not working
   public lastTick(): void {
     if (!this.lastAction)
-      return;
+      throw noLastActionError;
 
-    // Must be resting since the travel is over
-    const status = this.travelStore.mapStatus as RestingStatus; 
+    // Must be travelling since the last action is not yet taken
+    const status = this.travelStore.mapStatus as TravellingStatus; 
     if (this.lastAction.type === "arrive") {
-      this.store.log.messages.push(`You arrived at ${status.at.name}.`)
+      this.store.log.messages.push(`You arrived at ${status.to.name}.`)
     } else if (this.lastAction.type === "retreat") {
-      this.store.log.messages.push(`You feel a little tired, so you return to ${status.at.name} to rest.`)
+      this.store.log.messages.push(`You feel a little tired, so you return to ${status.from.name} to rest.`)
     }
+  }
+
+  public onEnd(): void {
+    if (!this.lastAction)
+      throw noLastActionError;
+
+    this.travelStore.takeAction(this.lastAction);
   }
 
   public isOver(): boolean {
-    return this.travelStore.mapStatus.type !== "travelling";
+    return !!this.lastAction;
   }
 }

@@ -40,7 +40,10 @@ const from = computed(() => props.status.from);
 const encounters = computed(() => props.status.encounters);
 
 const currentStage = computed(() => {
-  return zone.value.stageFromEncounterNumber(encounters.value)
+  if (!zone.value.isComplete(encounters.value)) 
+    return zone.value.stageFromEncounterNumber(encounters.value)
+  else
+    return undefined;
 });
 
 </script>

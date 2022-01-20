@@ -37,8 +37,8 @@ export class Zone {
 }
 
 export const createPlains = () => new Zone("Plains", [
-  new StageImpl([new StageEnemy(slime, 1, 1)], 5),
-  new StageImpl([new StageEnemy(slime, 2, 1)], 5),
-  new StageImpl([new StageEnemy(slime, 3, 1)], 5),
-  new StageImpl([new StageEnemy(slime, 4, 1)], 5),
+  new StageImpl([new StageEnemy(slime, 1, 1)], 4),
+  new StageImpl([new StageEnemy(slime, 2, 1)], 4),
+  new StageImpl([new StageEnemy(slime, 3, 1)], 4),
+  new StageImpl([new StageEnemy(slime, 4, 1)], 4),
 ]);
