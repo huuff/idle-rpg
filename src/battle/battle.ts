@@ -4,6 +4,8 @@ import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
 import { executeAction } from "./action";
 import { Tickable } from "@/ticking/async-ticker";
+import {Scene} from "@/scenes/scene";
+import {makeBattleScene} from "@/scenes/battle-scene";
 
 function allDead(creatures: Creature[]) {
   return creatures.every(c => !c.isAlive());
@@ -13,6 +15,8 @@ function allDead(creatures: Creature[]) {
 // enemies (as 1, 2, 3, etc) instead of doing it in the stage
 // Since it's a property that's only for presentation
 export class Battle implements Tickable {
+  public readonly scene: Scene;
+
   private readonly log = useMainStore().log;
   private turns: Creature[];
   
@@ -21,6 +25,7 @@ export class Battle implements Tickable {
     public readonly badGuys: Creature[],
   ) {
     this.turns = calculateTurns([...goodGuys, ...badGuys]);
+    this.scene = makeBattleScene(badGuys);
   }
 
   public firstTick(): void {

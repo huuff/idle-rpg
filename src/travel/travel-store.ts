@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
 import { prontera, aldebaran } from "@/map/settlements";
 import { GameMap } from "@/map/game-map";
-import { MapStatus } from "@/map/map-status";
+import { MapStatus, RestingStatus } from "@/map/map-status";
 import { createPlains } from "@/zones/zone";
 import { TravelAction, resolveNextStatus, matchTravelAction } from "./travel-action";
 import { runTickable } from "@/ticking/async-ticker";
-import {makeRest} from "@/rest";
+import { makeRest } from "@/rest";
 import { Travel } from "@/travel/travel";
 import { hasDestination } from "@/autoplay";
 import { useMainStore } from "@/store";
@@ -14,6 +14,10 @@ export type TravelStoreState = {
   mapStatus: MapStatus;
   map: GameMap;
 };
+
+// FUTURE: I cast the status as the one I *know* they must be.
+// However, in the future it'd be cool if `resolveNextStatus` could give stronger guarantees
+// as to the return type. But I don't know how to do that yet.
 
 export const useTravelStore = defineStore("travel", {
   state: () => ({
@@ -34,20 +38,22 @@ export const useTravelStore = defineStore("travel", {
         matchTravelAction<void>(
           action, 
           (arrive) => {
+            const status = this.mapStatus as RestingStatus;
             runTickable(makeRest())
             // AUTOPLAY 
             if (hasDestination(store.autoplay)
-                && this.mapStatus.type === "resting"
-                && this.mapStatus.at === store.autoplay.to) {
+                && status.at === store.autoplay.to) {
                 store.autoplay = "disabled";
             }
-          
           }, 
-          (retreat) => runTickable(makeRest()),
+          (retreat) => {
+            const status = this.mapStatus as RestingStatus;
+            runTickable(makeRest());
+            store.scene = status.at;
+          },
           (cont) => {}, //eslint-disable-line @typescript-eslint/no-empty-function
           (depart) => runTickable(new Travel()),
         )
-        
-    }
+    },
   }
 });

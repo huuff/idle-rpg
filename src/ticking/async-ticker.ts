@@ -1,4 +1,7 @@
+import { useMainStore } from "@/store";
+import { storeToRefs } from "pinia";
 import { tickDuration, longTickDuration } from "./tick-times";
+import { Scene } from "@/scenes/scene";
 
 export interface Tickable {
   firstTick?: () => void;
@@ -8,17 +11,19 @@ export interface Tickable {
   tick: () => void | Tickable;
   lastTick?: () => void | Tickable;
   isOver: () => boolean;
+  scene?: Scene;
   onEnd?: () => void;
 }
-
 
 export async function runTickable(tickable: Tickable): Promise<void> {
   if (tickable.firstTick) {
     tickable.firstTick();
+    setTickableScene(tickable);
     await wait(longTickDuration);
   }
 
   while (!tickable.isOver()) {
+    setTickableScene(tickable);
     await asyncTimeout(async () => {
       const tickResult = tickable.tick();
       if (tickResult) {
@@ -29,10 +34,19 @@ export async function runTickable(tickable: Tickable): Promise<void> {
 
   if (tickable.lastTick) {
     tickable.lastTick();
+    setTickableScene(tickable);
     await wait(longTickDuration);
   }
 
   tickable.onEnd && tickable.onEnd();
+}
+
+function setTickableScene(tickable: Tickable) {
+  if (tickable.scene) {
+    const { scene } = storeToRefs(useMainStore());
+
+    scene.value = tickable.scene;
+  }
 }
 
 async function asyncTimeout(
