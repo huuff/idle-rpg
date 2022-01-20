@@ -7,7 +7,8 @@ export class Creature {
   public _currentExp: number;
 
   constructor(
-    public readonly name: string,
+    // Not readonly so they can be renamed in battle
+    public name: string,
     baseStats: Stats,
     public readonly possibleActions: ActionFactory[], 
     public level = 1,

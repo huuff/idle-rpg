@@ -6,25 +6,24 @@ import { executeAction } from "./action";
 import { Tickable } from "@/ticking/async-ticker";
 import {Scene} from "@/scenes/scene";
 import {makeBattleScene} from "@/scenes/battle-scene";
+import { renameCreatures } from "@/creatures/rename-creatures";
 
 function allDead(creatures: Creature[]) {
   return creatures.every(c => !c.isAlive());
 }
 
-// TODO: This should take the responsibility of naming the
-// enemies (as 1, 2, 3, etc) instead of doing it in the stage
-// Since it's a property that's only for presentation
 export class Battle implements Tickable {
   public readonly scene: Scene;
-
+  public readonly badGuys: Creature[];
   private readonly log = useMainStore().battleLog;
   private turns: Creature[];
   
   constructor(
     public readonly goodGuys: Creature[],
-    public readonly badGuys: Creature[],
+    badGuys: Creature[],
   ) {
     this.log.clear();
+    this.badGuys = renameCreatures(badGuys);
     this.turns = calculateTurns([...goodGuys, ...badGuys]);
     this.scene = makeBattleScene(badGuys);
   }

@@ -11,9 +11,9 @@ export interface Species {
   naturalActions:  ActionFactory[];
 }
 
-export function createCreature(species: Species, identifier?: number, level = 1): Creature {
+export function createCreature(species: Species, level = 1): Creature {
   return reactive(new Creature(
-    identifier ? species.name + ` ${identifier}` : species.name,
+    species.name,
     species.baseStats,
     species.naturalActions,
     level,

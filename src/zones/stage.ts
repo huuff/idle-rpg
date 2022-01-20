@@ -40,9 +40,9 @@ export class StageImpl implements Stage {
   public newEncounter(): Battle {
     const { player } = useMainStore();
     const enemies = nrange(randomInt(3))
-    .map(i => {
+    .map(_ => {
       const enemy = randomByNormalizedFrequency(this.enemyToFrequency);
-      return createCreature(enemy.species, i, enemy.averageLevel)
+      return createCreature(enemy.species, enemy.averageLevel)
     });
 
     return new Battle([player], enemies);
