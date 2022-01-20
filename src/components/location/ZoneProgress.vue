@@ -1,10 +1,10 @@
 <template>
   <p class="has-text-centered is-size-5 has-text-weight-semibold"> {{ zone.name }} </p>
   <div class="columns is-vcentered is-flex-direction-row is-align-items-center">
-    <span class="is-size-3 has-text-weight-semibold"> 
+    <span class="is-size-3 has-text-weight-semibold mx-1"> 
       {{ from.name }} 
     </span>
-    <div class="is-flex-grow-1 mx-5 mt-2">
+    <div class="is-flex-grow-1 mx-3 mt-2">
       <ul class="steps is-horizontal">
         <li v-for="i in range(zone.stageNumber)"
             :key="`${zone.name}-${i}`"
@@ -15,7 +15,7 @@
         </li>
       </ul>
     </div>
-    <span class="is-size-3 has-text-weight-semibold"> 
+    <span class="is-size-3 has-text-weight-semibold mx-1"> 
       {{ to.name }} 
     </span>
   </div>
