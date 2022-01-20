@@ -31,20 +31,12 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useMainStore } from "@/store";
-import { useTravelStore } from "@/travel/travel-store";
+import { useSceneStore } from "@/scenes/scene-store";
 import AnimatedBar from "./components/AnimatedBar.vue";
 import HealthBar from "./components/HealthBar.vue";
 import LocationIndicator from "@/components/location/LocationIndicator.vue";
 
-const store = useMainStore();
-const { 
-  player, 
-  sceneMainView: mainView,
-  sceneSecondaryView: secondaryView,
-  } = storeToRefs(store);
+const { player, } = storeToRefs(useMainStore());
+const { mainView, secondaryView } = storeToRefs(useSceneStore());
 
-const travelStore = useTravelStore();
-if (travelStore.mapStatus.type === "resting") {
-  store.scene = travelStore.mapStatus.at;
-}
 </script>

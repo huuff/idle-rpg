@@ -14,7 +14,7 @@ export class Travel implements Tickable {
   public readonly scene = makeTravelScene();
   private readonly travelStore: ReturnType<typeof useTravelStore>
   private readonly store: ReturnType<typeof useMainStore>
-  //private lastAction: TravelAction | undefined; // See below todo
+  private lastAction: TravelAction | undefined;
 
   constructor(
     private readonly decisionMaker: TravelDecisionMaker = autoTravel,
@@ -30,7 +30,7 @@ export class Travel implements Tickable {
     this.store.log.clear();
 
     const action = this.decisionMaker(status, this.store.player);
-    //this.lastAction = action; // See below todo
+    this.lastAction = action; // See below todo
 
     if (action.type === "continue") {
       const battle = status.through.newEncounter(status.encounters);
@@ -43,19 +43,19 @@ export class Travel implements Tickable {
     }
   }
 
-  // TODO: This will ruin the resting scene, since this runs after the action has been taken
-  //public lastTick(): void {
-    //if (!this.lastAction)
-      //return;
+  // Still not working
+  public lastTick(): void {
+    if (!this.lastAction)
+      return;
 
-    //// Must be resting since the travel is over
-    //const status = this.travelStore.mapStatus as RestingStatus; 
-    //if (this.lastAction.type === "arrive") {
-      //this.store.log.messages.push(`You arrived at ${status.at.name}.`)
-    //} else if (this.lastAction.type === "retreat") {
-      //this.store.log.messages.push(`You feel a little tired, so you return to ${status.at.name} to rest.`)
-    //}
-  //}
+    // Must be resting since the travel is over
+    const status = this.travelStore.mapStatus as RestingStatus; 
+    if (this.lastAction.type === "arrive") {
+      this.store.log.messages.push(`You arrived at ${status.at.name}.`)
+    } else if (this.lastAction.type === "retreat") {
+      this.store.log.messages.push(`You feel a little tired, so you return to ${status.at.name} to rest.`)
+    }
+  }
 
   public isOver(): boolean {
     return this.travelStore.mapStatus.type !== "travelling";

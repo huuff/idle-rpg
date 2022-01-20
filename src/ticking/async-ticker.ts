@@ -1,5 +1,4 @@
-import { useMainStore } from "@/store";
-import { storeToRefs } from "pinia";
+import { useSceneStore } from "@/scenes/scene-store";
 import { tickDuration, longTickDuration } from "./tick-times";
 import { Scene } from "@/scenes/scene";
 
@@ -43,9 +42,9 @@ export async function runTickable(tickable: Tickable): Promise<void> {
 
 function setTickableScene(tickable: Tickable) {
   if (tickable.scene) {
-    const { scene } = storeToRefs(useMainStore());
+    const sceneStore = useSceneStore();
 
-    scene.value = tickable.scene;
+    sceneStore.setScene(tickable.scene);
   }
 }
 
