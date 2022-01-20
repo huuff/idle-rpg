@@ -36,6 +36,8 @@ export class Travel implements Tickable {
       return new DecisionTickable(10, (decision) => {
         if (decision.type === "retreat"){
           this.lastAction = decision;
+        } else {
+          status.encounters++;
         }
       });
     }
