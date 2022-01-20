@@ -45,7 +45,6 @@ function notSupportedError(current: MapStatus, action: TravelAction): Error {
   return new Error(`TravelAction '${JSON.stringify(action)}' for status '${current.type}' not handled in resolveNextStatus`);
 }
 
-// TODO: Use matchMapStatus here?
 export function resolveNextStatus(current: MapStatus, action: TravelAction): MapStatus {
   return matchMapStatus<MapStatus>(current,
     (resting) => {
