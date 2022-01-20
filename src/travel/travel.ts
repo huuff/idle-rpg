@@ -7,8 +7,11 @@ import { Tickable } from "@/ticking/async-ticker";
 import { makeTickableWithEnd } from "@/ticking/tickable-with-end";
 import { autoTravel } from "@/travel/autotraveller";
 import { makeTravelScene } from "@/scenes/travel-scene";
+import {DecisionTickable} from "@/ticking/decision-tickable";
 
-export type TravelDecisionMaker = (status: TravellingStatus, player: Creature) => TravelAction;
+export type TravelDecisionMaker = {
+  decide: (status: TravellingStatus, player: Creature) => TravelAction;
+}
 
 const noLastActionError = new Error("Travel was ended without deciding a last action!");
 
@@ -19,7 +22,7 @@ export class Travel implements Tickable {
   private lastAction: TravelAction | undefined;
 
   constructor(
-    private readonly decisionMaker: TravelDecisionMaker = autoTravel,
+    private decisionMaker: TravelDecisionMaker = autoTravel,
   ){
     this.travelStore = useTravelStore();
     this.store = useMainStore();
@@ -29,8 +32,16 @@ export class Travel implements Tickable {
   public tick(): void | Tickable {
     // By this point, isOver has been called and thus we know
     // that we must be travelling if this is being executed
+    
     const status = this.travelStore.mapStatus as TravellingStatus;
-    const action = this.decisionMaker(status, this.store.player);
+    if (status.encounters === 2) {
+      status.encounters++;
+      const decision = new DecisionTickable(10);
+      this.decisionMaker = decision;
+      return decision;
+    }
+
+    const action = this.decisionMaker.decide(status, this.store.player);
 
     if (action.type === "continue") {
       const battle = status.through.newEncounter(status.encounters);
