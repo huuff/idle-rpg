@@ -32,8 +32,8 @@ export class Travel implements Tickable {
     // that we must be travelling if this is being executed
     
     const status = this.travelStore.mapStatus as TravellingStatus;
-    if (status.encounters === 2) {
-      return new DecisionTickable(10, (decision) => {
+    if (status.through.isCheckpoint()) {
+      return new DecisionTickable(5, (decision) => {
         if (decision.type === "retreat"){
           this.lastAction = decision;
         } else {
