@@ -4,11 +4,11 @@ import { GameMap } from "@/map/game-map";
 import { MapStatus, RestingStatus } from "@/map/map-status";
 import { plains } from "@/zones/zone";
 import { TravelAction, resolveNextStatus, matchTravelAction } from "./travel-action";
-import { runTickable } from "@/ticking/async-ticker";
 import { makeRest } from "@/rest";
 import { Travel } from "@/travel/travel";
 import { hasDestination } from "@/autoplay";
 import { useMainStore } from "@/store";
+import {useTickStore} from "@/ticking/tick-store";
 
 export type TravelStoreState = {
   mapStatus: MapStatus;
@@ -35,11 +35,12 @@ export const useTravelStore = defineStore("travel", {
     takeAction(action: TravelAction) {
         this.mapStatus = (resolveNextStatus(this.mapStatus, action));
         const store = useMainStore();
+        const tickStore = useTickStore();
         matchTravelAction<void>(
           action, 
           (arrive) => {
             const status = this.mapStatus as RestingStatus;
-            runTickable(makeRest())
+            tickStore.start(makeRest())
             // AUTOPLAY 
             if (hasDestination(store.autoplay)
                 && status.at === store.autoplay.to) {
@@ -48,11 +49,14 @@ export const useTravelStore = defineStore("travel", {
           }, 
           (retreat) => {
             const status = this.mapStatus as RestingStatus;
-            runTickable(makeRest());
+            tickStore.start(makeRest());
             store.scene = status.at;
           },
           (cont) => {}, //eslint-disable-line @typescript-eslint/no-empty-function
-          (depart) => runTickable(new Travel()),
+          (depart) => {
+            tickStore.stop();
+            tickStore.start(new Travel());
+          }
         )
     },
   }

@@ -14,19 +14,19 @@ export interface Tickable {
   onEnd?: () => void;
 }
 
-export async function runTickable(tickable: Tickable): Promise<void> {
+export async function runTickable(tickable: Tickable, signal?: AbortSignal): Promise<void> {
   if (tickable.firstTick) {
     tickable.firstTick();
     setTickableScene(tickable);
     await wait(longTickDuration);
   }
 
-  while (!tickable.isOver()) {
+  while (!tickable.isOver() && (!signal || !signal.aborted)) {
     setTickableScene(tickable);
     await asyncTimeout(async () => {
       const tickResult = tickable.tick();
       if (tickResult) {
-        await runTickable(tickResult);
+        await runTickable(tickResult, signal);
       }
     }, tickDuration)
   }
