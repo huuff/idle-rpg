@@ -38,18 +38,11 @@ export function createZone({ name, stages }: { name: string, stages: Stage[]}): 
         throw new Error(`Shouldn't call 'currentStage' when not travelling`);
       }
 
-      let result = 0;
-      let accStages = 0;
-      for (const stage of stages) {
-        accStages += stage.steps + 1; // Add one for the checkpoint
-        if (status.steps < accStages)
-          return { stage, index: result, }
-        else
-          result++;
+      const index = accumulateStagesBySteps(stages).findIndex(s => status.steps < s.steps);
+      return {
+        stage: stages[index],
+        index,
       }
-      
-
-      throw new Error(`Called 'currentStage' with ${status.steps} steps on a zone with ${accStages} steps`)
     },
     isCheckpoint() {
       const { mapStatus: status } = useTravelStore();
@@ -63,11 +56,11 @@ export function createZone({ name, stages }: { name: string, stages: Stage[]}): 
 }
 
 export const plains = createZone({
-  name: "plains",
+  name: "Plains",
   stages: [
-    createStage({ steps: 5, enemies: [{ species: slime, averageLevel: 1, frequency: 1}]}),
-    createStage({ steps: 5, enemies: [{ species: slime, averageLevel: 2, frequency: 1}]}),
-    createStage({ steps: 5, enemies: [{ species: slime, averageLevel: 3, frequency: 1}]}),
-    createStage({ steps: 5, enemies: [{ species: slime, averageLevel: 4, frequency: 1}]}),
+    createStage({ steps: 1, enemies: [{ species: slime, averageLevel: 1, frequency: 1}]}),
+    createStage({ steps: 1, enemies: [{ species: slime, averageLevel: 2, frequency: 1}]}),
+    createStage({ steps: 1, enemies: [{ species: slime, averageLevel: 3, frequency: 1}]}),
+    createStage({ steps: 1, enemies: [{ species: slime, averageLevel: 4, frequency: 1}]}),
   ]
 });

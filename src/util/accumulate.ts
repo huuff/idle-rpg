@@ -1,4 +1,3 @@
-// TODO: See if I can use it for `currentStage` in `Zone`
 // TODO: See if I can use it for `randomByNormalizedFrequency`
 
 // Receives:

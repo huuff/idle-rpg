@@ -54,7 +54,7 @@ export function resolveNextStatus(current: MapStatus, action: TravelAction): Map
           from: resting.at,
           to: action.to,
           through: action.through,
-          steps: 0,
+          steps: 1,
         }
       } else {
         throw notSupportedError(current, action);
