@@ -37,7 +37,7 @@ export class Travel implements Tickable {
         if (decision.type === "retreat"){
           this.lastAction = decision;
         } else {
-          status.encounters++;
+          status.steps++;
         }
       });
     }
@@ -47,12 +47,12 @@ export class Travel implements Tickable {
     if (action.type === "continue") {
       const battle = status.through.currentStage().stage.newEncounter();
       return makeTickableWithEnd(battle, () => {
-        status.encounters++;
+        status.steps++;
         this.travelStore.takeAction(action);
       })
     } else {
       this.lastAction = action;
-      status.encounters++;
+      status.steps++;
     }
   }
 

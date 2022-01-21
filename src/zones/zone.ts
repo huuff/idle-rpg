@@ -30,7 +30,7 @@ export function createZone({ name, stages }: { name: string, stages: Stage[]}): 
     isComplete() {
       const { mapStatus: status } = useTravelStore();
       return status.type === "travelling"
-        && status.encounters >= this.totalSteps();
+        && status.steps >= this.totalSteps();
     },
     currentStage() {
       const { mapStatus: status } = useTravelStore();
@@ -42,14 +42,14 @@ export function createZone({ name, stages }: { name: string, stages: Stage[]}): 
       let accStages = 0;
       for (const stage of stages) {
         accStages += stage.steps + 1; // Add one for the checkpoint
-        if (status.encounters < accStages)
+        if (status.steps < accStages)
           return { stage, index: result, }
         else
           result++;
       }
       
 
-      throw new Error(`Called 'currentStage' with ${status.encounters} steps on a zone with ${accStages} steps`)
+      throw new Error(`Called 'currentStage' with ${status.steps} steps on a zone with ${accStages} steps`)
     },
     isCheckpoint() {
       const { mapStatus: status } = useTravelStore();
@@ -57,7 +57,7 @@ export function createZone({ name, stages }: { name: string, stages: Stage[]}): 
         throw new Error(`Shouldn't call 'isCheckpoint' when not travelling!`)
       }
 
-      return accumulateStagesBySteps(stages).some(s => s.steps === status.encounters)
+      return accumulateStagesBySteps(stages).some(s => s.steps === status.steps)
     }
   }
 }

@@ -7,7 +7,7 @@ export type TravellingStatus = {
   type: "travelling";
   from: MapLocation;
   to: MapLocation;
-  encounters: number;
+  steps: number;
   through: Zone;
 };
 
