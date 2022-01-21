@@ -1,17 +1,19 @@
-import { h } from "vue";
+import { h, ref, } from "vue";
 import { Tickable } from "./async-ticker";
 import { Scene } from "@/scenes/scene";
 import { TravelAction } from "@/travel/travel-action";
 import TravelDecision from "@/components/scenes/TravelDecision.vue";
 
 export class DecisionTickable implements Tickable {
-  private ticksHad = 0;
+  private ticksHad = ref(0);
   private decision: TravelAction | undefined;
 
   public readonly scene: Scene = {
     mainView: () => h(
       TravelDecision,
       {
+        ticksDuration: this.ticksDuration,
+        ticksHad: this.ticksHad,
         onContinue: () => this.decision = { type: "continue" },
         onRetreat: () => this.decision = { type: "retreat" },
       }, 
@@ -24,11 +26,11 @@ export class DecisionTickable implements Tickable {
   ){ }
 
   public tick(): void {
-    this.ticksHad++;
+    this.ticksHad.value++;
   }
 
   public isOver(): boolean {
-    return (this.ticksHad > this.ticksDuration) || !!this.decision;
+    return (this.ticksHad.value > this.ticksDuration) || !!this.decision;
   }
 
   public onEnd() {
