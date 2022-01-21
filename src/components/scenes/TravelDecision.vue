@@ -1,5 +1,5 @@
 <template>
-<div class="is-flex-direction-column is-justify-content-space-between">
+<div class="is-flex is-flex-direction-column is-justify-content-space-between" style="height: 100%; min-height: 100%;">
   <div>
     <travel-view />
 
