@@ -1,3 +1,6 @@
+import findLastIndex from "lodash/findLastIndex";
+import {accumulate} from "./accumulate";
+
 export function chooseRandom<T>(options: T[]): T {
   return options[Math.floor(Math.random() * options.length)];
 }
@@ -17,17 +20,16 @@ export function randomInt(max: number): number {
 // to the random number.
 // Check the tests if you ever forget how this works
 export function randomByNormalizedFrequency<T>(optionsToFrequencies: [T, number][]): T {
+  const accumulatedFrequencies = accumulate(
+    optionsToFrequencies, 
+    opt => opt[1],
+    (opt, freq) => [opt[0], freq] as [T, number]
+  );
+
   const target = Math.random();
+  const matchIndex = findLastIndex(accumulatedFrequencies, opt => target >= opt[1]);
 
-  let accummulatedFrequency = 0;
-  for (const [option, freq] of optionsToFrequencies) {
-    accummulatedFrequency += freq;
-    if (accummulatedFrequency >= target) {
-      return option;
-    }
-  }
-
-  throw new Error("Exited randomByFrequency without finding an option");
+  return accumulatedFrequencies[matchIndex+1][0];
 }
 
 // Makes an array of options to frequencies normalized

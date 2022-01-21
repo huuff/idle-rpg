@@ -1,5 +1,3 @@
-// TODO: See if I can use it for `randomByNormalizedFrequency`
-
 // Receives:
 // obj: An array of objects on which to operate
 // extractor: A function that takes some numeric property out of the objects
