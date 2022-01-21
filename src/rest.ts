@@ -24,7 +24,7 @@ export function makeRest(): Tickable {
         travelStore.takeAction({
           type: "depart",
           to: autoplay.to,
-          through: nextStepToObjective.through(),
+          through: nextStepToObjective.through,
         })
       }
     }

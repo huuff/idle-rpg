@@ -7,12 +7,12 @@ export interface MapLocation extends Scene {
 
 export interface LocationConnection {
   locations: [ MapLocation, MapLocation ];
-  through: () => Zone;
+  through: Zone;
 }
 
 export type TravelOption = {
   to: MapLocation,
-  through: () => Zone,
+  through: Zone,
 }
 
 export class GameMap {

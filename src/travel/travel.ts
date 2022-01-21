@@ -45,7 +45,7 @@ export class Travel implements Tickable {
     const action = this.decisionMaker(status, this.store.player);
 
     if (action.type === "continue") {
-      const battle = status.through.newEncounter(status.encounters);
+      const battle = status.through.currentStage().stage.newEncounter();
       return makeTickableWithEnd(battle, () => {
         status.encounters++;
         this.travelStore.takeAction(action);

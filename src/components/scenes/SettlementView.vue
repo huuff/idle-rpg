@@ -33,7 +33,7 @@ function goTo(destination: TravelOption): void {
   travelStore.takeAction({
     type: "depart",
     to: destination.to,
-    through: destination.through(),
+    through: destination.through,
   });
 }
 </script>

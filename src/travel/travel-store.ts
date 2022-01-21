@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { prontera, aldebaran } from "@/map/settlements";
 import { GameMap } from "@/map/game-map";
 import { MapStatus, RestingStatus } from "@/map/map-status";
-import { createPlains } from "@/zones/zone";
+import { plains } from "@/zones/zone";
 import { TravelAction, resolveNextStatus, matchTravelAction } from "./travel-action";
 import { runTickable } from "@/ticking/async-ticker";
 import { makeRest } from "@/rest";
@@ -28,7 +28,7 @@ export const useTravelStore = defineStore("travel", {
     map: new GameMap(
       [ prontera, aldebaran ],
       [ 
-        { locations: [ prontera, aldebaran ], through: createPlains }
+        { locations: [ prontera, aldebaran ], through: plains }
       ]),
   }) as TravelStoreState,
   actions: {

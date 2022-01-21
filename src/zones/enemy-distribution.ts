@@ -7,7 +7,7 @@ type EnemyWithLevel = {
   averageLevel: number;
 }
 
-type EnemySpecification = {
+export type EnemySpecification = {
   frequency: number;
 } & EnemyWithLevel;
 

@@ -6,7 +6,7 @@
     </span>
     <div class="is-flex-grow-1 mx-3 mt-2">
       <ul class="steps is-horizontal">
-        <li v-for="i in range(zone.stageNumber)"
+        <li v-for="i in range(zone.stages.length)"
             :key="`${zone.name}-${i}`"
             class="steps-segment"
             :class="{ 'is-active': currentStage === i}"
@@ -37,11 +37,10 @@ const props = defineProps<{
 const zone = computed(() => props.status.through);
 const to = computed(() => props.status.to);
 const from = computed(() => props.status.from);
-const encounters = computed(() => props.status.encounters);
 
 const currentStage = computed(() => {
-  if (!zone.value.isComplete(encounters.value)) 
-    return zone.value.stageFromEncounterNumber(encounters.value)
+  if (!zone.value.isComplete()) 
+    return zone.value.currentStage().index
   else
     return undefined;
 });
