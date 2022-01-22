@@ -38,7 +38,8 @@ import { JobClass } from "@/creatures/job-class";
 import { baseClasses } from "@/creatures/base-classes";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
-import { createCreature, human } from "@/creatures/species";
+import { Creature } from "@/creatures/creature";
+import { human } from "@/creatures/species";
 
 const { player } = storeToRefs(useMainStore());
 
@@ -49,7 +50,7 @@ const props = withDefaults(defineProps<{
 });
 
 function createPlayer(jobClass: JobClass): void {
-  player.value = createCreature(human, 1, jobClass);
+  player.value = new Creature("Human", human, 1, jobClass);
 }
 
 </script>

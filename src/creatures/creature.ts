@@ -1,13 +1,12 @@
-import { Stats, zeroStats, areZeroStats } from "./stats";
-import { ActionFactory } from "@/battle/action";
+import { Stats, calculateStats } from "./stats";
 import { JobClass, noClass, isNoClass } from "./job-class";
+import { Species, noSpecies, isNoSpecies } from "./species";
 
 export class Creature {
   public currentHealth: number;
   public stats: Stats;
   public _currentExp: number;
 
-  // TODO: Take species instead of baseStats and levelProgression
   // And calculate stats with that
   // TODO: Immutable stats by calculating them each time?
 
@@ -15,15 +14,13 @@ export class Creature {
     // Not readonly so they can be renamed in battle
     // TODO: Add a rename method instead? one that makes a copye
     // or use immer.js
+    // TODO: Name could be optional and derived from species
     public name: string,
-    baseStats: Stats,
-    public readonly possibleActions: ActionFactory[], 
+    public readonly species: Species,
     public level = 1,
-    public readonly levelProgression: Stats = zeroStats,
     public readonly jobClass: JobClass = noClass,
   ) {
-    this.stats = baseStats.plus(levelProgression.times(level))
-      .plus(jobClass.baseStats.plus(levelProgression.times(level)))
+    this.stats = calculateStats(species, level).plus(calculateStats(jobClass, level));
     this.currentHealth = this.stats.maxHealth;
     this._currentExp = 0;
   }
@@ -42,6 +39,10 @@ export class Creature {
     return this.level * 100;
   }
 
+  public get possibleActions() {
+    return this.species.naturalActions;
+  }
+
   public isAlive(): boolean {
     return this.currentHealth > 0;
   }
@@ -50,25 +51,21 @@ export class Creature {
     if (this.currentExp >= this.requiredExp) {
       const excedingExp = this.currentExp - this.requiredExp;
       this.level++;
-      this.stats = this.stats.plus(this.levelProgression);
+      this.stats = this.stats
+        .plus(this.species.levelProgression)
+        .plus(this.jobClass.levelProgression);
       this.currentExp = excedingExp;
-      this.currentHealth += this.levelProgression.maxHealth;
+      this.currentHealth += this.species.levelProgression.maxHealth + this.jobClass.levelProgression.maxHealth;
     }
   }
 }
 
 // Null object pattern
-export const noCreature = new Creature(
-  "None",
-  zeroStats,
-  [],
-);
+export const noCreature = new Creature("None", noSpecies);
 
 export function isNoCreature(creature: Creature) {
   return creature.name === "None"
-        && areZeroStats(creature.stats)
-        && areZeroStats(creature.levelProgression)
-        && creature.possibleActions.length === 0
+        && isNoSpecies(creature.species)
         && isNoClass(creature.jobClass)
         ;
 }

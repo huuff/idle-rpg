@@ -80,3 +80,12 @@ export function areZeroStats(stats: Stats) {
         && stats.agility === 0
         ;
 }
+
+export interface CalculableStats {
+  baseStats: Stats,
+  levelProgression: Stats,
+}
+
+export function calculateStats(stats: CalculableStats, level: number) {
+  return stats.baseStats.plus(stats.levelProgression.times(level));
+}

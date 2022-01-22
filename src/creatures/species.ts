@@ -1,9 +1,6 @@
-import { reactive } from "vue";
-import { Stats, StatsImpl } from "@/creatures/stats";
+import { areZeroStats, Stats, StatsImpl, zeroStats } from "@/creatures/stats";
 import { ActionFactory } from "@/battle/action";
 import { BasicAttack } from "@/battle/basic-attack";
-import { Creature } from "@/creatures/creature";
-import {JobClass, noClass} from "./job-class";
 
 export interface Species {
   name: string;
@@ -12,16 +9,20 @@ export interface Species {
   naturalActions:  ActionFactory[];
 }
 
-// TODO: Ditch this in favor of a better creature initializer
-export function createCreature(species: Species, level = 1, jobClass: JobClass = noClass): Creature {
-  return reactive(new Creature(
-    species.name,
-    species.baseStats,
-    species.naturalActions,
-    level,
-    species.levelProgression,
-    jobClass, 
-  ));
+// Null object
+export const noSpecies: Species = {
+  name: "None",
+  baseStats: zeroStats,
+  levelProgression: zeroStats,
+  naturalActions: [],
+}
+
+export function isNoSpecies(species: Species) {
+  return species.name === "None"
+    && areZeroStats(species.baseStats)
+    && areZeroStats(species.levelProgression)
+    && species.naturalActions.length === 0
+    ;
 }
 
 export const slime: Species = {

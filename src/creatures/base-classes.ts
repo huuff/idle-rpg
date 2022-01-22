@@ -1,8 +1,8 @@
 import { JobClass } from "./job-class";
 import { StatsImpl } from "./stats";
 
-export const swordman: JobClass = {
-  name: "Swordman",
+export const swordsman: JobClass = {
+  name: "Swordsman",
   baseStats: new StatsImpl({
     maxHealth: 20,
     strength: 4,
@@ -43,4 +43,4 @@ export const archer: JobClass = {
   }),
 };
 
-export const baseClasses: JobClass[] = [ swordman, thief, archer ];
+export const baseClasses: JobClass[] = [ swordsman, thief, archer ];

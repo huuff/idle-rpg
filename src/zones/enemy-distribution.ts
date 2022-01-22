@@ -1,5 +1,5 @@
 import {Creature} from "@/creatures/creature";
-import { createCreature, Species } from "@/creatures/species";
+import { Species } from "@/creatures/species";
 import { normalizeFrequencies, randomByNormalizedFrequency } from "@/util/random";
 
 type EnemyWithLevel = {
@@ -21,6 +21,10 @@ export function createEnemyFactory(spec: EnemySpecification[]): () => Creature {
     return () => {
       const type = randomByNormalizedFrequency(normalizedFrequencies);
 
-      return createCreature(type.species, type.averageLevel);
+      return new Creature(
+        type.species.name, 
+        type.species,
+        type.averageLevel,
+      );
     }
 }
