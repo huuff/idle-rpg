@@ -23,8 +23,22 @@
               </div>
             </div>
             <footer class="card-footer">
-              <a @click="createPlayer(jobClass)">Choose</a>
+              <a class="card-footer-item"
+                @click="createPlayer(jobClass)"
+                >Choose</a>
             </footer>
+          </div>
+        </div>
+      </div>
+      <div class="field is-horizontal">
+        <div class="field-label py-2">
+          <label class="label is-normal">Name: </label>
+        </div>
+        <div class="field-body">
+          <div class="field">
+            <div class="control is-expanded">
+              <input class="input" type="text" v-model="playerName" />
+            </div>
           </div>
         </div>
       </div>
@@ -34,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { JobClass } from "@/creatures/job-class";
 import { baseClasses } from "@/creatures/base-classes";
 import { useMainStore } from "@/store";
@@ -42,6 +57,7 @@ import { Creature } from "@/creatures/creature";
 import { human } from "@/creatures/species";
 
 const { player } = storeToRefs(useMainStore());
+const playerName = ref("Player");
 
 const props = withDefaults(defineProps<{
   classes?: JobClass[];
@@ -52,6 +68,7 @@ const props = withDefaults(defineProps<{
 function createPlayer(jobClass: JobClass): void {
   player.value = new Creature({
     jobClass,
+    name: playerName.value,
     species: human,
   });
 }
