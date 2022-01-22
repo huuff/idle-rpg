@@ -15,6 +15,7 @@ export type TravelOption = {
   through: Zone,
 }
 
+// TODO: This as a closure
 export class GameMap {
   constructor(
     private readonly locations: MapLocation[],

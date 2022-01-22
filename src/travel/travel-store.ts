@@ -9,6 +9,7 @@ import { Travel } from "@/travel/travel";
 import { hasDestination } from "@/autoplay";
 import { useMainStore } from "@/store";
 import {useTickStore} from "@/ticking/tick-store";
+import {useSceneStore} from "@/scenes/scene-store";
 
 export type TravelStoreState = {
   mapStatus: MapStatus;
@@ -35,6 +36,7 @@ export const useTravelStore = defineStore("travel", {
     takeAction(action: TravelAction) {
         this.mapStatus = (resolveNextStatus(this.mapStatus, action));
         const store = useMainStore();
+        const sceneStore = useSceneStore();
         const tickStore = useTickStore();
         matchTravelAction<void>(
           action, 
@@ -50,7 +52,7 @@ export const useTravelStore = defineStore("travel", {
           (retreat) => {
             const status = this.mapStatus as RestingStatus;
             tickStore.start(makeRest());
-            store.scene = status.at;
+            sceneStore.setScene(status.at);
           },
           (cont) => {}, //eslint-disable-line @typescript-eslint/no-empty-function
           (depart) => {
