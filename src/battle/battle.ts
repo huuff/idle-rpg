@@ -19,9 +19,9 @@ export type BattleResult = "lost" | "won";
 export class Battle implements Tickable {
   public readonly scene: Scene;
   public readonly badGuys: Creature[];
+  public result: BattleResult | undefined;
   private readonly log = useMainStore().battleLog;
   private turns: Creature[];
-  public result: BattleResult | undefined;
   
   constructor(
     public readonly goodGuys: Creature[],
