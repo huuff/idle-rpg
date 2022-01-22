@@ -35,9 +35,12 @@ export async function runTickable(tickable: Tickable, signal?: AbortSignal): Pro
   }
 
   if (tickable.lastTick) {
-    tickable.lastTick();
+    const tickResult = tickable.lastTick();
     setTickableScene(tickable);
     await wait(longTickDuration);
+    if (tickResult) {
+      await runTickable(tickResult, signal);
+    }
   }
 
   tickable.onEnd && tickable.onEnd();

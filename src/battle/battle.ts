@@ -9,6 +9,7 @@ import {Scene} from "@/scenes/scene";
 import {makeBattleScene} from "@/scenes/battle-scene";
 import { renameCreatures } from "@/creatures/rename-creatures";
 import { gameOver } from "@/game-over";
+import { Spoils } from "@/tickables/spoils";
 
 function allDead(creatures: Creature[]) {
   return creatures.every(c => !c.isAlive());
@@ -63,26 +64,17 @@ export class Battle implements Tickable {
     return allDead(this.goodGuys) || allDead(this.badGuys);
   }
 
-  public lastTick(): void {
+  public lastTick(): void | Tickable {
     if (allDead(this.goodGuys)) {
       this.result = "lost";
       this.log.messages.push("You lost!");
     } else if (allDead(this.badGuys)) {
       this.result = "won";
       this.log.messages.push("You won!");
-      this.shareExp();
+      return new Spoils(this.goodGuys, this.badGuys, this.log);
     } else {
       throw new Error("Called Battle's `endTick` but all teams are still alive!");
     }
-  }
-
-  // FUTURE: Should work for several good guys
-  private shareExp(): void {
-    this.goodGuys[0].currentExp += this.badGuys
-      .map(creature => creature.stats.challenge ?? 0)
-      .reduce((acc, challenge) => acc + challenge)
-      ;
-    this.goodGuys.map(a => a.adjustLevel());
   }
 
   public onEnd(): void {

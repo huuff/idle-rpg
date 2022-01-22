@@ -1,4 +1,5 @@
 <template>
+  <money-view />
   <div class="container game-container">
     <location-indicator />
     <div class="tile is-ancestor tiles-contents">
@@ -24,6 +25,7 @@ import { storeToRefs } from "pinia";
 import { useSceneStore } from "@/scenes/scene-store";
 import PlayerView from "@/components/PlayerView.vue";
 import LocationIndicator from "@/components/location/LocationIndicator.vue";
+import MoneyView from "@/components/MoneyView.vue";
 
 const { mainView, secondaryView } = storeToRefs(useSceneStore());
 

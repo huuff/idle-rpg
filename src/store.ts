@@ -10,6 +10,7 @@ export type StoreState = {
   travelLog: Log;
   autoplay: Autoplay;
   battle: Battle | undefined;
+  money: number;
 }
 
 export const useMainStore = defineStore("main", {
@@ -18,5 +19,6 @@ export const useMainStore = defineStore("main", {
       travelLog: makeLog(),
       battleLog: makeLog(),
       autoplay: "disabled",
+      money: 0,
     }) as StoreState,
 });

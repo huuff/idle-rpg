@@ -1,12 +1,15 @@
 import { areZeroStats, Stats, StatsImpl, zeroStats } from "@/creatures/stats";
 import { ActionFactory } from "@/battle/action";
 import { BasicAttack } from "@/battle/basic-attack";
+import { Item } from "@/items/item";
+import {slimeJelly} from "@/items/basic-items";
 
 export interface Species {
   name: string;
   baseStats: Stats;
   levelProgression: Stats;
   naturalActions:  ActionFactory[];
+  naturalItems?: Item[];
 }
 
 // Null object
@@ -38,6 +41,7 @@ export const slime: Species = {
     agility: 0.2,
   }),
   naturalActions: [ new BasicAttack() ],
+  naturalItems: [ slimeJelly ],
 }
 
 export const human: Species = {
