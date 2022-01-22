@@ -11,8 +11,6 @@ import {DecisionTickable} from "@/ticking/decision-tickable";
 
 export type TravelDecisionMaker = (status: TravellingStatus, player: Creature) => TravelAction;
 
-const noLastActionError = new Error("Travel was ended without deciding a last action!");
-
 export class Travel implements Tickable {
   public readonly scene = makeTravelScene();
   private readonly travelStore: ReturnType<typeof useTravelStore>
@@ -49,8 +47,10 @@ export class Travel implements Tickable {
     if (action.type === "continue") {
       const battle = status.through.currentStage().stage.newEncounter();
       return makeTickableWithEnd(battle, () => {
-        status.steps++;
-        this.travelStore.takeAction(action);
+        if (battle.result === "won") {
+          status.steps++;
+          this.travelStore.takeAction(action);
+        }
       })
     } else {
       this.lastAction = action;
@@ -60,7 +60,7 @@ export class Travel implements Tickable {
 
   public lastTick(): void {
     if (!this.lastAction)
-      throw noLastActionError;
+      return;
 
     // Must be travelling since the last action is not yet taken
     const status = this.travelStore.mapStatus as TravellingStatus; 
@@ -73,7 +73,7 @@ export class Travel implements Tickable {
 
   public onEnd(): void {
     if (!this.lastAction)
-      throw noLastActionError;
+      return;
 
     this.travelStore.takeAction(this.lastAction);
   }

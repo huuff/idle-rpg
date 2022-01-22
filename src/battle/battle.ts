@@ -8,16 +8,20 @@ import { Tickable } from "@/ticking/async-ticker";
 import {Scene} from "@/scenes/scene";
 import {makeBattleScene} from "@/scenes/battle-scene";
 import { renameCreatures } from "@/creatures/rename-creatures";
+import { gameOver } from "@/game-over";
 
 function allDead(creatures: Creature[]) {
   return creatures.every(c => !c.isAlive());
 }
+
+export type BattleResult = "lost" | "won";
 
 export class Battle implements Tickable {
   public readonly scene: Scene;
   public readonly badGuys: Creature[];
   private readonly log = useMainStore().battleLog;
   private turns: Creature[];
+  public result: BattleResult | undefined;
   
   constructor(
     public readonly goodGuys: Creature[],
@@ -61,8 +65,10 @@ export class Battle implements Tickable {
 
   public lastTick(): void {
     if (allDead(this.goodGuys)) {
+      this.result = "lost";
       this.log.messages.push("You lost!");
     } else if (allDead(this.badGuys)) {
+      this.result = "won";
       this.log.messages.push("You won!");
       this.shareExp();
     } else {
@@ -77,5 +83,11 @@ export class Battle implements Tickable {
       .reduce((acc, challenge) => acc + challenge)
       ;
     this.goodGuys.map(a => a.adjustLevel());
+  }
+
+  public onEnd(): void {
+    if (allDead(this.goodGuys)) {
+      gameOver();
+    }
   }
 }

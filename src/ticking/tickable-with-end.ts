@@ -11,6 +11,9 @@ export function makeTickableWithEnd(tickable: Tickable, end: () => void): Tickab
     isOver: () => tickable.isOver(),
     lastTick: () => tickable.lastTick && tickable.lastTick(),
     scene: tickable.scene,
-    onEnd: end,
+    onEnd: () => {
+      tickable.onEnd && tickable.onEnd();
+      end();
+    }
   }
 }

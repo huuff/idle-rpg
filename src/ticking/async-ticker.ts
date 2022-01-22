@@ -21,7 +21,10 @@ export async function runTickable(tickable: Tickable, signal?: AbortSignal): Pro
     await wait(longTickDuration);
   }
 
-  while (!tickable.isOver() && (!signal || !signal.aborted)) {
+  while (!tickable.isOver()) {
+    if (signal && signal.aborted)
+      return
+
     setTickableScene(tickable);
     await asyncTimeout(async () => {
       const tickResult = tickable.tick();
