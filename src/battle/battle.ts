@@ -1,3 +1,4 @@
+import { reactive } from "vue";
 import { useMainStore } from "@/store";
 import { Creature, } from "@/creatures/creature";
 import { chooseRandom } from "@/util/random";
@@ -23,9 +24,9 @@ export class Battle implements Tickable {
     badGuys: Creature[],
   ) {
     this.log.clear();
-    this.badGuys = renameCreatures(badGuys);
-    this.turns = calculateTurns([...goodGuys, ...badGuys]);
-    this.scene = makeBattleScene(badGuys);
+    this.badGuys = reactive(renameCreatures(badGuys));
+    this.turns = calculateTurns([...this.goodGuys, ...this.badGuys]);
+    this.scene = makeBattleScene(this.badGuys);
   }
 
   public firstTick(): void {
