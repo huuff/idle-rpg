@@ -14,32 +14,39 @@ export class Spoils implements Tickable {
   ){}
   
   public tick(): void {
-    // TODO: Each of these in a method
     if (this.ticksHad === 0) {
-      const totalExp = this.losers
-        .map(c => c.stats.challenge)
-        .reduce((a, b) => a + b);
-      const expForEachWinner = totalExp / this.winners.length;
-      for (const winner of this.winners) {
-        winner.currentExp += expForEachWinner;
-        winner.adjustLevel(); // TODO: Maybe a currentExp setter could adjust level?
-      }
-      this.log.messages.push(`You earned ${totalExp} exp`);
+      this.shareExp();
     } else if (this.ticksHad === 1) {
-      const totalDrops = this.losers.flatMap(c => c.inventory);
-      const { player } = useMainStore();
-      player.inventory.push(...totalDrops);
-
-      const itemsByType = countByType(totalDrops, (item) => item.name);
-      for (const itemName of Object.keys(itemsByType)) {
-        const amount = itemsByType[itemName];
-        this.log.messages.push(`You found ${amount} ${itemName}`);
-      }
+      this.shareDrops();
     }
     this.ticksHad++;
   }
 
   public isOver(): boolean {
     return this.ticksHad >= 3;
+  }
+
+  private shareExp(): void {
+    const totalExp = this.losers
+      .map(c => c.stats.challenge)
+      .reduce((a, b) => a + b);
+    const expForEachWinner = totalExp / this.winners.length;
+    for (const winner of this.winners) {
+      winner.currentExp += expForEachWinner;
+      winner.adjustLevel(); // TODO: Maybe a currentExp setter could adjust level?
+    }
+    this.log.messages.push(`You earned ${totalExp} exp`);
+  }
+
+  private shareDrops(): void {
+    const totalDrops = this.losers.flatMap(c => c.inventory);
+    const { player } = useMainStore();
+    player.inventory.push(...totalDrops);
+
+    const itemsByType = countByType(totalDrops, (item) => item.name);
+    for (const itemName of Object.keys(itemsByType)) {
+      const amount = itemsByType[itemName];
+      this.log.messages.push(`You found ${amount} ${itemName}`);
+    }
   }
 }
