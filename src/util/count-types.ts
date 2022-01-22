@@ -1,6 +1,3 @@
-// TODO: Use this in `enemy-distribution` or I dunno wherever
-// I've done this before ad-hoc
-
 type CountObject = { [type: string]: number}
 
 // Returns an object whose keys are "types" (string extracted by a function from the object) and the value is the number of times
