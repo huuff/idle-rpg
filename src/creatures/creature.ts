@@ -14,7 +14,6 @@ export class Creature {
   public readonly jobClass: JobClass;
 
   public level: number;
-  public stats: Stats;
   // Not readonly so they can be renamed in battle
   // TODO: Add a rename method instead? one that makes a copye
   // or use immer.js
@@ -22,8 +21,6 @@ export class Creature {
 
   public currentHealth: number;
   public _currentExp: number;
-
-  // TODO: Immutable stats by calculating them each time?
 
   constructor({ 
       species,
@@ -35,14 +32,19 @@ export class Creature {
     this.species = species;
     this.jobClass = jobClass;
     this.level = level;
-    this.stats = calculateStats(species, level).plus(calculateStats(jobClass, level));
     this.currentHealth = this.stats.maxHealth;
     this._currentExp = 0;
+  }
+
+  public get stats() {
+    return calculateStats(this.species, this.level)
+      .plus(calculateStats(this.jobClass, this.level))
   }
 
   public get currentExp() {
     return this._currentExp;
   }
+  // TODO: I don't whink this is necessary
   public set currentExp(newExp: number) {
     this._currentExp = newExp > 0 ? newExp : 0;
   }
@@ -66,9 +68,6 @@ export class Creature {
     if (this.currentExp >= this.requiredExp) {
       const excedingExp = this.currentExp - this.requiredExp;
       this.level++;
-      this.stats = this.stats
-        .plus(this.species.levelProgression)
-        .plus(this.jobClass.levelProgression);
       this.currentExp = excedingExp;
       this.currentHealth += this.species.levelProgression.maxHealth + this.jobClass.levelProgression.maxHealth;
     }
