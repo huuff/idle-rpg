@@ -1,4 +1,4 @@
-import { Stats, calculateStats } from "./stats";
+import { calculateStats } from "./stats";
 import { JobClass, noClass, isNoClass } from "./job-class";
 import { Species, noSpecies, isNoSpecies } from "./species";
 
@@ -15,8 +15,6 @@ export class Creature {
 
   public level: number;
   // Not readonly so they can be renamed in battle
-  // TODO: Add a rename method instead? one that makes a copye
-  // or use immer.js
   public name: string;
 
   public currentHealth: number;
