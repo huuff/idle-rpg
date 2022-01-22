@@ -3,6 +3,7 @@ import { Stats, StatsImpl } from "@/creatures/stats";
 import { ActionFactory } from "@/battle/action";
 import { BasicAttack } from "@/battle/basic-attack";
 import { Creature } from "@/creatures/creature";
+import {JobClass, noClass} from "./job-class";
 
 export interface Species {
   name: string;
@@ -11,13 +12,15 @@ export interface Species {
   naturalActions:  ActionFactory[];
 }
 
-export function createCreature(species: Species, level = 1): Creature {
+// TODO: Ditch this in favor of a better creature initializer
+export function createCreature(species: Species, level = 1, jobClass: JobClass = noClass): Creature {
   return reactive(new Creature(
     species.name,
     species.baseStats,
     species.naturalActions,
     level,
     species.levelProgression,
+    jobClass, 
   ));
 }
 

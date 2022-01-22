@@ -1,54 +1,21 @@
 <template>
-  <div class="container game-container">
-    <location-indicator />
-    <div class="tile is-ancestor tiles-contents">
-      <div class="tile is-4 is-vertical is-parent">
-        <div class="tile is-child box">
-          <p class="title has-text-dark">Player</p>
-          <p class="subtitle has-text-dark">Level {{ player.level }}</p>
-          <span>Health</span>
-          <health-bar :creature="player" />
-          <span>Experience</span>
-          <animated-bar :current="player.currentExp" :max="player.requiredExp" class="is-info"/>
-        </div>
-        <div v-if="secondaryView" class="tile is-child box">
-          <secondary-view />
-        </div>
-      </div>
-      <div class="tile is-parent">
-        <div class="tile is-child box">
-          <main-view /> 
-        </div>
-      </div>
-    </div>
-  </div>
+<component :is="componentToShow" />
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
+import { computed } from "vue";
 import { useMainStore } from "@/store";
-import { useSceneStore } from "@/scenes/scene-store";
-import AnimatedBar from "./components/AnimatedBar.vue";
-import HealthBar from "./components/HealthBar.vue";
-import LocationIndicator from "@/components/location/LocationIndicator.vue";
+import { storeToRefs } from "pinia";
+import { isNoCreature } from "@/creatures/creature";
+import Game from "@/Game.vue";
+import ChooseCharacter from "@/components/modals/ChooseCharacter";
 
-const { player, } = storeToRefs(useMainStore());
-const { mainView, secondaryView } = storeToRefs(useSceneStore());
+const { player } = storeToRefs(useMainStore());
 
+const componentToShow = computed(() => {
+  if (isNoCreature(player.value))
+    return ChooseCharacter;
+  else
+    return Game;
+});
 </script>
-
-<style>
-body, body, #app {
-  height: 100vh;
-  background-color: hsl(204, 86%, 53%);
-}
-
-.game-container {
-  height: 90vh;
-  padding: 10vh 0;
-}
-
-.tiles-contents {
-  height: 100%;
-}
-</style>

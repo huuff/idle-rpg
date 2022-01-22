@@ -67,8 +67,16 @@ export class StatsImpl implements Stats {
   }
 }
 
+// Null object pattern
 export const zeroStats: Stats = new StatsImpl({
   maxHealth: 0,
   strength: 0,
   agility: 0,
 });
+
+export function areZeroStats(stats: Stats) {
+  return stats.maxHealth === 0
+        && stats.strength === 0
+        && stats.agility === 0
+        ;
+}

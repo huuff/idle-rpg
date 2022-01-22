@@ -1,7 +1,5 @@
 import { defineStore } from "pinia";
-import { Creature } from "@/creatures/creature";
-import { human } from "@/creatures/species";
-import { createCreature } from "@/creatures/species";
+import { Creature, noCreature } from "@/creatures/creature";
 import { Log, makeLog } from "@/log";
 import { Battle } from "@/battle/battle"
 import { Autoplay } from "@/autoplay";
@@ -13,12 +11,12 @@ export type StoreState = {
   travelLog: Log;
   autoplay: Autoplay;
   battle: Battle | undefined;
-  scene: Scene | undefined;
+  scene: Scene | undefined; //TODO: Remove this?
 }
 
 export const useMainStore = defineStore("main", {
   state: () => ({
-      player: createCreature(human),
+      player: noCreature,
       travelLog: makeLog(),
       battleLog: makeLog(),
       autoplay: "disabled",
