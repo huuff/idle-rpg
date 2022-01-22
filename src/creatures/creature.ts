@@ -20,7 +20,7 @@ export class Creature {
   public name: string;
 
   public currentHealth: number;
-  public _currentExp: number;
+  public currentExp = 0;
 
   constructor({ 
       species,
@@ -33,20 +33,11 @@ export class Creature {
     this.jobClass = jobClass;
     this.level = level;
     this.currentHealth = this.stats.maxHealth;
-    this._currentExp = 0;
   }
 
   public get stats() {
     return calculateStats(this.species, this.level)
       .plus(calculateStats(this.jobClass, this.level))
-  }
-
-  public get currentExp() {
-    return this._currentExp;
-  }
-  // TODO: I don't whink this is necessary
-  public set currentExp(newExp: number) {
-    this._currentExp = newExp > 0 ? newExp : 0;
   }
 
   public get healthRatio() {
