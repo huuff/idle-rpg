@@ -43,7 +43,7 @@ export const slime: Species = {
 export const human: Species = {
   name: "Human",
   baseStats: new StatsImpl({
-    maxHealth: 50, // TODO turn it back
+    maxHealth: 50,
     strength: 12,
     agility: 8,
   }),
