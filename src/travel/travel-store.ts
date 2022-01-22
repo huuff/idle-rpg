@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { prontera, aldebaran } from "@/map/settlements";
-import { GameMap } from "@/map/game-map";
+import { GameMap, createGameMap } from "@/map/game-map";
 import { MapStatus, RestingStatus } from "@/map/map-status";
 import { plains } from "@/zones/zone";
 import { TravelAction, resolveNextStatus, matchTravelAction } from "./travel-action";
@@ -26,7 +26,7 @@ export const useTravelStore = defineStore("travel", {
       type: "resting",
       at: prontera,
     },
-    map: new GameMap(
+    map: createGameMap(
       [ prontera, aldebaran ],
       [ 
         { locations: [ prontera, aldebaran ], through: plains }

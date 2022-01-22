@@ -15,19 +15,23 @@ export type TravelOption = {
   through: Zone,
 }
 
-// TODO: This as a closure
-export class GameMap {
-  constructor(
-    private readonly locations: MapLocation[],
-    private readonly connections: LocationConnection[],
-  ){}
+export interface GameMap {
+  locations: MapLocation[];
+  connections: LocationConnection[];
+  optionsFrom(location: MapLocation): TravelOption[];
+}
 
-  public optionsFrom(location: MapLocation): TravelOption[] {
-    return this.connections
-      .filter(conn => conn.locations.includes(location))
-      .map(conn => ({
-        to: conn.locations[0] === location ? conn.locations[1] : conn.locations[0],
-        through: conn.through,
-      }));
+export function createGameMap(locations: MapLocation[], connections: LocationConnection[]): GameMap {
+  return {
+    locations,
+    connections,
+    optionsFrom(location: MapLocation) {
+      return this.connections
+        .filter(conn => conn.locations.includes(location))
+        .map(conn => ({
+          to: conn.locations[0] === location ? conn.locations[1] : conn.locations[0],
+          through: conn.through,
+        }));
+    }
   }
 }
