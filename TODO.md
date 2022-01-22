@@ -1,7 +1,8 @@
 # Tasks
-1. Selling spoils for cash in settlements
-2. Equipment
-3. Buying equipment
+1. A main tab to show inventory
+2. Selling spoils for cash in settlements
+3. Equipment
+4. Buying equipment
 
 # Future
 * Maybe use `immer.js` for mutations such as renaming creatures, increase level, change EXP and health... it'd be great but I'm unsure how to use it with `vue`'s reactivity

@@ -1,7 +1,7 @@
 import { calculateStats } from "./stats";
 import { JobClass, noClass, isNoClass } from "./job-class";
 import { Species, noSpecies, isNoSpecies } from "./species";
-import { Item } from "@/items/item";
+import { Inventory, createInventory } from "@/items/inventory";
 
 export type CreatureInitialData = {
   species: Species;
@@ -13,7 +13,7 @@ export type CreatureInitialData = {
 export class Creature {
   public readonly species: Species;
   public readonly jobClass: JobClass;
-  public readonly inventory: Item[]; // TODO: Actually I'm gonna need some type that also holds an amount or else I'm gonna end with a huge array
+  public readonly inventory: Inventory;
 
   public level: number;
   // Not readonly so they can be renamed in battle
@@ -33,7 +33,7 @@ export class Creature {
     this.jobClass = jobClass;
     this.level = level;
     this.currentHealth = this.stats.maxHealth;
-    this.inventory = species.naturalItems ?? [];
+    this.inventory = createInventory(species.naturalItems?.items());
   }
 
   public get stats() {

@@ -3,6 +3,7 @@ import { Creature } from "@/creatures/creature";
 import { Log } from "@/log";
 import { countByType } from "@/util/count-types";
 import { useMainStore } from "@/store";
+import { flattenItems } from "@/items/inventory";
 
 export class Spoils implements Tickable {
   private ticksHad = 0;
@@ -39,9 +40,9 @@ export class Spoils implements Tickable {
   }
 
   private shareDrops(): void {
-    const totalDrops = this.losers.flatMap(c => c.inventory);
+    const totalDrops = flattenItems(this.losers.flatMap(c => c.inventory.items()));
     const { player } = useMainStore();
-    player.inventory.push(...totalDrops);
+    player.inventory.addItems(totalDrops);
 
     const itemsByType = countByType(totalDrops, (item) => item.name);
     for (const itemName of Object.keys(itemsByType)) {
