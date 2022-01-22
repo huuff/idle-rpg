@@ -3,8 +3,8 @@
     <location-indicator />
     <div class="tile is-ancestor tiles-contents">
       <div class="tile is-4 is-vertical is-parent">
-        <div class="tile is-child box">
-          <creature-view :creature="player" />
+        <div class="tile is-child box tabbed-tile">
+          <player-view />
         </div>
         <div v-if="secondaryView" class="tile is-child box">
           <secondary-view />
@@ -21,12 +21,10 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { useMainStore } from "@/store";
 import { useSceneStore } from "@/scenes/scene-store";
-import CreatureView from "./components/CreatureView.vue";
+import PlayerView from "@/components/PlayerView.vue";
 import LocationIndicator from "@/components/location/LocationIndicator.vue";
 
-const { player, } = storeToRefs(useMainStore());
 const { mainView, secondaryView } = storeToRefs(useSceneStore());
 
 </script>
@@ -44,5 +42,9 @@ body, body, #app {
 
 .tiles-contents {
   height: 100%;
+}
+
+.tabbed-tile {
+  padding-top: 0 !important;
 }
 </style>
