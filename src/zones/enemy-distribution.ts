@@ -21,10 +21,9 @@ export function createEnemyFactory(spec: EnemySpecification[]): () => Creature {
     return () => {
       const type = randomByNormalizedFrequency(normalizedFrequencies);
 
-      return new Creature(
-        type.species.name, 
-        type.species,
-        type.averageLevel,
-      );
+      return new Creature({
+        species: type.species,
+        level: type.averageLevel,
+      });
     }
 }

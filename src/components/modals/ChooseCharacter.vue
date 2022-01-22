@@ -50,7 +50,10 @@ const props = withDefaults(defineProps<{
 });
 
 function createPlayer(jobClass: JobClass): void {
-  player.value = new Creature("Human", human, 1, jobClass);
+  player.value = new Creature({
+    jobClass,
+    species: human,
+  });
 }
 
 </script>
