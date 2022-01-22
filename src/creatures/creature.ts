@@ -20,7 +20,7 @@ export class Creature {
   public name: string;
 
   public currentHealth: number;
-  public currentExp = 0;
+  public _currentExp = 0;
 
   constructor({ 
       species,
@@ -52,17 +52,23 @@ export class Creature {
     return this.species.naturalActions;
   }
 
-  public isAlive(): boolean {
-    return this.currentHealth > 0;
+  public get currentExp() {
+    return this._currentExp;
   }
 
-  public adjustLevel(): void {
-    if (this.currentExp >= this.requiredExp) {
-      const excedingExp = this.currentExp - this.requiredExp;
+  public set currentExp(newExp: number) {
+    if (newExp >= this.requiredExp) {
+      const excedingExp = newExp - this.requiredExp;
       this.level++;
-      this.currentExp = excedingExp;
+      this._currentExp = excedingExp;
       this.currentHealth += this.species.levelProgression.maxHealth + this.jobClass.levelProgression.maxHealth;
+    } else {
+      this._currentExp = newExp;
     }
+  }
+
+  public isAlive(): boolean {
+    return this.currentHealth > 0;
   }
 }
 
