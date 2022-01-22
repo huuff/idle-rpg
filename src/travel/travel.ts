@@ -31,8 +31,10 @@ export class Travel implements Tickable {
     // By this point, isOver has been called and thus we know
     // that we must be travelling if this is being executed
     
+    // AUTOPLAY
     const status = this.travelStore.mapStatus as TravellingStatus;
-    if (status.through.isCheckpoint()) {
+    if (status.through.isCheckpoint()
+        && this.store.autoplay === "disabled") {
       return new DecisionTickable(5, (decision) => {
         if (decision.type === "retreat"){
           this.lastAction = decision;

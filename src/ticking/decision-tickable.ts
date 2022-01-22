@@ -3,6 +3,7 @@ import { Tickable } from "./async-ticker";
 import { Scene } from "@/scenes/scene";
 import { TravelAction } from "@/travel/travel-action";
 import TravelDecision from "@/components/scenes/TravelDecision.vue";
+import AutoplayCheckbox from "@/components/AutoplayCheckbox.vue";
 
 export class DecisionTickable implements Tickable {
   private ticksHad = ref(0);
@@ -17,7 +18,8 @@ export class DecisionTickable implements Tickable {
         onContinue: () => this.decision = { type: "continue" },
         onRetreat: () => this.decision = { type: "retreat" },
       }, 
-    )
+    ),
+    sideView: () => h(AutoplayCheckbox, {}),
   }
 
   constructor(
