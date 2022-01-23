@@ -1,7 +1,8 @@
 import { calculateStats } from "./stats";
 import { JobClass, noClass, isNoClass } from "./job-class";
 import { Species, noSpecies, isNoSpecies } from "./species";
-import { InventoryImpl, Inventory } from "@/items/inventory";
+import { InventoryImpl, Inventory, singleInventoryItem } from "@/items/inventory";
+import {equipmentFromInventory} from "@/items/equipment";
 
 export type CreatureInitialData = {
   species: Species;
@@ -32,13 +33,16 @@ export class Creature {
     this.species = species;
     this.jobClass = jobClass;
     this.level = level;
-    this.currentHealth = this.stats.maxHealth;
     this.inventory = new InventoryImpl(species.naturalItems);
+    this.inventory.addItems(jobClass.baseEquipment?.map(singleInventoryItem) ?? []);
+    this.currentHealth = this.stats.maxHealth;
   }
 
   public get stats() {
     return calculateStats(this.species, this.level)
       .plus(calculateStats(this.jobClass, this.level))
+      .plus(equipmentFromInventory(this.inventory).totalStats)
+      ;
   }
 
   public get healthRatio() {

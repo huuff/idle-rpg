@@ -1,3 +1,4 @@
+import {woodenSword} from "@/items/basic-equipments";
 import { JobClass } from "./job-class";
 import { StatsImpl } from "./stats";
 
@@ -13,6 +14,7 @@ export const swordsman: JobClass = {
     strength: 1,
     agility: 0.2,
   }),
+  baseEquipment: [ {...woodenSword, isEquipped: true} ],
 };
 
 export const thief: JobClass = {

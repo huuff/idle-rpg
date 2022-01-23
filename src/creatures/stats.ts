@@ -17,6 +17,7 @@ export class StatsImpl implements Stats {
   private readonly _strength: number;
   private readonly _agility: number;
   
+  // TODO: Default to 0
   constructor(stats: {
     maxHealth: number;
     strength: number;

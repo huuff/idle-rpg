@@ -1,8 +1,12 @@
 import { Item } from "./item";
 import cloneDeep from "lodash/cloneDeep";
 
-export interface InventoryItem extends Item {
+export type InventoryItem = {
   amount: number;
+} & Item;
+
+export function singleInventoryItem(item: Item): InventoryItem {
+  return { ...item, amount: 1 };
 }
 
 function findItem(items: InventoryItem[], itemName: string): number | undefined {

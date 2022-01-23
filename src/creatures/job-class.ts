@@ -1,9 +1,11 @@
 import { Stats, zeroStats, areZeroStats } from "./stats"
+import { EquipmentItem } from "@/items/item";
 
 export interface JobClass {
   name: string;
   baseStats: Stats;
   levelProgression: Stats;
+  baseEquipment?: EquipmentItem[];
 }
 
 export const noClass: JobClass =  {

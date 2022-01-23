@@ -21,7 +21,6 @@ export function makeRest(): Tickable {
       if (!hasDestination(autoplayValue) || mapStatus.type !== "resting") 
         return;
       
-      console.log(`Ending rest, autoplay is ${JSON.stringify(autoplayValue)}`)
       const nextStepToObjective = map.optionsFrom(mapStatus.at).find(opt => opt.to === autoplayValue.to);
       if (nextStepToObjective) {
         travelStore.takeAction({
