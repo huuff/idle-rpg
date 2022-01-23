@@ -1,21 +1,13 @@
 <template>
-<div class="tabs">
-<ul>
-  <li v-for="tab in Tab"
-      :key="tab"
-      :class="{ 'is-active': tab === currentTab }"
-  ><a @click="currentTab = tab">{{ tab }}</a></li>
-</ul>
-</div>
-<component :is="currentView" :inventory="inventory" />
+<tabbed-view :tabs="Tab" :tab-to-component="tabToComponent" :componentProps="props"/>
 </template>
 
 <script setup lang="ts">
-// TODO: Dry this and `PlayerView` with a TabbedTile component
-import { ref, computed } from "vue";
+import { computed, Component, ComputedRef } from "vue";
 import { useSceneStore } from "@/scenes/scene-store";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
+import TabbedView from "@/components/ui/TabbedView.vue";
 import InventoryView from "./InventoryView.vue";
 
 const { player } = useMainStore();
@@ -25,18 +17,15 @@ enum Tab {
   Inventory = "Inventory",
 }
 
-const currentTab = ref(Tab.Scene);
 const { mainView } = storeToRefs(useSceneStore());
 
-const inventory = computed(() => player.inventory);
+const tabToComponent: ComputedRef<Record<Tab, Component>> = computed(() => ({
+  [Tab.Scene]: mainView.value,
+  [Tab.Inventory]: InventoryView,
+}));
 
-const currentView = computed(() => {
-  if (currentTab.value === Tab.Scene)
-    return mainView.value;
-  else if (currentTab.value === Tab.Inventory)
-    return InventoryView;
-  else
-    throw new Error(`Tab ${currentTab.value} not handled in 'PlayerView'`);
-})
+const props = computed(() => ({
+  "inventory": player.inventory,
+}));
 
 </script>

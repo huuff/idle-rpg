@@ -1,36 +1,29 @@
 <template>
-<div class="tabs">
-<ul>
-  <li v-for="tab in Tab" 
-      :key="tab"
-      :class="{ 'is-active': tab === currentTab }"
-  ><a @click="currentTab = tab">{{ tab }}</a></li>
-</ul>
-</div>
-<component :is="currentView" :creature="player" />
+<tabbed-view :tabs="Tab" :tab-to-component="tabToComponent" :componentProps="componentProps" />
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed, ComputedRef, Component } from "vue";
 import { useMainStore } from "@/store";
+import { storeToRefs } from "pinia";
+import TabbedView from "@/components/ui/TabbedView.vue";
 import CreatureView from "@/components/CreatureView.vue";
 import StatsView from "@/components/StatsView.vue";
 
-const { player } = useMainStore();
+const { player } = storeToRefs(useMainStore());
 
 enum Tab {
   Main = "Main",
   Stats = "Stats",
 }
 
-const currentTab = ref(Tab.Main);
 
-const currentView = computed(() => {
-  if (currentTab.value === Tab.Main)
-    return CreatureView;
-  else if (currentTab.value === Tab.Stats)
-    return StatsView
-  else
-    throw new Error(`Tab ${currentTab.value} not handled in 'PlayerView'`);
-})
+const tabToComponent: ComputedRef<Record<Tab, Component>> = computed(() => ({
+  [Tab.Main]: CreatureView,
+  [Tab.Stats]: StatsView,
+}));
+
+const componentProps = computed(() => ({
+  "creature": player.value
+}));
 </script>
