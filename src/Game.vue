@@ -7,12 +7,12 @@
         <div class="tile is-child box tabbed-tile">
           <player-view />
         </div>
-        <div v-if="secondaryView" class="tile is-child box">
+        <div v-if="secondaryView" class="tile is-child box scroll-tile">
           <secondary-view />
         </div>
       </div>
       <div class="tile is-parent">
-        <div class="tile is-child box">
+        <div class="tile is-child box scroll-tile">
           <main-view /> 
         </div>
       </div>
@@ -48,5 +48,9 @@ body, body, #app {
 
 .tabbed-tile {
   padding-top: 0 !important;
+}
+
+.scroll-tile {
+  overflow-y: scroll;
 }
 </style>

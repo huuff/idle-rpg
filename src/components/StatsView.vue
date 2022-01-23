@@ -1,6 +1,6 @@
 <template>
 <div class="content">
-  <p class="title has-text-dark"> {{ creature.name }} </p>
+  <p class="title has-text-dark my-1"> {{ creature.name }} </p>
   <strong>Level:</strong> {{ creature.level }}  <br/>
   <strong>Species:</strong> {{ creature.species.name }} <br/>
   <strong>Class:</strong> {{ creature.jobClass.name }} <br/>
