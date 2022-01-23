@@ -11,8 +11,9 @@
 
 <script setup lang="ts">
 import { useMainStore } from "@/store";
+import { storeToRefs } from "pinia";
 
-const { money } = useMainStore();
+const { money } = storeToRefs(useMainStore());
 </script>
 
 <style>

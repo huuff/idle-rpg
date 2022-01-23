@@ -1,11 +1,18 @@
 <template>
 <p class="title has-text-dark">Resting in {{ location.name }}</p>
 
-<button v-for="destination of possibleDestinations"
-        :key="`${destination.through.name}-${destination.to.name}`"
-        @click="goTo(destination)"
-        class="button is-primary"
->Go to {{ destination.to.name }}</button>
+<div class="is-flex is-flex-direction-column">
+  <button v-for="destination of possibleDestinations"
+          :key="`${destination.through.name}-${destination.to.name}`"
+          @click="goTo(destination)"
+          class="button is-primary mb-2"
+  >Go to {{ destination.to.name }}</button>
+
+  <button 
+    @click="sellSpoils"
+    class="button is-info mb-2"
+    >Sell Spoils</button>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -21,7 +28,7 @@ const props = defineProps<{
 
 const travelStore = useTravelStore();
 const { map }= storeToRefs(travelStore);
-const { autoplay, } = storeToRefs(useMainStore());
+const { autoplay, player, money } = storeToRefs(useMainStore());
 
 const possibleDestinations = computed(() => map.value.optionsFrom(props.location));
 
@@ -35,5 +42,10 @@ function goTo(destination: TravelOption): void {
     to: destination.to,
     through: destination.through,
   });
+}
+
+function sellSpoils() {
+  money.value += player.value.inventory.totalValue;
+  player.value.inventory.empty();
 }
 </script>

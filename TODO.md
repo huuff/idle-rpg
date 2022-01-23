@@ -1,5 +1,4 @@
 # Tasks
-2. Selling spoils for cash in settlements
 3. Equipment
 4. Buying equipment
 

@@ -30,6 +30,8 @@ export function flattenItems(items: InventoryItem[]): InventoryItem[] {
 export interface Inventory {
   items: Readonly<InventoryItem[]>;
   addItems: (items: InventoryItem[]) => void;
+  totalValue: number;
+  empty: () => void;
 }
 
 export class InventoryImpl {
@@ -43,7 +45,16 @@ export class InventoryImpl {
     return this._items;
   }
 
-  public addItems(items: InventoryItem[]) {
+  public get totalValue(): number {
+    return this._items
+      .reduce((acc, item) => acc + (item.amount * item.avgValue), 0);
+  }
+
+  public addItems(items: InventoryItem[]): void {
     this._items = flattenItems(this._items.concat(items));
+  }
+
+  public empty(): void {
+    this._items = [];
   }
 }
