@@ -2,28 +2,31 @@ import { useMainStore } from "@/store";
 import { Tickable } from "@/ticking/async-ticker";
 import {hasDestination} from "./autoplay";
 import {useTravelStore} from "./travel/travel-store";
+import { storeToRefs } from "pinia";
 
 export function makeRest(): Tickable {
-  const { player, autoplay } = useMainStore();
+  const { player, autoplay } = storeToRefs(useMainStore());
   const travelStore = useTravelStore();
   const { mapStatus, map } = travelStore;
   return {
     tick: () => {
-      player.currentHealth++;
+      player.value.currentHealth++;
     },
 
-    isOver: () => player.currentHealth >= player.stats.maxHealth,
+    isOver: () => player.value.currentHealth >= player.value.stats.maxHealth,
 
     // AUTOPLAY
     onEnd: () => {
-      if (!hasDestination(autoplay) || mapStatus.type !== "resting") 
+      const autoplayValue = autoplay.value;
+      if (!hasDestination(autoplayValue) || mapStatus.type !== "resting") 
         return;
       
-      const nextStepToObjective = map.optionsFrom(mapStatus.at).find(opt => opt.to === autoplay.to);
+      console.log(`Ending rest, autoplay is ${JSON.stringify(autoplayValue)}`)
+      const nextStepToObjective = map.optionsFrom(mapStatus.at).find(opt => opt.to === autoplayValue.to);
       if (nextStepToObjective) {
         travelStore.takeAction({
           type: "depart",
-          to: autoplay.to,
+          to: autoplayValue.to,
           through: nextStepToObjective.through,
         })
       }

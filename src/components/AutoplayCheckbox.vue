@@ -15,7 +15,9 @@ const { autoplay } = storeToRefs(useMainStore());
 
 const checkbox = computed({
   get: () => autoplay.value !== "disabled",
-  set: () => autoplay.value = "enabled",
+  set: (newVal: boolean) => {
+    autoplay.value = newVal ? "enabled" : "disabled";
+  }
 });
 
 const isEngaged = computed(() => autoplay.value !== "disabled" && autoplay.value !== "enabled");
