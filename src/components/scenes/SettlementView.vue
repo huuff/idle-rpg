@@ -45,7 +45,7 @@ function goTo(destination: TravelOption): void {
 }
 
 function sellSpoils() {
-  money.value += player.value.inventory.totalValue;
-  player.value.inventory.empty();
+  money.value += player.value.inventory.stuffValue;
+  player.value.inventory.removeStuff();
 }
 </script>

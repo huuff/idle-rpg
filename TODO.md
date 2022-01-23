@@ -1,5 +1,4 @@
 # Tasks
-2. Prevent selling equipped items
 3. Showing equipped items in inventary
 4. Add option to equip and unequip
 5. Buying equipment
