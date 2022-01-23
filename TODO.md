@@ -1,5 +1,4 @@
 # Tasks
-3. Showing equipped items in inventary
 4. Add option to equip and unequip
 5. Buying equipment
 * A base `CreatureView` that adds the name of the creature

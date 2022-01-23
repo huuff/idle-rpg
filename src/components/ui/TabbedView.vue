@@ -1,5 +1,5 @@
 <template>
-<div class="tabs">
+<div class="tabs mb-2">
   <ul>
     <li v-for="tab in tabs"
         :key="tab"
