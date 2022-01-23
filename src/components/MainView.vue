@@ -7,12 +7,7 @@
   ><a @click="currentTab = tab">{{ tab }}</a></li>
 </ul>
 </div>
-<template v-if="currentTab === Tab.Scene">
-  <main-view />
-</template>
-<template v-else-if="currentTab === Tab.Inventory">
-  <inventory-view :inventory="inventory" />
-</template>
+<component :is="currentView" :inventory="inventory" />
 </template>
 
 <script setup lang="ts">
@@ -37,7 +32,7 @@ const inventory = computed(() => player.inventory);
 
 const currentView = computed(() => {
   if (currentTab.value === Tab.Scene)
-    return mainView;
+    return mainView.value;
   else if (currentTab.value === Tab.Inventory)
     return InventoryView;
   else
