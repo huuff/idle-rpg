@@ -1,5 +1,4 @@
 # Tasks
-4. Add option to equip and unequip
 5. Buying equipment
 * A base `CreatureView` that adds the name of the creature
 * Put all creature views in a `creature-views` folder in `components`

@@ -1,4 +1,4 @@
-import { Item } from "./item";
+import { Item, isEquipment, EquipmentItem } from "./item";
 import cloneDeep from "lodash/cloneDeep";
 
 export type InventoryItem = {
@@ -32,10 +32,11 @@ export function flattenItems(items: InventoryItem[]): InventoryItem[] {
 }
 
 export interface Inventory {
-  items: Readonly<InventoryItem[]>;
+  items: ReadonlyArray<InventoryItem>;
   addItems: (items: InventoryItem[]) => void;
   stuffValue: number;
   removeStuff: () => void;
+  toggleEquipped: (itemName: string) => void;
 }
 
 export class InventoryImpl {
@@ -45,7 +46,7 @@ export class InventoryImpl {
     this._items = initialItems ? cloneDeep(initialItems) : [];
   }
 
-  public get items(): Readonly<InventoryItem[]> {
+  public get items(): ReadonlyArray<InventoryItem> {
     return this._items;
   }
 
@@ -61,5 +62,27 @@ export class InventoryImpl {
 
   public removeStuff(): void {
     this._items = this._items.filter(i => i.type !== "stuff");
+  }
+
+  public toggleEquipped(itemName: string): void {
+    const equipmentItems = this._items.filter(isEquipment) as EquipmentItem[];
+    const itemIndex = findItem(equipmentItems as InventoryItem[], itemName)
+
+    if (itemIndex == undefined) {
+      throw new Error(`Trying to toggle equipment in non-present item ${itemName}`)
+    }
+
+    const item = equipmentItems[itemIndex];
+    
+    // Remove previously equipped items for that slot
+    equipmentItems
+      .filter(i => i.slot === item.slot)
+      .filter(i => i.name !== item.name)
+      .filter(i => i.isEquipped)
+      .forEach(i => i.isEquipped = false)
+      ;
+
+    // Actually toggle it
+    item.isEquipped = !item.isEquipped;
   }
 }

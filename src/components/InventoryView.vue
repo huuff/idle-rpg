@@ -9,7 +9,7 @@
   </ul>
 </div>
 <div>
-  <table class="table is-fullwidth">
+  <table class="table is-fullwidth is-hoverable is-unselectable">
     <thead>
       <tr>
         <th>Name</th>
@@ -20,7 +20,11 @@
       <tr 
         v-for="item in filteredItems" 
         :key="item.name"
-        :class="{ 'is-selected': isEquipped(item) }"
+        :class="{ 
+          'is-selected': isEquipped(item),
+          'is-clickable': item.type === 'equipment',
+          }"
+        @click="toggleEquipped(item)"
         >
         <td>{{ item.name }}</td>
         <td>{{ item.amount}}</td>
@@ -56,5 +60,11 @@ const filteredItems = computed(() => {
 
 function isEquipped(item: Item): boolean {
   return item.type === "equipment" && item.isEquipped;
+}
+
+function toggleEquipped(item: Item): void {
+  if (item.type === "equipment") {
+    props.inventory.toggleEquipped(item.name);
+  }
 }
 </script>

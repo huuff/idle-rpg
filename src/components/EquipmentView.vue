@@ -4,7 +4,9 @@
   <template v-for="(item, slotName) in creature.equipment.slots "
     :key="slotName"
   >
-    <strong>{{ capitalize(slotName) }}:</strong> {{ item.name }}
+    <template v-if="item">
+      <strong>{{ capitalize(slotName) }}:</strong> {{ item.name }}
+    </template>
   </template>
 </div>
 </template>
