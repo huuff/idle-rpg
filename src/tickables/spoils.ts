@@ -39,14 +39,12 @@ export class Spoils implements Tickable {
   }
 
   private shareDrops(): void {
-    const totalDrops = flattenItems(this.losers.flatMap(c => c.inventory.items()));
+    const totalDrops = flattenItems(this.losers.flatMap(c => c.inventory.items));
     const { player } = useMainStore();
     player.inventory.addItems(totalDrops);
 
-    const itemsByType = countByType(totalDrops, (item) => item.name);
-    for (const itemName of Object.keys(itemsByType)) {
-      const amount = itemsByType[itemName];
-      this.log.messages.push(`You found ${amount} ${itemName}`);
+    for (const item of totalDrops) {
+      this.log.messages.push(`You found ${item.amount} ${item.name}`);
     }
   }
 }

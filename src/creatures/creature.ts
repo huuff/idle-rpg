@@ -1,7 +1,7 @@
 import { calculateStats } from "./stats";
 import { JobClass, noClass, isNoClass } from "./job-class";
 import { Species, noSpecies, isNoSpecies } from "./species";
-import { Inventory, createInventory } from "@/items/inventory";
+import { InventoryImpl, Inventory } from "@/items/inventory";
 
 export type CreatureInitialData = {
   species: Species;
@@ -33,7 +33,7 @@ export class Creature {
     this.jobClass = jobClass;
     this.level = level;
     this.currentHealth = this.stats.maxHealth;
-    this.inventory = createInventory(species.naturalItems?.items());
+    this.inventory = new InventoryImpl(species.naturalItems);
   }
 
   public get stats() {

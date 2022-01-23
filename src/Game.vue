@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="tile is-parent">
-        <div class="tile is-child box scroll-tile">
+        <div class="tile is-child box scroll-tile tabbed-tile">
           <main-view /> 
         </div>
       </div>
@@ -26,8 +26,9 @@ import { useSceneStore } from "@/scenes/scene-store";
 import PlayerView from "@/components/PlayerView.vue";
 import LocationIndicator from "@/components/location/LocationIndicator.vue";
 import MoneyView from "@/components/MoneyView.vue";
+import MainView from "@/components/MainView.vue";
 
-const { mainView, secondaryView } = storeToRefs(useSceneStore());
+const { secondaryView } = storeToRefs(useSceneStore());
 
 </script>
 

@@ -1,12 +1,8 @@
 import { Item } from "./item";
+import cloneDeep from "lodash/cloneDeep";
 
 export interface InventoryItem extends Item {
   amount: number;
-}
-
-export interface Inventory {
-  items: () => InventoryItem[];
-  addItems: (itemsToAdd: InventoryItem[]) => void;
 }
 
 function findItem(items: InventoryItem[], itemName: string): number | undefined {
@@ -21,24 +17,33 @@ export function flattenItems(items: InventoryItem[]): InventoryItem[] {
 
   for (const item of items) {
     const positionOfItem = findItem(result, item.name);
-    if (positionOfItem) {
+    if (positionOfItem != undefined) {
       result[positionOfItem].amount += item.amount;
     } else {
       result.push(item);
-      }
+    }
   }
 
   return result;
 }
 
-export function createInventory(initialItems: InventoryItem[] = []): Inventory {
-  let items = [...initialItems];
+export interface Inventory {
+  items: Readonly<InventoryItem[]>;
+  addItems: (items: InventoryItem[]) => void;
+}
 
+export class InventoryImpl {
+  private _items: InventoryItem[];
 
-  return {
-    items: () => [...items],
-    addItems: (itemsToAdd: InventoryItem[]) => {
-      items = flattenItems(items.concat(itemsToAdd));
-    }
+  constructor(initialItems?: InventoryItem[]) {
+    this._items = initialItems ? cloneDeep(initialItems) : [];
+  }
+
+  public get items(): Readonly<InventoryItem[]> {
+    return this._items;
+  }
+
+  public addItems(items: InventoryItem[]) {
+    this._items = flattenItems(this._items.concat(items));
   }
 }
