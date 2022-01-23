@@ -9,7 +9,5 @@ export const woodenSword: EquipmentItem = {
   avgValue: 10,
   stats: new StatsImpl({
     strength: 1,
-    maxHealth: 0,
-    agility: 0,
   })
 }

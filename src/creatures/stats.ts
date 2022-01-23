@@ -17,15 +17,18 @@ export class StatsImpl implements Stats {
   private readonly _strength: number;
   private readonly _agility: number;
   
-  // TODO: Default to 0
-  constructor(stats: {
-    maxHealth: number;
-    strength: number;
-    agility: number;
-  }) {
-    this._maxHealth = stats.maxHealth;
-    this._strength = stats.strength;
-    this._agility = stats.agility;
+  constructor({
+    maxHealth = 0,
+    strength = 0,
+    agility = 0,
+  } : {
+    maxHealth?: number;
+    strength?: number;
+    agility?: number;
+  } = {}) {
+    this._maxHealth = maxHealth;
+    this._strength = strength;
+    this._agility = agility;
   }
 
   public get maxHealth() {
@@ -69,11 +72,7 @@ export class StatsImpl implements Stats {
 }
 
 // Null object pattern
-export const zeroStats: Stats = new StatsImpl({
-  maxHealth: 0,
-  strength: 0,
-  agility: 0,
-});
+export const zeroStats: Stats = new StatsImpl();
 
 export function areZeroStats(stats: Stats) {
   return stats.maxHealth === 0
