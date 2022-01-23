@@ -41,8 +41,12 @@ export class Creature {
   public get stats() {
     return calculateStats(this.species, this.level)
       .plus(calculateStats(this.jobClass, this.level))
-      .plus(equipmentFromInventory(this.inventory).totalStats)
+      .plus(this.equipment.totalStats)
       ;
+  }
+
+  public get equipment() {
+    return equipmentFromInventory(this.inventory);
   }
 
   public get healthRatio() {
