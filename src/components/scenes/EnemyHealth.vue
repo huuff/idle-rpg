@@ -1,5 +1,4 @@
 <template>
-<p class="title has-text-dark">Enemies</p>
 <template v-for="enemy in enemies" :key="enemy.name">
   <span> {{enemy.name }} </span>
   <health-bar :creature="enemy" />
