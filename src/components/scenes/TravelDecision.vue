@@ -1,27 +1,23 @@
 <template>
-<div class="is-flex is-flex-direction-column is-justify-content-space-between" style="height: 100%; min-height: 100%;">
-  <div>
-    <travel-view />
+<div style="height: 100%; min-height: 100%; position: relative">
+  <travel-view />
 
-    <button 
-      type="button"
-      class="button is-primary"
-      @click="emit('continue')"
-    >Continue</button>
+  <button 
+    type="button"
+    class="button is-primary"
+    @click="emit('continue')"
+  >Continue</button>
 
-    <button 
-      type="button" 
-      class="button is-secondary" 
-      @click="emit('retreat')"
-    >Retreat</button>
-  </div>
-  <div>
-    <progress 
-      class="progress" 
-      :max="ticksDuration"
-      :value="ticksHad.value"
-    ></progress>
-  </div>
+  <button 
+    type="button" 
+    class="button is-secondary" 
+    @click="emit('retreat')"
+  >Retreat</button>
+  <progress 
+    class="progress" 
+    :max="ticksDuration"
+    :value="ticksHad.value"
+  ></progress>
 </div>
 </template>
 
@@ -40,3 +36,10 @@ const emit = defineEmits<{
 }>();
 
 </script>
+
+<style scoped>
+.progress {
+  position: absolute;
+  bottom: 10%;
+}
+</style>

@@ -1,5 +1,4 @@
 # Tasks
-* Travelling decision progress bar is showing below content
 * Loading creatures, items, etc from JSON
 * Saving game to `localStorage`
 * Showing where each stat comes from with popups

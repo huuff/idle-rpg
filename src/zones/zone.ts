@@ -58,7 +58,7 @@ export function createZone({ name, stages }: { name: string, stages: Stage[]}): 
 export const plains = createZone({
   name: "Plains",
   stages: [
-    createStage({ steps: 5, enemies: [{ species: slime, averageLevel: 1, frequency: 1}]}),
+    createStage({ steps: 1, enemies: [{ species: slime, averageLevel: 1, frequency: 1}]}),
     createStage({ steps: 5, enemies: [{ species: slime, averageLevel: 2, frequency: 1}]}),
     createStage({ steps: 5, enemies: [{ species: slime, averageLevel: 3, frequency: 1}]}),
     createStage({ steps: 5, enemies: [{ species: slime, averageLevel: 4, frequency: 1}]}),
