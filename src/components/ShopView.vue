@@ -35,6 +35,7 @@ import { InventoryItem, singleInventoryItem } from "@/items/inventory";
 import { Item } from "@/items/item";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
+import { sellableValue, removeSellable } from "@/items/selling";
 
 const props = defineProps<{
   shop: Shop;
@@ -60,7 +61,7 @@ function buy(item: InventoryItem) {
 }
 
 function sellSpoils() {
-  money.value += player.value.inventory.stuffValue;
-  player.value.inventory.removeStuff();
+  money.value += sellableValue(player.value.inventory);
+  removeSellable(player.value.inventory);
 }
 </script>

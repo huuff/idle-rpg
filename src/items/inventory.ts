@@ -23,9 +23,8 @@ export interface Inventory {
   // an ugly separate `adds` method
   adds: (items: InventoryItem[]) => void;
   merge: (inventory: Inventory) => Inventory;
-  stuffValue: number;
+  asArray: () => InventoryItem[];
   removeItem: (itemName: string, amount?: number) => void;
-  removeStuff: () => void;
   toggleEquipped: (itemName: string) => void;
 }
 
@@ -69,6 +68,10 @@ export class InventoryImpl implements Inventory {
     return result;
   }
 
+  public asArray(): InventoryItem[] {
+    return Object.values(this.items);
+  }
+
   // TODO: just `remove`
   public removeItem(itemName: string, amount = 1) {
     const item = this.items[itemName];
@@ -80,23 +83,6 @@ export class InventoryImpl implements Inventory {
     if (item.amount == 0) {
       delete this.items[itemName];
     } 
-  }
-
-  // TODO stuff stuff somewhere else
-  public get stuffValue(): number {
-    return Object.entries(this.items)
-      .map(([_, item]) => item)
-      .filter(i => i.type === "stuff")
-      .reduce((acc, item) => acc + (item.amount * item.avgValue), 0)
-      ;
-  }
-
-  public removeStuff(): void {
-    for (const [name, item] of Object.entries(this.items)) {
-      if (item.type === "stuff") {
-        delete this.items[name];
-      }
-    }
   }
 
   // TODO: this in equipment?
