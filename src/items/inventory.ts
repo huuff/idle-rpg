@@ -24,7 +24,7 @@ export interface Inventory {
   adds: (items: InventoryItem[]) => void;
   merge: (inventory: Inventory) => Inventory;
   asArray: () => InventoryItem[];
-  removeItem: (itemName: string, amount?: number) => void;
+  remove: (itemName: string, amount?: number) => void;
 }
 
 export class InventoryImpl implements Inventory {
@@ -71,8 +71,7 @@ export class InventoryImpl implements Inventory {
     return Object.values(this.items);
   }
 
-  // TODO: just `remove`
-  public removeItem(itemName: string, amount = 1) {
+  public remove(itemName: string, amount = 1) {
     const item = this.items[itemName];
     if (!item) {
       throw new Error(`Item ${itemName} not in inventory!`);

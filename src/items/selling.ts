@@ -10,6 +10,6 @@ export function sellableValue(inventory: Inventory): number {
 
 export function removeSellable(inventory: Inventory): void {
   for (const sellable of findSellable(inventory)) {
-    inventory.removeItem(sellable.name, sellable.amount);
+    inventory.remove(sellable.name, sellable.amount);
   }
 }
