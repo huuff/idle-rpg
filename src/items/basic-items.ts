@@ -1,20 +1,16 @@
 import { StuffItem } from "./item";
 import basicItemsJson from "./basic-items.json";
 
-export type BasicItems = {[itemName in keyof typeof basicItemsJson]: StuffItem}
+type BasicItemName = keyof typeof basicItemsJson;
+type JsonValue = Omit<StuffItem, "type"> & { type: string };
+type JsonType = { [itemName in BasicItemName]: JsonValue };
 
-function areBasicItems(json: any): json is BasicItems {
+export type BasicItems = {[itemName in BasicItemName]: StuffItem}
+
+
+function areBasicItems(json: JsonType): json is BasicItems {
   return Object.values(json)
-    .every((obj: any) => {
-      const result = obj.type === "stuff"
-            && typeof obj.name === "string"
-            && typeof obj.avgValue === "number"
-            && typeof obj.rarity === "number";
-      if (!result) {
-        throw new Error(`Error loading 'basic-items.json'! The following object is not a 'StuffItem': ${JSON.stringify(obj)}`)
-      }
-      return result;
-    })
+    .every((obj: JsonValue) => obj.type === "stuff");
 }
 
 function loadJson(): BasicItems {
