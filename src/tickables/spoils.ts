@@ -1,9 +1,8 @@
 import { Tickable } from "@/ticking/async-ticker";
 import { Creature } from "@/creatures/creature";
 import { Log } from "@/log";
-import { countByType } from "@/util/count-types";
 import { useMainStore } from "@/store";
-import { flattenItems } from "@/items/inventory";
+import {InventoryImpl} from "@/items/inventory";
 
 export class Spoils implements Tickable {
   private ticksHad = 0;
@@ -39,11 +38,13 @@ export class Spoils implements Tickable {
   }
 
   private shareDrops(): void {
-    const totalDrops = flattenItems(this.losers.flatMap(c => c.inventory.items));
+    const totalDrops = this.losers
+      .map(c => c.inventory)
+      .reduce((acc, inv) => acc.merge(inv), new InventoryImpl()).items;
     const { player } = useMainStore();
-    player.inventory.addItems(totalDrops);
+    player.inventory.adds(Object.values(totalDrops));
 
-    for (const item of totalDrops) {
+    for (const item of Object.values(totalDrops)) {
       this.log.messages.push(`You found ${item.amount} ${item.name}`);
     }
   }

@@ -8,7 +8,7 @@ export type Equipment = {
 }
 
 export function equipmentFromInventory(inventory: Inventory): Equipment {
-  const equipment = inventory.items.filter(isEquipment) as EquipmentItem[];
+  const equipment = Object.values(inventory.items).filter(isEquipment) as EquipmentItem[];
   const weapons = equipment.filter(i => i.slot === "weapon" && i.isEquipped);
 
   if (weapons.length > 1)

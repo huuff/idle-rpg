@@ -1,7 +1,6 @@
 import { 
   Inventory,
   InventoryImpl,
-  singleInventoryItem
 } from "@/items/inventory";
 import { basicEquipments } from "@/items/basic-equipments";
 import {chooseRandom} from "@/util/random";
@@ -17,7 +16,7 @@ function createShopInventory(budget: number, rarity: number): Inventory {
   const availableItems = new InventoryImpl();
   while (budgetLeft > 0) {
     const choosenItem = chooseRandom(possibleItems);
-    availableItems.addItems([singleInventoryItem(choosenItem)]);
+    availableItems.add(choosenItem);
     budgetLeft -= choosenItem.avgValue;
   }
   return availableItems;

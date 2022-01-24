@@ -48,12 +48,13 @@ const tabs = [ "all", "stuff", "equipment" ];
 const currentTab = ref("all");
 
 const filteredItems = computed(() => {
+  const items = Object.values(props.inventory.items);
   if (currentTab.value === "all")
-    return props.inventory.items;
+    return items;
   else if (currentTab.value === "stuff")
-    return props.inventory.items.filter(i => i.type === "stuff");
+    return items.filter(i => i.type === "stuff");
   else if (currentTab.value === "equipment")
-    return props.inventory.items.filter(i => i.type === "equipment");
+    return items.filter(i => i.type === "equipment");
   else 
     throw new Error(`Tab ${currentTab.value} not handled in 'InventoryView'`);
 })

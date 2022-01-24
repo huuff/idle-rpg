@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { Shop } from "@/locations/shop";
-import { InventoryItem } from "@/items/inventory";
+import { InventoryItem, singleInventoryItem } from "@/items/inventory";
 import { Item } from "@/items/item";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
@@ -46,13 +46,14 @@ const emit = defineEmits<{
 
 const { player, money } = storeToRefs(useMainStore());
 
+
 function hasMoneyForItem(item: Item) {
   return money.value >= item.avgValue;
 }
 
 function buy(item: InventoryItem) {
   if (hasMoneyForItem(item)) {
-    player.value.inventory.addItem(item);
+    player.value.inventory.add(singleInventoryItem(item));
     props.shop.inventory.removeItem(item.name);
     money.value -= item.avgValue;
   }

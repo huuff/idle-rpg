@@ -34,7 +34,7 @@ export class Creature {
     this.jobClass = jobClass;
     this.level = level;
     this.inventory = new InventoryImpl(species.naturalItems);
-    this.inventory.addItems(jobClass.baseEquipment?.map(singleInventoryItem) ?? []);
+    this.inventory.adds(jobClass.baseEquipment?.map(singleInventoryItem) ?? []);
     this.currentHealth = this.stats.maxHealth;
   }
 
