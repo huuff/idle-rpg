@@ -1,5 +1,8 @@
 # Tasks
-* Loading creatures, equipment, etc from JSON
+* Clicking on equipment on inventory to unequip not working
+* Loading creatures, places, etc from JSON
+* Tests that basic items and basic equipments load
+* Make `isEquipped` optional in `EquipmentItem`
 * Saving game to `localStorage`
 * Showing where each stat comes from with popups
 * Put autoplay somewhere where it's accessible at any time

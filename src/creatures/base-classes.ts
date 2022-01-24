@@ -1,6 +1,8 @@
-import { woodenSword, ironKnife } from "@/items/basic-equipments";
+import { basicEquipments } from "@/items/basic-equipments";
 import { JobClass } from "./job-class";
 import { StatsImpl } from "./stats";
+
+const { woodenSword, ironKnife } = basicEquipments;
 
 export const swordsman: JobClass = {
   name: "Swordsman",

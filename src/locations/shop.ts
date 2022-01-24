@@ -11,7 +11,7 @@ export interface Shop {
 
 function createShopInventory(budget: number, rarity: number): Inventory {
   let budgetLeft = budget;
-  const possibleItems = basicEquipments.filter(i => i.rarity <= rarity);
+  const possibleItems = Object.values(basicEquipments).filter(i => i.rarity <= rarity);
   
   const availableItems = new InventoryImpl();
   while (budgetLeft > 0) {

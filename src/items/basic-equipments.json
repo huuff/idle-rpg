@@ -1,0 +1,37 @@
+{
+  "woodenSword": {
+    "type": "equipment",
+    "name": "Wooden Sword",
+    "slot": "weapon",
+    "isEquipped": false,
+    "avgValue": 100,
+    "rarity": 1,
+    "stats": {
+      "strength": 1
+    }
+  },
+
+  "ironSword": {
+    "type": "equipment",
+    "name": "Iron Sword",
+    "slot": "weapon",
+    "isEquipped": false,
+    "rarity": 2,
+    "avgValue": 1000,
+    "stats": {
+      "strength": 10
+    }
+  },
+
+  "ironKnife": {
+    "type": "equipment",
+    "name": "Iron Knife",
+    "slot": "weapon",
+    "isEquipped": false,
+    "rarity": 1,
+    "avgValue": 10,
+    "stats": {
+      "strength": 0.2
+    }
+  }
+}
