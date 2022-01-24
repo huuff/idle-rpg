@@ -37,6 +37,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { Inventory } from "@/items/inventory";
+import { EquipmentImpl } from "@/items/equipment";
 import capitalize from "lodash/capitalize";
 import {Item} from "@/items/item";
 
@@ -65,7 +66,7 @@ function isEquipped(item: Item): boolean {
 
 function toggleEquipped(item: Item): void {
   if (item.type === "equipment") {
-    props.inventory.toggleEquipped(item.name);
+    new EquipmentImpl(props.inventory).toggleEquipped(item.name);
   }
 }
 </script>

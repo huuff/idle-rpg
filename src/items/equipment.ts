@@ -1,23 +1,58 @@
-import { Stats, zeroStats } from "@/creatures/stats";
+import { Stats, zeroStats, } from "@/creatures/stats";
 import { Inventory } from "./inventory";
 import { EquipmentSlot, EquipmentItem, isEquipment } from "./item";
+import { keyBy, uniq } from "lodash";
 
-export type Equipment = {
-  slots: {[slot in EquipmentSlot]: EquipmentItem};
-  totalStats: Stats;
+export type EquipmentSlots = {[slot in EquipmentSlot]: EquipmentItem};
+
+export interface Equipment {
+  readonly equipped: EquipmentItem[];
+  readonly slots: {[slot in EquipmentSlot]: EquipmentItem};
+  readonly totalStats: Stats;
+  toggleEquipped: (itemName: string) => void;
 }
 
-export function equipmentFromInventory(inventory: Inventory): Equipment {
-  const equipment = Object.values(inventory.items).filter(isEquipment) as EquipmentItem[];
-  const weapons = equipment.filter(i => i.slot === "weapon" && i.isEquipped);
+export class EquipmentImpl {
+  
+  constructor(private readonly inventory: Inventory) {}
 
-  if (weapons.length > 1)
-    throw new Error(`Can't have more than one weapon equipped! Currently has: ${JSON.stringify(weapons)}`);
+  // STUCK: Why is this not narrowing?
+  private get items(): EquipmentItem[] {
+    return this.inventory.asArray().filter(i => isEquipment(i)) as EquipmentItem[];
+  }
 
-  const weapon = weapons[0];
+  public get equipped(): EquipmentItem[] {
+    return this.items.filter(i => i.isEquipped);
+  }
 
-  return {
-    slots: { weapon },
-    totalStats: weapon?.stats ?? zeroStats,
+  public get slots(): EquipmentSlots {
+    const slotsTaken = this.equipped.map(e => e.slot);
+    if (slotsTaken.length !== uniq(slotsTaken).length) {
+      throw new Error(`Some slot has more than one item in: ${JSON.stringify(slotsTaken)}`)
+    }
+
+    return keyBy(this.equipped, e => e.slot) as EquipmentSlots;
+  }
+
+  public get totalStats(): Stats {
+    return this.equipped
+      .map(i => i.stats)
+      .reduce((acc, s) => acc.plus(s), zeroStats)
+      ;
+  }
+
+  public toggleEquipped(itemName: string): void {
+    const item = this.items.find(i => i.name === itemName);
+    if (!item) {
+      throw new Error(`Trying to toggle equipped on non-present item ${itemName}`);
+    }
+
+    const itemAtSameSlot = this.slots[item.slot];
+    if (itemAtSameSlot) {
+      itemAtSameSlot.isEquipped = false;
+    }
+
+    item.isEquipped = true;
   }
 }
+

@@ -1,8 +1,9 @@
-import { calculateStats } from "./stats";
+import { calculateStats, Stats } from "./stats";
 import { JobClass, noClass, isNoClass } from "./job-class";
 import { Species, noSpecies, isNoSpecies } from "./species";
 import { InventoryImpl, Inventory, singleInventoryItem } from "@/items/inventory";
-import {equipmentFromInventory} from "@/items/equipment";
+import {Equipment, EquipmentImpl} from "@/items/equipment";
+import { ActionFactory} from "@/battle/action";
 
 export type CreatureInitialData = {
   species: Species;
@@ -11,7 +12,23 @@ export type CreatureInitialData = {
   jobClass?: JobClass;
 }
 
-export class Creature {
+export interface Creature {
+  readonly species: Species;
+  readonly jobClass: JobClass,
+  readonly inventory: Inventory,
+  readonly stats: Stats;
+  readonly healthRatio: number;
+  readonly possibleActions: ActionFactory[];
+  readonly level: number;
+  readonly isAlive: boolean;
+  readonly requiredExp: number;
+  readonly equipment: Equipment;
+  name: string;
+  currentHealth: number;
+  currentExp: number;
+}
+
+export class CreatureImpl implements Creature {
   public readonly species: Species;
   public readonly jobClass: JobClass;
   public readonly inventory: Inventory;
@@ -46,7 +63,7 @@ export class Creature {
   }
 
   public get equipment() {
-    return equipmentFromInventory(this.inventory);
+    return new EquipmentImpl(this.inventory);
   }
 
   public get healthRatio() {
@@ -75,13 +92,13 @@ export class Creature {
     }
   }
 
-  public isAlive(): boolean {
+  public get isAlive(): boolean {
     return this.currentHealth > 0;
   }
 }
 
 // Null object pattern
-export const noCreature = new Creature({ species: noSpecies });
+export const noCreature = new CreatureImpl({ species: noSpecies });
 
 export function isNoCreature(creature: Creature) {
   return creature.name === "None"

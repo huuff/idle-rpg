@@ -25,7 +25,6 @@ export interface Inventory {
   merge: (inventory: Inventory) => Inventory;
   asArray: () => InventoryItem[];
   removeItem: (itemName: string, amount?: number) => void;
-  toggleEquipped: (itemName: string) => void;
 }
 
 export class InventoryImpl implements Inventory {
@@ -83,25 +82,5 @@ export class InventoryImpl implements Inventory {
     if (item.amount == 0) {
       delete this.items[itemName];
     } 
-  }
-
-  // TODO: this in equipment?
-  public toggleEquipped(itemName: string): void {
-    const equipmentItems = pickBy(this.items, i => isEquipment(i)) as Dictionary<EquipmentItem>;
-    const item = equipmentItems[itemName];
-
-    if (!item) {
-      throw new Error(`Trying to toggle equipment in non-present item ${itemName}`)
-    }
-
-    // Remove previously equipped items for that slot
-    Object.entries(pickBy(equipmentItems, i => 
-      i.slot === item.slot
-      && i.name !== item.name
-      && i.isEquipped
-    )).forEach((([_, item]) => item.isEquipped = false))
-
-    // Actually toggle it
-    item.isEquipped = !item.isEquipped;
   }
 }

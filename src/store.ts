@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { Creature, noCreature } from "@/creatures/creature";
 import { Log, makeLog } from "@/log";
-import { Battle } from "@/battle/battle"
 import { Autoplay } from "@/autoplay";
 
 export type StoreState = {
@@ -9,7 +8,6 @@ export type StoreState = {
   battleLog: Log;
   travelLog: Log;
   autoplay: Autoplay;
-  battle: Battle | undefined;
   money: number;
 }
 

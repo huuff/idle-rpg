@@ -12,7 +12,7 @@ import { gameOver } from "@/game-over";
 import { Spoils } from "@/tickables/spoils";
 
 function allDead(creatures: Creature[]) {
-  return creatures.every(c => !c.isAlive());
+  return creatures.every(c => !c.isAlive);
 }
 
 export type BattleResult = "lost" | "won";
@@ -42,8 +42,8 @@ export class Battle implements Tickable {
   }
 
   public tick(): void {
-    const aliveGoodGuys = this.goodGuys.filter(a => a.isAlive());
-    const aliveBadGuys = this.badGuys.filter(a => a.isAlive());
+    const aliveGoodGuys = this.goodGuys.filter(a => a.isAlive);
+    const aliveBadGuys = this.badGuys.filter(a => a.isAlive);
 
     if (this.turns.length === 0)
       this.turns = calculateTurns([ ...aliveGoodGuys, ...aliveBadGuys]);
@@ -55,7 +55,7 @@ export class Battle implements Tickable {
     executeAction(action, this.log);
 
     if (target.currentHealth <= 0) {
-      this.turns = this.turns.filter(a => a.isAlive());
+      this.turns = this.turns.filter(a => a.isAlive);
       this.log.messages.push(`${attacker.name} killed ${target.name}!`)
     }
   }
