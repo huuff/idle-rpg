@@ -4,16 +4,16 @@ import { MapLocation, } from "./game-map";
 export type MapStatusType = "resting" | "travelling";
 
 export type TravellingStatus = {
-  type: "travelling";
-  from: MapLocation;
-  to: MapLocation;
+  readonly type: "travelling";
+  readonly from: MapLocation;
+  readonly to: MapLocation;
+  readonly through: Zone;
   steps: number;
-  through: Zone;
 };
 
 export type RestingStatus = {
-  type: "resting";
-  at: MapLocation;
+  readonly type: "resting";
+  readonly at: MapLocation;
 };
 
 export type MapStatus = TravellingStatus | RestingStatus;

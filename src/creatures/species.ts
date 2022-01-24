@@ -5,11 +5,11 @@ import { InventoryItem } from "@/items/inventory";
 import {slimeJelly} from "@/items/basic-items";
 
 export interface Species {
-  name: string;
-  baseStats: Stats;
-  levelProgression: Stats;
-  naturalActions:  ActionFactory[];
-  naturalItems?: InventoryItem[];
+  readonly name: string;
+  readonly baseStats: Stats;
+  readonly levelProgression: Stats;
+  readonly naturalActions:  ActionFactory[];
+  readonly naturalItems?: InventoryItem[];
 }
 
 // Null object

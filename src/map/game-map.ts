@@ -2,22 +2,22 @@ import { Zone } from "@/zones/zone";
 import { Scene } from "@/scenes/scene";
 
 export interface MapLocation extends Scene {
-  name: string;
+  readonly name: string;
 }
 
 export interface LocationConnection {
-  locations: [ MapLocation, MapLocation ];
-  through: Zone;
+  readonly locations: [ MapLocation, MapLocation ];
+  readonly through: Zone;
 }
 
 export type TravelOption = {
-  to: MapLocation,
-  through: Zone,
+  readonly to: MapLocation,
+  readonly through: Zone,
 }
 
 export interface GameMap {
-  locations: MapLocation[];
-  connections: LocationConnection[];
+  readonly locations: MapLocation[];
+  readonly connections: LocationConnection[];
   optionsFrom(location: MapLocation): TravelOption[];
 }
 

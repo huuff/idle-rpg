@@ -5,7 +5,7 @@
 * Put all creature views in a `creature-views` folder in `components`
 * Loading creatures, items, etc from JSON
 * Saving game to `localStorage`
-* I just realized you can have readonly object properties in typescript... use them in all appropriate sites (that is, species, items, equipments, places...);
+* Showing where each stat comes from with popups
 
 # Future
 * Maybe use `immer.js` for mutations such as renaming creatures, increase level, change EXP and health... it'd be great but I'm unsure how to use it with `vue`'s reactivity

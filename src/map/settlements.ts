@@ -5,7 +5,7 @@ import RestingOptions from "@/components/scenes/RestingOptions.vue";
 import { Shop, createShopFactory } from "@/locations/shop";
 
 export interface Settlement extends MapLocation {
-  createShop: () => Shop;
+  readonly createShop: () => Shop;
 }
 
 export function makeSettlement(name: string, shopFactory: () => Shop): Settlement {
