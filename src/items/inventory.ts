@@ -1,5 +1,6 @@
 import { Item, isEquipment, EquipmentItem } from "./item";
 import cloneDeep from "lodash/cloneDeep";
+import remove from "lodash/remove";
 
 export type InventoryItem = {
   amount: number;
@@ -9,6 +10,7 @@ export function singleInventoryItem(item: Item): InventoryItem {
   return { ...item, amount: 1 };
 }
 
+// TODO: Return the actual item? Inside Inventory?
 function findItem(items: InventoryItem[], itemName: string): number | undefined {
   for (let i = 0; i < items.length; i++) {
     if (items[i].name === itemName)
@@ -34,12 +36,17 @@ export function flattenItems(items: InventoryItem[]): InventoryItem[] {
 export interface Inventory {
   items: ReadonlyArray<InventoryItem>;
   addItems: (items: InventoryItem[]) => void;
+  addItem: (item: Item) => void;
   stuffValue: number;
+  removeItem: (itemName: string, amount?: number) => void;
   removeStuff: () => void;
   toggleEquipped: (itemName: string) => void;
 }
 
 export class InventoryImpl {
+  // TODO: Actually I could hold items by name in an object
+  // instead of an array... it'd be much easier to work
+  // with that
   private _items: InventoryItem[];
 
   constructor(initialItems?: InventoryItem[]) {
@@ -58,6 +65,25 @@ export class InventoryImpl {
 
   public addItems(items: InventoryItem[]): void {
     this._items = flattenItems(this._items.concat(items));
+  }
+
+  public addItem(item: Item): void {
+    this.addItems([singleInventoryItem(item)]);
+  }
+
+  public removeItem(itemName: string, amount = 1) {
+    const itemIndex = findItem(this._items, itemName);
+
+    if (itemIndex === undefined) {
+      throw new Error(`Item ${itemName} not in inventory!`);
+    }
+
+    const item = this._items[itemIndex];
+    item.amount -= amount;
+    
+    if (item.amount <= 0) {
+      remove(this._items, i => i.name === item.name);
+    }
   }
 
   public removeStuff(): void {

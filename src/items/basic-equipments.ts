@@ -8,6 +8,7 @@ export const woodenSword: EquipmentItem = {
   slot: "weapon",
   isEquipped: false,
   avgValue: 100,
+  rarity: 1,
   stats: new StatsImpl({ strength: 1 }),
 }
 
@@ -16,6 +17,7 @@ export const ironSword: EquipmentItem = {
   name: "Iron Sword",
   slot: "weapon",
   isEquipped: false,
+  rarity: 2,
   avgValue: 1000,
   stats: new StatsImpl({ strength: 10, }),
 }
@@ -26,5 +28,8 @@ export const ironKnife: EquipmentItem = {
   slot: "weapon",
   isEquipped: false,
   avgValue: 10,
+  rarity: 1,
   stats: new StatsImpl({ strength: 0.2 }),
 }
+
+export const basicEquipments = [ woodenSword, ironSword, ironKnife ];

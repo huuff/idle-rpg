@@ -2,7 +2,8 @@ import { Stats } from "@/creatures/stats";
 
 export type BaseItem = {
   name: string;
-  avgValue: number
+  avgValue: number;
+  rarity: number;
 }
 
 export type StuffItem = {

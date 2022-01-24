@@ -2,8 +2,13 @@ import { h } from "vue";
 import { MapLocation } from "./game-map";
 import SettlementView from "@/components/scenes/SettlementView.vue";
 import RestingOptions from "@/components/scenes/RestingOptions.vue";
+import { Shop, createShopFactory } from "@/locations/shop";
 
-export function makeSettlement(name: string): MapLocation {
+export interface Settlement extends MapLocation {
+  createShop: () => Shop;
+}
+
+export function makeSettlement(name: string, shopFactory: () => Shop): Settlement {
   return {
     name,
     mainView() {
@@ -11,9 +16,10 @@ export function makeSettlement(name: string): MapLocation {
     },
     sideView() {
       return h(RestingOptions, {});
-    }
+    },
+    createShop: shopFactory,
   }
 }
 
-export const prontera: MapLocation = makeSettlement("Prontera");
-export const aldebaran: MapLocation = makeSettlement("Aldebaran");
+export const prontera: MapLocation = makeSettlement("Prontera", createShopFactory(500, 1) );
+export const aldebaran: MapLocation = makeSettlement("Aldebaran", createShopFactory(1000, 2));
