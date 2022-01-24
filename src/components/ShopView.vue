@@ -55,7 +55,7 @@ function hasMoneyForItem(item: Item) {
 function buy(item: InventoryItem) {
   if (hasMoneyForItem(item)) {
     player.value.inventory.add(singleInventoryItem(item));
-    props.shop.inventory.removeItem(item.name);
+    props.shop.inventory.remove(item.name);
     money.value -= item.avgValue;
   }
 }
