@@ -9,11 +9,6 @@
             class="button is-primary mb-2"
     >Go to {{ destination.to.name }}</button>
 
-    <button 
-      @click="sellSpoils"
-      class="button is-info mb-2"
-      >Sell Spoils</button>
-
     <button
       class="button is-link mb-2"
       @click="currentView = View.Shop"
@@ -43,7 +38,7 @@ const props = defineProps<{
 
 const travelStore = useTravelStore();
 const { map }= storeToRefs(travelStore);
-const { autoplay, player, money } = storeToRefs(useMainStore());
+const { autoplay } = storeToRefs(useMainStore());
 
 const possibleDestinations = computed(() => map.value.optionsFrom(props.location));
 
@@ -57,11 +52,6 @@ function goTo(destination: TravelOption): void {
     to: destination.to,
     through: destination.through,
   });
-}
-
-function sellSpoils() {
-  money.value += player.value.inventory.stuffValue;
-  player.value.inventory.removeStuff();
 }
 
 const shop = ref(emptyShop);

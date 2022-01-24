@@ -1,6 +1,10 @@
 <template>
 <button
-  class="button is-warning"
+  class="button is-info mr-1"
+  @click="sellSpoils"
+>Sell stuff</button>
+<button
+  class="button is-warning mr-1"
   @click="emit('back')"
   >Go back</button>
 <table class="table is-hoverable is-fullwidth">
@@ -27,6 +31,7 @@
 import { Shop } from "@/locations/shop";
 import { InventoryItem } from "@/items/inventory";
 import { useMainStore } from "@/store";
+import { storeToRefs } from "pinia";
 
 const props = defineProps<{
   shop: Shop;
@@ -36,11 +41,16 @@ const emit = defineEmits<{
   (event: "back"): void;
 }>();
 
-const store = useMainStore();
+const { player, money } = storeToRefs(useMainStore());
 
 function buy(item: InventoryItem) {
-  store.player.inventory.addItem(item);
+  player.value.inventory.addItem(item);
   props.shop.inventory.removeItem(item.name);
-  store.money-=item.avgValue;
+  money.value -= item.avgValue;
+}
+
+function sellSpoils() {
+  money.value += player.value.inventory.stuffValue;
+  player.value.inventory.removeStuff();
 }
 </script>
