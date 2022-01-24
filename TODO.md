@@ -1,5 +1,4 @@
 # Tasks
-* Not buying more than you can afford
 * Selling equipment
 * Loading creatures, items, etc from JSON
 * Saving game to `localStorage`
