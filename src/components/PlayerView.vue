@@ -1,9 +1,18 @@
 <template>
-<tabbed-view :tabs="Tab" :tab-to-component="tabToComponent" :componentProps="componentProps" />
+<tabbed-view :tabs="Tab">
+  <template v-slot:[Tab.Main]>
+    <creature-status :creature="player" />
+  </template>
+  <template v-slot:[Tab.Stats]>
+    <stats-view :creature="player" />
+  </template>
+  <template v-slot:[Tab.Equipment]>
+    <equipment-view :creature="player" />
+  </template>
+</tabbed-view>
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, Component } from "vue";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
 import TabbedView from "@/components/ui/TabbedView.vue";
@@ -18,15 +27,4 @@ enum Tab {
   Stats = "Stats",
   Equipment = "Equipment",
 }
-
-
-const tabToComponent: ComputedRef<Record<Tab, Component>> = computed(() => ({
-  [Tab.Main]: CreatureStatus,
-  [Tab.Stats]: StatsView,
-  [Tab.Equipment]: EquipmentView,
-}));
-
-const componentProps = computed(() => ({
-  "creature": player.value
-}));
 </script>

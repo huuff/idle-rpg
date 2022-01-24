@@ -8,21 +8,20 @@
   </ul>
 </div>
 
-<component :is="currentComponent" v-bind="componentProps"/>
+<current-slot />
 </template>
 
 <script setup lang="ts">
-import { Component, ref, computed } from "vue";
+import { ref, computed, useSlots } from "vue";
 
 const props = defineProps<{
   tabs: { [s: string]: string };
-  tabToComponent: { [s: string]: Component};
-  componentProps?: { [s: string]: any };
 }>();
 
 const currentTab = ref(props.tabs[Object.keys(props.tabs)[0]]);
 
-const currentComponent = computed(() => {
-  return props.tabToComponent[currentTab.value];
-});
+const currentSlot = computed(() => {
+  const slots = useSlots();
+  return slots[currentTab.value];
+})
 </script>

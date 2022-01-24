@@ -1,11 +1,11 @@
 # Tasks
-* Selling equipment
 * Travelling decision progress bar is showing below content
 * Loading creatures, items, etc from JSON
 * Saving game to `localStorage`
 * Showing where each stat comes from with popups
 * Put autoplay somewhere where it's accessible at any time
 * More equipment items!
+* Make current `InventoryView` `PlayerInventoryView` and add some `InventoryView` that shows an inventory and adds the options to filter it. Maybe pass the result via a scoped slot or smth.
 
 # Future
 * Maybe use `immer.js` for mutations such as renaming creatures, increase level, change EXP and health... it'd be great but I'm unsure how to use it with `vue`'s reactivity

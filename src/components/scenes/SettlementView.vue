@@ -30,7 +30,7 @@ import { useTravelStore, } from "@/travel/travel-store";
 import { useMainStore } from "@/store";
 import { emptyShop } from "@/locations/shop";
 import {Settlement} from "@/map/settlements";
-import ShopView from "@/components/ShopView.vue";
+import ShopView from "@/components/shops/ShopView.vue";
 
 const props = defineProps<{
   location: Settlement;
