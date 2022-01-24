@@ -10,21 +10,14 @@ export function singleInventoryItem(item: Item): InventoryItem {
   return { ...item, amount: 1 };
 }
 
-// TODO: Return the actual item? Inside Inventory?
-function findItem(items: InventoryItem[], itemName: string): number | undefined {
-  for (let i = 0; i < items.length; i++) {
-    if (items[i].name === itemName)
-      return i;
-  }
-}
 
 export function flattenItems(items: InventoryItem[]): InventoryItem[] {
   const result: InventoryItem[] = [];
 
   for (const item of items) {
-    const positionOfItem = findItem(result, item.name);
-    if (positionOfItem != undefined) {
-      result[positionOfItem].amount += item.amount;
+    const previousItem = result.find(i => i.name === item.name);
+    if (previousItem != undefined) {
+      previousItem.amount += item.amount;
     } else {
       result.push(item);
     }
@@ -72,18 +65,16 @@ export class InventoryImpl {
   }
 
   public removeItem(itemName: string, amount = 1) {
-    const itemIndex = findItem(this._items, itemName);
+    const item = this._items.find(i => i.name === itemName);
 
-    if (itemIndex === undefined) {
+    if (!item) {
       throw new Error(`Item ${itemName} not in inventory!`);
     }
 
-    const item = this._items[itemIndex];
     item.amount -= amount;
-    
-    if (item.amount <= 0) {
+    if (item.amount == 0) {
       remove(this._items, i => i.name === item.name);
-    }
+    } 
   }
 
   public removeStuff(): void {
@@ -92,14 +83,12 @@ export class InventoryImpl {
 
   public toggleEquipped(itemName: string): void {
     const equipmentItems = this._items.filter(isEquipment) as EquipmentItem[];
-    const itemIndex = findItem(equipmentItems as InventoryItem[], itemName)
+    const item = equipmentItems.find(i => i.name === itemName);
 
-    if (itemIndex == undefined) {
+    if (!item) {
       throw new Error(`Trying to toggle equipment in non-present item ${itemName}`)
     }
 
-    const item = equipmentItems[itemIndex];
-    
     // Remove previously equipped items for that slot
     equipmentItems
       .filter(i => i.slot === item.slot)
