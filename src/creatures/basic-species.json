@@ -1,0 +1,41 @@
+{
+  "slime": {
+    "name": "Slime",
+    "baseStats": {
+      "maxHealth": 20,
+      "strength": 4,
+      "agility": 2
+    },
+    "levelProgression": {
+      "maxHealth": 5,
+      "strength": 0.5,
+      "agility": 0.2
+    },
+    "naturalActions": [
+      "basicAttack"
+    ],
+    "naturalItems": [
+      {
+        "item": "slimeJelly",
+        "amount": 1
+      }
+    ]
+  },
+
+  "human": {
+    "name": "Human",
+    "baseStats": {
+      "maxHealth": 50,
+      "strength": 12,
+      "agility": 8
+    },
+    "levelProgression": {
+      "maxHealth": 5,
+      "strength": 2,
+      "agility": 1
+    },
+    "naturalActions": [
+      "basicAttack"
+    ]
+  }
+}

@@ -22,3 +22,7 @@ function loadJson(): BasicItems {
 }
 
 export const basicItems: BasicItems = loadJson();
+
+export function isBasicItemName(itemName: string): itemName is BasicItemName {
+  return itemName in basicItems;
+}

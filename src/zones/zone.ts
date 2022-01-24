@@ -1,7 +1,9 @@
 import { useTravelStore } from "@/travel/travel-store";
-import { slime } from "@/creatures/species";
+import { basicSpecies} from "@/creatures/basic-species";
 import { Stage, createStage } from "./stage";
 import { accumulate } from "@/util/accumulate";
+
+const { slime } = basicSpecies;
 
 export interface Zone {
   name: string;

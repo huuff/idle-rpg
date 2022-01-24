@@ -54,7 +54,9 @@ import { baseClasses } from "@/creatures/base-classes";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
 import { CreatureImpl } from "@/creatures/creature";
-import { human } from "@/creatures/species";
+import { basicSpecies } from "@/creatures/basic-species";
+
+const { human } = basicSpecies;
 
 const { player } = storeToRefs(useMainStore());
 const playerName = ref("Player");
