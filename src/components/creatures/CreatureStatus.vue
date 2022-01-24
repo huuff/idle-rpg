@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { Creature } from "@/creatures/creature";
-import HealthBar from "@/components/HealthBar.vue";
+import HealthBar from "@/components/creatures/HealthBar.vue";
 import AnimatedBar from "@/components/AnimatedBar.vue";
 
 const props = defineProps<{

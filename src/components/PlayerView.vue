@@ -7,9 +7,9 @@ import { computed, ComputedRef, Component } from "vue";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
 import TabbedView from "@/components/ui/TabbedView.vue";
-import CreatureView from "@/components/CreatureView.vue";
-import StatsView from "@/components/StatsView.vue";
-import EquipmentView from "@/components/EquipmentView.vue";
+import CreatureStatus from "@/components/creatures/CreatureStatus.vue";
+import StatsView from "@/components/creatures/StatsView.vue";
+import EquipmentView from "@/components/creatures/EquipmentView.vue";
 
 const { player } = storeToRefs(useMainStore());
 
@@ -21,7 +21,7 @@ enum Tab {
 
 
 const tabToComponent: ComputedRef<Record<Tab, Component>> = computed(() => ({
-  [Tab.Main]: CreatureView,
+  [Tab.Main]: CreatureStatus,
   [Tab.Stats]: StatsView,
   [Tab.Equipment]: EquipmentView,
 }));

@@ -1,7 +1,5 @@
 # Tasks
 * Selling equipment
-* A base `CreatureView` that adds the name of the creature
-* Put all creature views in a `creature-views` folder in `components`
 * Loading creatures, items, etc from JSON
 * Saving game to `localStorage`
 * Showing where each stat comes from with popups
@@ -11,6 +9,7 @@
 # Future
 * Maybe use `immer.js` for mutations such as renaming creatures, increase level, change EXP and health... it'd be great but I'm unsure how to use it with `vue`'s reactivity
 * Thief can steal in battle for extra drops
+* Some way that thieves cannot equip swords? Maybe weapons have strength requirements and classes can have a bonus that allows them to equip them? Or just some skill that allows their usage?
 * Some randomness in creature drops
 * Some price variation (e.g. more expensive to buy than sell earning)
 

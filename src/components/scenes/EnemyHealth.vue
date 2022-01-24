@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { Creature } from "@/creatures/creature";
-import HealthBar from "../HealthBar.vue";
+import HealthBar from "@/components/creatures/HealthBar.vue";
 
 const props = defineProps<{
   enemies: Creature[];

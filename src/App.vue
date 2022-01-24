@@ -7,7 +7,7 @@ import { computed } from "vue";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
 import { isNoCreature } from "@/creatures/creature";
-import Game from "@/Game.vue";
+import Game from "@/components/Game.vue";
 import ChooseCharacter from "@/components/modals/ChooseCharacter";
 
 const { player } = storeToRefs(useMainStore());
