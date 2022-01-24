@@ -3,10 +3,18 @@
 // that's only compatible on the public properties, so, a
 // Stats
 
-export interface Stats {
+export interface BaseStats {
   maxHealth: number;
   strength: number;
   agility: number;
+}
+const statNames = [ "maxHealth", "strength", "agility" ];
+export function isStatsInput(obj: any): obj is Partial<BaseStats> {
+  return Object.keys(obj).every(k => statNames.includes(k))
+    && Object.values(obj).every(v => typeof v === "number");
+}
+
+export interface Stats extends BaseStats {
   challenge: number;
   plus(augend: Stats): Stats;
   times(factor: number): Stats;
@@ -21,11 +29,7 @@ export class StatsImpl implements Stats {
     maxHealth = 0,
     strength = 0,
     agility = 0,
-  } : {
-    maxHealth?: number;
-    strength?: number;
-    agility?: number;
-  } = {}) {
+  } : Partial<BaseStats> = {}) {
     this._maxHealth = maxHealth;
     this._strength = strength;
     this._agility = agility;

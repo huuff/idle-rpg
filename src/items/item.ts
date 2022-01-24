@@ -12,6 +12,10 @@ export type StuffItem = {
 
 
 export type EquipmentSlot = "weapon";
+export function isEquipmentSlot(slot: string): slot is EquipmentSlot {
+  return slot === "weapon";
+}
+
 export type EquipmentItem = {
   readonly type: "equipment";
   readonly slot: EquipmentSlot;
@@ -24,3 +28,4 @@ export type Item = StuffItem | EquipmentItem;
 export function isEquipment(item: Item): item is EquipmentItem {
   return item.type === "equipment";
 }
+
