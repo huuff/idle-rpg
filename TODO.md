@@ -1,5 +1,4 @@
 # Tasks
-* Sell spoils in shop
 * Selling equipment
 * A base `CreatureView` that adds the name of the creature
 * Put all creature views in a `creature-views` folder in `components`
