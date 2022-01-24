@@ -1,5 +1,5 @@
 # Tasks
-* Loading creatures, items, etc from JSON
+* Loading creatures, equipment, etc from JSON
 * Saving game to `localStorage`
 * Showing where each stat comes from with popups
 * Put autoplay somewhere where it's accessible at any time
