@@ -6,7 +6,7 @@
         "steps": 1,
         "enemies": [
           {
-            "species": "slime",
+            "species": "Slime",
             "averageLevel": 1,
             "frequency": 1
           }
@@ -17,7 +17,7 @@
         "steps": 5,
         "enemies": [
           {
-            "species": "slime",
+            "species": "Slime",
             "averageLevel": 2,
             "frequency": 1
           }
@@ -28,7 +28,7 @@
         "steps": 5,
         "enemies": [
           {
-            "species": "slime",
+            "species": "Slime",
             "averageLevel": 3,
             "frequency": 1
           }
@@ -39,7 +39,7 @@
         "steps": 5,
         "enemies": [
           {
-            "species": "slime",
+            "species": "Slime",
             "averageLevel": 4,
             "frequency": 1
           }

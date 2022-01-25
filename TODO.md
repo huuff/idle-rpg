@@ -1,9 +1,10 @@
 # Tasks
-* Saving game to `localStorage`
 * Showing where each stat comes from with popups
 * Put autoplay somewhere where it's accessible at any time
 * More equipment items!
 * Make current `InventoryView` `PlayerInventoryView` and add some `InventoryView` that shows an inventory and adds the options to filter it. Maybe pass the result via a scoped slot or smth.
+* Refreshing the settings tab when saving or deleting
+* The saved weapons are not working.
 
 # Future
 * I couldn't test `basic-zones` nor `basic-settlements` since they have some quite intricate circular dependencies

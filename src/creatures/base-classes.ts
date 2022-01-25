@@ -4,7 +4,7 @@ import { StatsImpl } from "./stats";
 
 const { woodenSword, ironKnife } = basicEquipments;
 
-export const swordsman: JobClass = {
+const swordsman: JobClass = {
   name: "Swordsman",
   baseStats: new StatsImpl({
     maxHealth: 20,
@@ -19,7 +19,7 @@ export const swordsman: JobClass = {
   baseEquipment: [ {...woodenSword, isEquipped: true} ],
 };
 
-export const thief: JobClass = {
+const thief: JobClass = {
   name: "Thief",
   baseStats: new StatsImpl({
     maxHealth: 10,
@@ -34,7 +34,7 @@ export const thief: JobClass = {
   baseEquipment: [ {...ironKnife, isEquipped: true }]
 };
 
-export const archer: JobClass = {
+const archer: JobClass = {
   name: "Archer",
   baseStats: new StatsImpl({
     maxHealth: 5,
@@ -48,4 +48,8 @@ export const archer: JobClass = {
   }),
 };
 
-export const baseClasses: JobClass[] = [ swordsman, thief, archer ];
+export const baseClasses: { [className: string]: JobClass} = {
+  "Swordsman": swordsman,
+  "Thief": thief,
+  "Archer": archer,
+}

@@ -56,22 +56,20 @@ import { storeToRefs } from "pinia";
 import { CreatureImpl } from "@/creatures/creature";
 import { basicSpecies } from "@/creatures/basic-species";
 
-const { human } = basicSpecies;
-
 const { player } = storeToRefs(useMainStore());
 const playerName = ref("Player");
 
 const props = withDefaults(defineProps<{
   classes?: JobClass[];
 }>(), {
-  classes: () => baseClasses,
+  classes: () => Object.values(baseClasses),
 });
 
 function createPlayer(jobClass: JobClass): void {
   player.value = new CreatureImpl({
     jobClass,
     name: playerName.value,
-    species: human,
+    species: basicSpecies["Human"],
   });
 }
 
