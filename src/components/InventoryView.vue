@@ -61,7 +61,7 @@ const filteredItems = computed(() => {
 })
 
 function isEquipped(item: Item): boolean {
-  return item.type === "equipment" && item.isEquipped;
+  return item.type === "equipment" && (item.isEquipped === true);
 }
 
 function toggleEquipped(item: Item): void {

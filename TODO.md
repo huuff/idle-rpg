@@ -1,5 +1,4 @@
 # Tasks
-* Make `isEquipped` optional in `EquipmentItem`
 * Saving game to `localStorage`
 * Showing where each stat comes from with popups
 * Put autoplay somewhere where it's accessible at any time

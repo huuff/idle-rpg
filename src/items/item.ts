@@ -20,7 +20,7 @@ export type EquipmentItem = {
   readonly type: "equipment";
   readonly slot: EquipmentSlot;
   readonly stats: Stats;
-  isEquipped: boolean;
+  isEquipped?: boolean;
 } & BaseItem;
 
 export type Item = StuffItem | EquipmentItem;

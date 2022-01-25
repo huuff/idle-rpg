@@ -3,7 +3,6 @@
     "type": "equipment",
     "name": "Wooden Sword",
     "slot": "weapon",
-    "isEquipped": false,
     "avgValue": 100,
     "rarity": 1,
     "stats": {
@@ -15,7 +14,6 @@
     "type": "equipment",
     "name": "Iron Sword",
     "slot": "weapon",
-    "isEquipped": false,
     "rarity": 2,
     "avgValue": 1000,
     "stats": {
@@ -27,7 +25,6 @@
     "type": "equipment",
     "name": "Iron Knife",
     "slot": "weapon",
-    "isEquipped": false,
     "rarity": 1,
     "avgValue": 10,
     "stats": {
