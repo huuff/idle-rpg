@@ -1,10 +1,5 @@
 # Tasks
 * Clicking on equipment on inventory to unequip not working
-* Tests about loading json:
-  * Loading basic equipment
-  * Loading basic species
-  * Loading basic settlements
-  * Loading basic zones
 * Make `isEquipped` optional in `EquipmentItem`
 * Saving game to `localStorage`
 * Showing where each stat comes from with popups
@@ -13,6 +8,7 @@
 * Make current `InventoryView` `PlayerInventoryView` and add some `InventoryView` that shows an inventory and adds the options to filter it. Maybe pass the result via a scoped slot or smth.
 
 # Future
+* I couldn't test `basic-zones` nor `basic-settlements` since they have some quite intricate circular dependencies
 * Maybe use `immer.js` for mutations such as renaming creatures, increase level, change EXP and health... it'd be great but I'm unsure how to use it with `vue`'s reactivity
 * Thief can steal in battle for extra drops
 * Some way that thieves cannot equip swords? Maybe weapons have strength requirements and classes can have a bonus that allows them to equip them? Or just some skill that allows their usage?
