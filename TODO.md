@@ -1,6 +1,5 @@
 # Tasks
 * Clicking on equipment on inventory to unequip not working
-* Loading zones, classes, etc from JSON
 * Tests that basic items and basic equipments load
 * Make `isEquipped` optional in `EquipmentItem`
 * Saving game to `localStorage`
@@ -15,6 +14,7 @@
 * Some way that thieves cannot equip swords? Maybe weapons have strength requirements and classes can have a bonus that allows them to equip them? Or just some skill that allows their usage?
 * Some randomness in creature drops
 * Some price variation (e.g. more expensive to buy than sell earning)
+* Maybe loading classes from JSON as I do from the rest, but there aren't many and the interface is not set in stone yet
 
 # Hard
 * Do I need `firstTick` and `lastTick`? They are 2 ticks each anyway. I could have some way of specifying how many ticks something lasts and maybe some way of specifying first and last via... I dunno, template method?

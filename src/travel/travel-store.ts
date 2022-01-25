@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { GameMap, createGameMap } from "@/map/game-map";
 import { MapStatus, RestingStatus } from "@/map/map-status";
-import { plains } from "@/zones/zone";
 import { TravelAction, resolveNextStatus, matchTravelAction } from "./travel-action";
 import { makeRest } from "@/rest";
 import { Travel } from "@/travel/travel";
@@ -10,6 +9,7 @@ import { useMainStore } from "@/store";
 import {useTickStore} from "@/ticking/tick-store";
 import {useSceneStore} from "@/scenes/scene-store";
 import { basicSettlements } from "@/map/basic-settlements";
+import { basicZones } from "@/zones/basic-zones";
 
 export type TravelStoreState = {
   mapStatus: MapStatus;
@@ -21,6 +21,7 @@ export type TravelStoreState = {
 // as to the return type. But I don't know how to do that yet.
 
 const { prontera, aldebaran } = basicSettlements;
+const { plains } = basicZones;
 
 export const useTravelStore = defineStore("travel", {
   state: () => ({

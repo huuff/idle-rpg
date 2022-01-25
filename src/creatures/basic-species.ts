@@ -68,3 +68,7 @@ function loadJson(json: JsonType): BasicSpecies {
 }
 
 export const basicSpecies: BasicSpecies = loadJson(basicSpeciesJson);
+
+export function isBasicSpeciesName(speciesName: string): speciesName is BasicSpeciesName {
+  return speciesName in basicSpecies;
+}
