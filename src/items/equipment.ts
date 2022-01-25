@@ -46,13 +46,15 @@ export class EquipmentImpl {
     if (!item) {
       throw new Error(`Trying to toggle equipped on non-present item ${itemName}`);
     }
+    
+    const wasEquipped = item.isEquipped;
 
     const itemAtSameSlot = this.slots[item.slot];
     if (itemAtSameSlot) {
       itemAtSameSlot.isEquipped = false;
     }
 
-    item.isEquipped = true;
+    item.isEquipped = !wasEquipped;
   }
 }
 
