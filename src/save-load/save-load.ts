@@ -2,8 +2,6 @@ import { playerToSavedPlayer } from "./player";
 import { useMainStore } from "@/store";
 import { SaveData } from "./save-data";
 import {CreatureImpl} from "@/creatures/creature";
-import {basicSpecies, isBasicSpeciesName} from "@/creatures/basic-species";
-import { baseClasses } from "@/creatures/base-classes";
 
 const SAVE_PROPERTY = "save";
 
@@ -26,19 +24,9 @@ export function load(): void {
   if (serializedSave) {
     const saveData = JSON.parse(serializedSave) as SaveData;
 
-    const speciesName = saveData.player.speciesName;
-    if (!isBasicSpeciesName(speciesName)) {
-      throw new Error(`${speciesName} is not a valid species!`);
-    }
-
-    const jobClassName = saveData.player.jobClassName;
-    if (!(jobClassName in baseClasses)) {
-      throw new Error(`${jobClassName} is not a valid class!`)
-    }
-
     const player = new CreatureImpl({
-      species: basicSpecies[speciesName],
-      jobClass: baseClasses[jobClassName],
+      species: saveData.player.species,
+      jobClass: saveData.player.jobClass,
       name: saveData.player.name,
       level: saveData.player.level,
       items: saveData.player.inventory,
