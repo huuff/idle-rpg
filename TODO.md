@@ -1,6 +1,10 @@
 # Tasks
 * Clicking on equipment on inventory to unequip not working
-* Tests that basic items and basic equipments load
+* Tests about loading json:
+  * Loading basic equipment
+  * Loading basic species
+  * Loading basic settlements
+  * Loading basic zones
 * Make `isEquipped` optional in `EquipmentItem`
 * Saving game to `localStorage`
 * Showing where each stat comes from with popups
