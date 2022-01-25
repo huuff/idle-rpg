@@ -1,7 +1,7 @@
 import { useMainStore } from "@/store";
 import { Tickable } from "@/ticking/async-ticker";
-import {hasDestination} from "./autoplay";
-import {useTravelStore} from "./travel/travel-store";
+import {hasDestination} from "@/autoplay";
+import {useTravelStore} from "@/travel/travel-store";
 import { storeToRefs } from "pinia";
 
 export function makeRest(): Tickable {

@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { GameMap, createGameMap } from "@/map/game-map";
 import { MapStatus, RestingStatus } from "@/map/map-status";
 import { TravelAction, resolveNextStatus, matchTravelAction } from "./travel-action";
-import { makeRest } from "@/rest";
+import { makeRest } from "@/tickables/rest";
 import { Travel } from "@/travel/travel";
 import { hasDestination } from "@/autoplay";
 import { useMainStore } from "@/store";
