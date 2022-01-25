@@ -1,0 +1,17 @@
+{
+  "prontera": {
+    "name": "Prontera",
+    "shop": {
+      "budget": 500,
+      "rarity": 1
+    }
+  },
+
+  "aldebaran": {
+    "name": "Aldebaran",
+    "shop": {
+      "budget": 1000,
+      "rarity": 2
+    }
+  }
+}

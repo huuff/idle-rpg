@@ -4,12 +4,13 @@ import { storeToRefs } from "pinia";
 import { useSceneStore } from "@/scenes/scene-store";
 import { useTravelStore } from "@/travel/travel-store";
 import { noCreature } from "@/creatures/creature";
-import { prontera } from "@/map/settlements";
+import { basicSettlements } from "@/map/basic-settlements";
 
 // FUTURE: Choose a random starting location instead of always prontera
 export function gameOver(): void {
   const { autoplay, player } = storeToRefs(useMainStore());
   const { mapStatus } = storeToRefs(useTravelStore());
+  const { prontera } = basicSettlements;
   const sceneStore = useSceneStore();
 
   player.value = noCreature;

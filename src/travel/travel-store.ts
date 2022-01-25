@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { prontera, aldebaran } from "@/map/settlements";
 import { GameMap, createGameMap } from "@/map/game-map";
 import { MapStatus, RestingStatus } from "@/map/map-status";
 import { plains } from "@/zones/zone";
@@ -10,6 +9,7 @@ import { hasDestination } from "@/autoplay";
 import { useMainStore } from "@/store";
 import {useTickStore} from "@/ticking/tick-store";
 import {useSceneStore} from "@/scenes/scene-store";
+import { basicSettlements } from "@/map/basic-settlements";
 
 export type TravelStoreState = {
   mapStatus: MapStatus;
@@ -19,6 +19,8 @@ export type TravelStoreState = {
 // FUTURE: I cast the status as the one I *know* they must be.
 // However, in the future it'd be cool if `resolveNextStatus` could give stronger guarantees
 // as to the return type. But I don't know how to do that yet.
+
+const { prontera, aldebaran } = basicSettlements;
 
 export const useTravelStore = defineStore("travel", {
   state: () => ({
