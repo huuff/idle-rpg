@@ -1,5 +1,5 @@
 {
-  "Slime": {
+  "slime": {
     "name": "Slime",
     "baseStats": {
       "maxHealth": 20,
@@ -22,7 +22,7 @@
     ]
   },
 
-  "Human": {
+  "human": {
     "name": "Human",
     "baseStats": {
       "maxHealth": 50,

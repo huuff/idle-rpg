@@ -69,7 +69,7 @@ function createPlayer(jobClass: JobClass): void {
   player.value = new CreatureImpl({
     jobClass,
     name: playerName.value,
-    species: basicSpecies["Human"],
+    species: basicSpecies.human,
   });
 }
 
