@@ -6,7 +6,7 @@
     <th>Amount</th>
   </thead>
   <tbody>
-    <tr v-for="item in inventory.items"
+    <tr v-for="item in Object.values(inventory)"
         :class="{
           'is-clickable': hasMoneyForItem(item)
         }"
@@ -22,13 +22,17 @@
 </template>
 
 <script setup lang="ts">
-import { Inventory, InventoryItem, singleInventoryItem } from "@/items/inventory";
+import inventoryOps, { Inventory, InventoryItem } from "@/items/inventory";
 import { Item } from "@/items/item";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
 
 const props = defineProps<{
   inventory: Inventory;
+}>();
+
+const emit = defineEmits<{
+  (event: "sold", itemName: string): void;
 }>();
 
 const { player, money } = storeToRefs(useMainStore());
@@ -39,8 +43,9 @@ function hasMoneyForItem(item: Item) {
 
 function buy(item: InventoryItem) {
   if (hasMoneyForItem(item)) {
-    player.value.inventory.add(singleInventoryItem(item));
-    props.inventory.remove(item.name);
+    player.value.inventory = inventoryOps.plus(player.value.inventory, item)
+
+    emit("sold", item.name);
     money.value -= item.avgValue;
   }
 }

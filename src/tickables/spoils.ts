@@ -2,7 +2,8 @@ import { Tickable } from "@/ticking/async-ticker";
 import { Creature } from "@/creatures/creature";
 import { Log } from "@/log";
 import { useMainStore } from "@/store";
-import {InventoryImpl} from "@/items/inventory";
+import { storeToRefs } from "pinia";
+import inventory from "@/items/inventory";
 import { calculateChallenge } from "@/creatures/stats";
 
 export class Spoils implements Tickable {
@@ -39,11 +40,10 @@ export class Spoils implements Tickable {
   }
 
   private shareDrops(): void {
-    const totalDrops = this.losers
-      .map(c => c.inventory)
-      .reduce((acc, inv) => acc.merge(inv), new InventoryImpl()).items;
-    const { player } = useMainStore();
-    player.inventory.adds(Object.values(totalDrops));
+    const totalDrops = inventory.merge(...this.losers.map(c => c.inventory) )
+
+    const { player } = storeToRefs(useMainStore());
+    player.value.inventory = inventory.merge(player.value.inventory, totalDrops)
 
     for (const item of Object.values(totalDrops)) {
       this.log.messages.push(`You found ${item.amount} ${item.name}`);

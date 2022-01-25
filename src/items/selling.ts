@@ -1,15 +1,18 @@
-import { InventoryItem, Inventory } from "./inventory";
+import inventoryOps, { InventoryItem, Inventory } from "./inventory";
 
 export function findSellable(inventory: Inventory): InventoryItem[] {
-  return inventory.asArray().filter(i => i.type === "stuff");
+  return Object.values(inventory).filter(i => i.type === "stuff");
 }
 
 export function sellableValue(inventory: Inventory): number {
   return findSellable(inventory).reduce((acc, i) => acc + (i.avgValue * i.amount), 0);
 }
 
-export function removeSellable(inventory: Inventory): void {
+export function withoutSellable(inventory: Inventory): Inventory {
+  let result = inventory;
   for (const sellable of findSellable(inventory)) {
-    inventory.remove(sellable.name, sellable.amount);
+    result = inventoryOps.minus(inventory, sellable.name, sellable.amount);
   }
+
+  return result;
 }

@@ -1,11 +1,9 @@
 import stats, { Stats } from "./stats";
 import { JobClass, noClass, isNoClass } from "./job-class";
 import { Species, noSpecies, isNoSpecies } from "./species";
-import { 
-  InventoryImpl,
+import inventory, { 
   Inventory,
   singleInventoryItem, 
-  ItemBag
 } from "@/items/inventory";
 import {Equipment, EquipmentImpl} from "@/items/equipment";
 import { ActionFactory} from "@/battle/action";
@@ -15,13 +13,13 @@ export type CreatureInitialData = {
   level?: number;
   name?: string;
   jobClass?: JobClass;
-  items?: ItemBag
+  items?: Inventory
 }
 
 export interface Creature {
   readonly species: Species;
   readonly jobClass: JobClass,
-  readonly inventory: Inventory,
+  inventory: Inventory,
   readonly stats: Required<Stats>;
   readonly healthRatio: number;
   readonly possibleActions: ActionFactory[];
@@ -37,7 +35,7 @@ export interface Creature {
 export class CreatureImpl implements Creature {
   public readonly species: Species;
   public readonly jobClass: JobClass;
-  public readonly inventory: Inventory;
+  public inventory: Inventory;
 
   public level: number;
   // Not readonly so they can be renamed in battle
@@ -57,12 +55,12 @@ export class CreatureImpl implements Creature {
     this.species = species;
     this.jobClass = jobClass;
     this.level = level;
-    this.inventory = new InventoryImpl(items);
+    this.inventory = items ?? {};
     // XXX: Only if it's a new creature we don't have items
     // so we add those of its species and class
     if (!items) {
-      this.inventory.adds(species.naturalItems ?? []);
-      this.inventory.adds(jobClass.baseEquipment?.map(singleInventoryItem) ?? []);
+      this.inventory = inventory.plus(this.inventory, species.naturalItems ?? []);
+      this.inventory = inventory.plus(this.inventory, this.jobClass.baseEquipment?.map(singleInventoryItem) ?? [])
     }
     this.currentHealth = this.stats.maxHealth;
   }

@@ -1,5 +1,7 @@
-import { Item,  } from "./item";
-import {keyBy, cloneDeep,  isArray } from "lodash";
+import { Item, } from "./item";
+import { isArray, cloneDeep } from "lodash";
+
+// TODO: Immer would make everything faster here
 
 export type InventoryItem = {
   amount: number;
@@ -9,77 +11,59 @@ export function isInventoryItem(item: Item): item is InventoryItem {
   return "amount" in item;
 }
 
-export type ItemBag = { [itemName: string]: InventoryItem };
+export type Inventory = { [itemName: string]: InventoryItem };
 
 export function singleInventoryItem(item: Item): InventoryItem {
   return { ...item, amount: 1 };
 }
 
-export interface Inventory {
-  items: ItemBag;
-  add: (item: Item | InventoryItem) => void;
-  // STUCK: I genuinely don't know why the fuck I can't
-  // add `InventoryItem[]` to the overload so I desperately add
-  // an ugly separate `adds` method
-  adds: (items: InventoryItem[]) => void;
-  merge: (inventory: Inventory) => Inventory;
-  asArray: () => InventoryItem[];
-  remove: (itemName: string, amount?: number) => void;
+export function plus(inventory: Inventory, item: Item): Inventory;
+export function plus(inventory: Inventory, item: InventoryItem): Inventory;
+export function plus(inventory: Inventory, items: InventoryItem[]): Inventory;
+export function plus(inventory: Inventory, items: Item | InventoryItem | InventoryItem[]): Inventory {
+  const itemsToAdd = isArray(items)
+    ? items
+    : isInventoryItem(items)
+      ? [items]
+      : [singleInventoryItem(items)]
+    ;
+  
+  const result = cloneDeep(inventory);
+  for (const item of itemsToAdd) {
+    if (item.name in result) {
+      result[item.name].amount += item.amount;
+    } else {
+      result[item.name] = item;
+    }
+  }
+  return result;
 }
 
-export class InventoryImpl implements Inventory {
-  public items: ItemBag;
+export function merge(...inventories: Inventory[]) {
+  return inventories.reduce((acc, i) => plus(acc, Object.values(i)), {} as Inventory)
+}
 
-  constructor(initialItems?: InventoryItem[]);
-  constructor(initialItems?: ItemBag);
-  constructor(initialItems?: InventoryItem[] | ItemBag) {
-    if (!initialItems) {
-      this.items = {};
-    } else if (isArray(initialItems)) {
-      this.items = keyBy(initialItems.map(cloneDeep), i => i.name);
-    } else {
-      this.items = cloneDeep(initialItems);
-    }
+export function minus(inventory: Inventory, itemName: string, amount = 1): Inventory {
+  if (!inventory[itemName])
+    throw new Error(`${itemName} is not in ${JSON.stringify(inventory)}`)
+
+  const item = inventory[itemName];
+  if (amount > item.amount) {
+    throw new Error(`Trying to remove ${amount} ${itemName} from an inventory with ${item.amount}`)
   }
 
-  public adds(items: InventoryItem[]): void {
-    for (const item of items) {
-      if (this.items[item.name])
-        this.items[item.name].amount += item.amount;
-      else
-        this.items[item.name] = cloneDeep(item);
-    } 
+  const result = cloneDeep(inventory);
+  result[itemName].amount -= amount;
+
+  if (result[itemName].amount === 0) {
+    delete result[itemName];
   }
 
-  public add(item: Item): void;
-  public add(item: InventoryItem): void;
-  public add(item: Item | InventoryItem): void {
-    this.adds(isInventoryItem(item)
-            ? [item]
-            : [singleInventoryItem(item)])
-  }
+  return result;
+}
 
-  public merge(other: Inventory): Inventory {
-    const result = new InventoryImpl(this.items);
-    for (const item of Object.values(other.items)) {
-      result.add(item);
-    }
-    return result;
-  }
-
-  public asArray(): InventoryItem[] {
-    return Object.values(this.items);
-  }
-
-  public remove(itemName: string, amount = 1) {
-    const item = this.items[itemName];
-    if (!item) {
-      throw new Error(`Item ${itemName} not in inventory!`);
-    }
-
-    item.amount -= amount;
-    if (item.amount == 0) {
-      delete this.items[itemName];
-    } 
-  }
+export default {
+  plus,
+  merge,
+  minus,
 }

@@ -10,7 +10,7 @@
 
 <tabbed-view :tabs="Tab">
   <template v-slot:[Tab.Buy]>
-    <buy-view :inventory="shop.inventory" />
+    <buy-view :inventory="shop.inventory" @sold="soldItem" />
   </template>
   <template v-slot:[Tab.Sell]>
     <sell-view :inventory="player.inventory" />
@@ -22,7 +22,8 @@
 import { Shop } from "@/locations/shop";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
-import { sellableValue, removeSellable } from "@/items/selling";
+import { sellableValue, withoutSellable } from "@/items/selling";
+import inventory from "@/items/inventory";
 import TabbedView from "@/components/ui/TabbedView.vue";
 import BuyView from "./BuyView.vue";
 import SellView from "./SellView.vue";
@@ -44,6 +45,12 @@ enum Tab {
 
 function sellSpoils() {
   money.value += sellableValue(player.value.inventory);
-  removeSellable(player.value.inventory);
+  player.value.inventory = withoutSellable(player.value.inventory);
+}
+
+function soldItem(itemName: string) {
+  // whoops I'll think about that later
+  // eslint-disable-next-line 
+  props.shop.inventory = inventory.minus(props.shop.inventory, itemName);
 }
 </script>

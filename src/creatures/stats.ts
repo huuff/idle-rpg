@@ -3,7 +3,7 @@ import { omit, sum, mapValues } from "lodash";
 export type StatType = "maxHealth" | "strength" | "agility";
 
 export type Stats = {
-  [type in StatType]?: number;
+  readonly [type in StatType]?: number;
 }
 
 // Null object pattern

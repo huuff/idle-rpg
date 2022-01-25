@@ -18,7 +18,7 @@ export class EquipmentImpl {
 
   // STUCK: Why is this not narrowing?
   private get items(): EquipmentItem[] {
-    return this.inventory.asArray().filter(i => isEquipment(i)) as EquipmentItem[];
+    return Object.values(this.inventory).filter(isEquipment) as EquipmentItem[];
   }
 
   public get equipped(): EquipmentItem[] {

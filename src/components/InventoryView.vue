@@ -49,7 +49,7 @@ const tabs = [ "all", "stuff", "equipment" ];
 const currentTab = ref("all");
 
 const filteredItems = computed(() => {
-  const items = Object.values(props.inventory.items);
+  const items = Object.values(props.inventory);
   if (currentTab.value === "all")
     return items;
   else if (currentTab.value === "stuff")

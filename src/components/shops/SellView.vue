@@ -8,7 +8,7 @@
   </thead>
   <tbody>
     <tr
-      v-for="item in inventory.items"
+      v-for="item in Object.values(player.inventory)"
       :key="item.name"
       class="is-clickable"
       @click="sellOne(item)"
@@ -25,23 +25,19 @@
 </template>
 
 <script setup lang="ts">
-import { Inventory, InventoryItem } from "@/items/inventory";
+import inventoryOps, { InventoryItem } from "@/items/inventory";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
 
-const props = defineProps<{
-  inventory: Inventory;
-}>();
-
-const { money } = storeToRefs(useMainStore());
+const { money, player } = storeToRefs(useMainStore());
 
 function sellAll(item: InventoryItem): void {
   money.value += item.amount * item.avgValue;
-  props.inventory.remove(item.name, item.amount);
+  player.value.inventory = inventoryOps.minus(player.value.inventory, item.name, item.amount)
 }
 
 function sellOne(item: InventoryItem): void {
   money.value += item.avgValue;
-  props.inventory.remove(item.name);
+  player.value.inventory = inventoryOps.minus(player.value.inventory, item.name)
 }
 </script>
