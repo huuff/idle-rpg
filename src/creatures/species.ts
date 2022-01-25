@@ -1,8 +1,6 @@
-import { areZeroStats, Stats, StatsImpl, zeroStats } from "@/creatures/stats";
+import { areZeroStats, Stats, zeroStats } from "@/creatures/stats";
 import { ActionFactory } from "@/battle/action";
-import { BasicAttack } from "@/battle/basic-attack";
 import { InventoryItem } from "@/items/inventory";
-import { basicItems } from "@/items/basic-items";
 
 export interface Species {
   readonly name: string;

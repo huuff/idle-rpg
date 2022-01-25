@@ -3,6 +3,7 @@ import { Creature } from "@/creatures/creature";
 import { Log } from "@/log";
 import { useMainStore } from "@/store";
 import {InventoryImpl} from "@/items/inventory";
+import { calculateChallenge } from "@/creatures/stats";
 
 export class Spoils implements Tickable {
   private ticksHad = 0;
@@ -28,7 +29,7 @@ export class Spoils implements Tickable {
 
   private shareExp(): void {
     const totalExp = this.losers
-      .map(c => c.stats.challenge)
+      .map(c => calculateChallenge(c.stats))
       .reduce((a, b) => a + b);
     const expForEachWinner = totalExp / this.winners.length;
     for (const winner of this.winners) {

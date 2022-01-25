@@ -1,82 +1,17 @@
-// Separated into an interface and implementation because
-// Vue's `reactive` of a `StatsImpl` only returns a type
-// that's only compatible on the public properties, so, a
-// Stats
+import { omit, sum, mapValues } from "lodash";
 
-export interface BaseStats {
-  maxHealth: number;
-  strength: number;
-  agility: number;
-}
-const statNames = [ "maxHealth", "strength", "agility" ];
-export function isStatsInput(obj: any): obj is Partial<BaseStats> {
-  return Object.keys(obj).every(k => statNames.includes(k))
-    && Object.values(obj).every(v => typeof v === "number");
-}
+export type StatType = "maxHealth" | "strength" | "agility";
 
-export interface Stats extends BaseStats {
-  challenge: number;
-  plus(augend: Stats): Stats;
-  times(factor: number): Stats;
-}
-
-export class StatsImpl implements Stats {
-  private readonly _maxHealth: number;
-  private readonly _strength: number;
-  private readonly _agility: number;
-  
-  constructor({
-    maxHealth = 0,
-    strength = 0,
-    agility = 0,
-  } : Partial<BaseStats> = {}) {
-    this._maxHealth = maxHealth;
-    this._strength = strength;
-    this._agility = agility;
-  }
-
-  public get maxHealth() {
-    return Math.round(this._maxHealth);
-  }
-
-  public get strength() {
-    return Math.round(this._strength);
-  }
-
-  public get agility() {
-    return Math.round(this._agility);
-  }
-
-  public get challenge() {
-    return Math.round(
-      (this._maxHealth) / 10
-      + this._strength
-      + this._agility
-    );
-  }
-
-  public plus(augend: Stats): Stats {
-    if (augend instanceof StatsImpl)
-      return new StatsImpl({
-        maxHealth: this._maxHealth + augend._maxHealth,
-        strength: this._strength + augend._strength,
-        agility: this._agility + augend._agility
-      });
-    else
-      return this.plus(new StatsImpl(augend));
-  }
-
-  public times(factor: number): Stats {
-    return new StatsImpl({
-      maxHealth: this._maxHealth * factor,
-      strength: this._strength * factor,
-      agility: this._agility * factor,
-    });
-  }
+export type Stats = {
+  [type in StatType]?: number;
 }
 
 // Null object pattern
-export const zeroStats: Stats = new StatsImpl();
+export const zeroStats: Stats = {
+  maxHealth: 0,
+  strength: 0,
+  agility: 0,
+};
 
 export function areZeroStats(stats: Stats) {
   return stats.maxHealth === 0
@@ -85,11 +20,56 @@ export function areZeroStats(stats: Stats) {
         ;
 }
 
-export interface CalculableStats {
+export function calculateChallenge(stats: Stats) {
+  const nonHealthStats = omit(stats, "maxHealth");
+  const healthChallenge = stats.maxHealth ? stats.maxHealth / 10 : 0;
+
+  return sum(Object.values(nonHealthStats)) + healthChallenge;
+}
+
+export function plus(...stats: Stats[]) {
+  return {
+    maxHealth: sum(stats.map(s => s.maxHealth ?? 0)),
+    strength: sum(stats.map(s => s.strength ?? 0)),
+    agility: sum(stats.map(s => s.agility ?? 0)),
+  }
+}
+
+export function times(stats: Stats, factor: number) {
+  return {
+    maxHealth: (stats.maxHealth ?? 0) * factor,
+    strength: (stats.strength ?? 0) * factor,
+    agility: (stats.agility ?? 0) * factor,
+  }
+}
+
+
+
+export interface LevelableStats {
   baseStats: Stats,
   levelProgression: Stats,
 }
 
-export function calculateStats(stats: CalculableStats, level: number) {
-  return stats.baseStats.plus(stats.levelProgression.times(level));
+export function calculateByLevel(stats: LevelableStats, level: number) {
+  return plus(stats.baseStats, times(stats.levelProgression, level));
+}
+
+export function round(stats: Stats): Stats {
+  return mapValues(stats, v => Math.round(v ?? 0));
+}
+
+export function totalize(stats: Stats): Required<Stats> {
+  return {
+    maxHealth: stats.maxHealth ?? 0,
+    strength: stats.strength ?? 0,
+    agility: stats.agility ?? 0,
+  }
+}
+
+export default {
+  plus,
+  times,
+  totalize,
+  round,
+  calculateByLevel,
 }

@@ -1,7 +1,6 @@
 import { Species } from "./species";
 import basicSpeciesJson from "./basic-species.json";
 import {mapValues} from "lodash";
-import {isStatsInput, StatsImpl} from "./stats";
 import {basicItems, isBasicItemName} from "@/items/basic-items";
 import {InventoryItem} from "@/items/inventory";
 import {BasicAttack} from "@/battle/basic-attack";
@@ -12,9 +11,7 @@ type JsonNaturalItem = {
   amount: number;
 }
 
-type JsonValue = Omit<Species, "baseStats" | "levelProgression" | "naturalActions" | "naturalItems"> & {
-  baseStats: { [statName: string]: number };
-  levelProgression: { [statName: string]: number };
+type JsonValue = Omit<Species, "naturalActions" | "naturalItems"> & {
   naturalActions: string[];
   naturalItems?: JsonNaturalItem[];
 }
@@ -23,15 +20,6 @@ type JsonType = {[speciesName in BasicSpeciesName]: JsonValue};
 export type BasicSpecies = {[name in BasicSpeciesName]: Species };
 
 function valueToSpecies(val: JsonValue): Species {
-  const baseStats = val.baseStats;
-  if (!isStatsInput(baseStats)) {
-    throw new Error(`Not valid stats: ${JSON.stringify(baseStats)}`)
-  }
-
-  const levelProgression = val.levelProgression;
-  if (!isStatsInput(levelProgression)) {
-    throw new Error(`Not valid stats: ${JSON.stringify(levelProgression)}`)
-  }
 
   // TODO: Improve it when there are more attacks
   const naturalActions = val.naturalActions;
@@ -56,8 +44,6 @@ function valueToSpecies(val: JsonValue): Species {
 
   return {
     ...val,
-    baseStats: new StatsImpl(baseStats),
-    levelProgression: new StatsImpl(levelProgression),
     naturalActions: [ new BasicAttack() ],
     naturalItems,
   }

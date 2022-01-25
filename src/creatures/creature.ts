@@ -1,4 +1,4 @@
-import { calculateStats, Stats } from "./stats";
+import stats, { Stats } from "./stats";
 import { JobClass, noClass, isNoClass } from "./job-class";
 import { Species, noSpecies, isNoSpecies } from "./species";
 import { 
@@ -22,7 +22,7 @@ export interface Creature {
   readonly species: Species;
   readonly jobClass: JobClass,
   readonly inventory: Inventory,
-  readonly stats: Stats;
+  readonly stats: Required<Stats>;
   readonly healthRatio: number;
   readonly possibleActions: ActionFactory[];
   readonly level: number;
@@ -68,10 +68,11 @@ export class CreatureImpl implements Creature {
   }
 
   public get stats() {
-    return calculateStats(this.species, this.level)
-      .plus(calculateStats(this.jobClass, this.level))
-      .plus(this.equipment.totalStats)
-      ;
+    return stats.totalize(stats.round(stats.plus(
+        stats.calculateByLevel(this.species, this.level),
+        stats.calculateByLevel(this.jobClass, this.level),
+        this.equipment.totalStats
+      )));
   }
 
   public get equipment() {
@@ -98,7 +99,7 @@ export class CreatureImpl implements Creature {
       const excedingExp = newExp - this.requiredExp;
       this.level++;
       this._currentExp = excedingExp;
-      this.currentHealth += this.species.levelProgression.maxHealth + this.jobClass.levelProgression.maxHealth;
+      this.currentHealth += (this.species.levelProgression.maxHealth ?? 0) + (this.jobClass.levelProgression.maxHealth ?? 0);
     } else {
       this._currentExp = newExp;
     }

@@ -1,4 +1,4 @@
-import { Stats, zeroStats, } from "@/creatures/stats";
+import stats, { Stats, zeroStats } from "@/creatures/stats";
 import { Inventory } from "./inventory";
 import { EquipmentSlot, EquipmentItem, isEquipment } from "./item";
 import { keyBy, uniq } from "lodash";
@@ -37,7 +37,7 @@ export class EquipmentImpl {
   public get totalStats(): Stats {
     return this.equipped
       .map(i => i.stats)
-      .reduce((acc, s) => acc.plus(s), zeroStats)
+      .reduce((acc, s) => stats.plus(acc, s), zeroStats)
       ;
   }
 
