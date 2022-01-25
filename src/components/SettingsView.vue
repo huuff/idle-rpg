@@ -1,5 +1,5 @@
 <template>
-<div class="is-flex is-flex-direction-column">
+<button-column>
   <button 
     type="button" 
     class="button is-primary"
@@ -17,12 +17,13 @@
     :disabled="!saveDataPresent"
     @click="deleteSave(); $forceUpdate()"
   >Delete</button>
-</div>
+</button-column>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
 import { save, load, existsSaveData, deleteSave } from "@/save-load/save-load";
+import ButtonColumn from "@/components/ui/ButtonColumn.vue";
 
 const saveDataPresent = computed(() => existsSaveData());
 

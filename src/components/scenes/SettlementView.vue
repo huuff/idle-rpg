@@ -2,7 +2,7 @@
 <p class="title has-text-dark">Resting in {{ location.name }}</p>
 
 <template v-if="currentView === View.Main">
-  <div class="is-flex is-flex-direction-column">
+  <button-column>
     <button v-for="destination of possibleDestinations"
             :key="`${destination.through.name}-${destination.to.name}`"
             @click="goTo(destination)"
@@ -13,7 +13,7 @@
       class="button is-link mb-2"
       @click="currentView = View.Shop"
     >Shop</button>
-  </div>
+  </button-column>
 </template>
 <shop-view 
   v-else-if="currentView == View.Shop"
@@ -31,6 +31,7 @@ import { useMainStore } from "@/store";
 import { emptyShop } from "@/locations/shop";
 import {Settlement} from "@/map/settlements";
 import ShopView from "@/components/shops/ShopView.vue";
+import ButtonColumn from "@/components/ui/ButtonColumn.vue";
 
 const props = defineProps<{
   location: Settlement;

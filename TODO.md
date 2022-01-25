@@ -5,6 +5,7 @@
 * Make current `InventoryView` `PlayerInventoryView` and add some `InventoryView` that shows an inventory and adds the options to filter it. Maybe pass the result via a scoped slot or smth.
 * Refreshing the settings tab when saving or deleting
 * The saved weapons are not working.
+* Also load the map status (maybe main ticker?)
 
 # Future
 * I couldn't test `basic-zones` nor `basic-settlements` since they have some quite intricate circular dependencies
