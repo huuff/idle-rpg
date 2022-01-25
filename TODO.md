@@ -1,6 +1,6 @@
 # Tasks
 * Clicking on equipment on inventory to unequip not working
-* Loading places, zones, classes, etc from JSON
+* Loading zones, classes, etc from JSON
 * Tests that basic items and basic equipments load
 * Make `isEquipped` optional in `EquipmentItem`
 * Saving game to `localStorage`
