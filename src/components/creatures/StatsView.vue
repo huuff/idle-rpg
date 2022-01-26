@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Creature } from "@/creatures/creature";
-import StatDetail, { DetailsProp } from "./StatDetail.vue";
+import StatDetail from "./StatDetail.vue";
 import equipment from "@/items/equipment";
 import stats from "@/creatures/stats";
 
@@ -37,11 +37,11 @@ const equipmentStats = computed(() => equipment.stats(props.creature.equipment))
 const classStats = computed(() => stats.calculateByLevel(props.creature.jobClass, props.creature.level));
 const speciesStats = computed(() => stats.calculateByLevel(props.creature.species, props.creature.level));
 
-function getDetails(statName: keyof typeof props.creature.stats): DetailsProp {
+function getDetails(statName: keyof typeof props.creature.stats) {
   return {
-    equipment: equipmentStats.value[statName],
-    jobClass: classStats.value[statName],
-    species: speciesStats.value[statName],
+    Equipment: equipmentStats.value[statName],
+    Class: classStats.value[statName],
+    Species: speciesStats.value[statName],
   }
 }
 </script>
