@@ -30,3 +30,7 @@ export function createShopFactory(budget: number, rarity: number) {
 export const emptyShop: Shop = {
   inventory: {}
 };
+
+export function sellItem(shop: Shop, itemName: string) {
+  shop.inventory = inventory.minus(shop.inventory, itemName);
+}
