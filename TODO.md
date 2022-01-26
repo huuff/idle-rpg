@@ -1,5 +1,4 @@
 # Tasks
-* Showing where each stat comes from with popups
 * Put autoplay somewhere where it's accessible at any time
 * More equipment items!
 * Make current `InventoryView` `PlayerInventoryView` and add some `InventoryView` that shows an inventory and adds the options to filter it. Maybe pass the result via a scoped slot or smth.

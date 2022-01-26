@@ -956,6 +956,11 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@creativebulma/bulma-tooltip@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@creativebulma/bulma-tooltip/-/bulma-tooltip-1.2.0.tgz#84dcdd59d94c09c2975fadbec1d3d765ae29c471"
+  integrity sha512-ooImbeXEBxf77cttbzA7X5rC5aAWm9UsXIGViFOnsqB+6M944GkB28S5R4UWRqjFd2iW4zGEkEifAU+q43pt2w==
+
 "@eslint/eslintrc@^0.4.3":
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-0.4.3.tgz#9e42981ef035beb3dd49add17acb96e8ff6f394c"
@@ -1442,6 +1447,11 @@
   integrity sha512-anKkLmZZ+xm4p8JWBf4hElkM4XR+EZeA2M9BAkkTldmcyDY4mbdIJnRghDJH3Ov5ooY7/UAoENtmdMSkaAd7Cw==
   dependencies:
     "@types/node" "*"
+
+"@types/he@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@types/he/-/he-1.1.2.tgz#0c8b275f36d2b8b651104638e4d45693349c3953"
+  integrity sha512-kSJPcLO1x+oolc0R89pUl2kozldQ/fVQ1C1p5mp8fPoLdF/ZcBvckaTC2M8xXh3GYendXvCpy5m/a2eSbfgNgw==
 
 "@types/html-minifier-terser@^6.0.0":
   version "6.1.0"
