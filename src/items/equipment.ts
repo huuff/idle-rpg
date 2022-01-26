@@ -1,60 +1,50 @@
-import stats, { Stats, zeroStats } from "@/creatures/stats";
+import { plus, Stats } from "@/creatures/stats";
+import { cloneDeep, keyBy, pickBy } from "lodash";
 import { Inventory } from "./inventory";
-import { EquipmentSlot, EquipmentItem, isEquipment } from "./item";
-import { keyBy, uniq } from "lodash";
+import { EquipmentItem, EquipmentSlot, isEquipment } from "./item";
 
-export type EquipmentSlots = {[slot in EquipmentSlot]: EquipmentItem};
+export type EquipmentInventory<T> = { [ itemName in keyof T ]: EquipmentItem}
 
-export interface Equipment {
-  readonly equipped: EquipmentItem[];
-  readonly slots: {[slot in EquipmentSlot]: EquipmentItem};
-  readonly totalStats: Stats;
-  toggleEquipped: (itemName: string) => void;
+export function equipmentItems(inventory: Inventory): EquipmentInventory<Inventory> {
+  return pickBy(inventory, isEquipment) as EquipmentInventory<Inventory>;
 }
 
-export class EquipmentImpl {
+export function equipped(inventory: Inventory): EquipmentInventory<Inventory> {
+  return pickBy(equipmentItems(inventory), i => i.isEquipped) as EquipmentInventory<Inventory>;
+}
+
+export type Equipment = {[slotName in EquipmentSlot]: EquipmentItem};
+
+// XXX: Why is the type not inferred? Is it the fault of lodash types? (Dictionary)
+export function from(inventory: Inventory): Equipment {
+  return keyBy(equipped(inventory), "slot") as Equipment;
+}
+
+export function stats(equipment: Equipment): Stats {
+  return plus(...Object.values(equipment).map(e => e.stats));
+}
+
+export function toggleEquipped(inventory: Inventory, itemName: string): Inventory {
+  const item = equipmentItems(inventory)[itemName]
+  if (!item) {
+    throw new Error(`Trying to toggle equipped on ${itemName}, which is not in the inventory`);
+  }
+
+  const nextInventory = cloneDeep(inventory);
+
+  // Unequip previous items at same slot
+  Object.values(nextInventory).forEach(i => {
+    if (isEquipment(i) && i.slot === item.slot)
+      i.isEquipped = false;
+  });
   
-  constructor(private readonly inventory: Inventory) {}
-
-  // STUCK: Why is this not narrowing?
-  private get items(): EquipmentItem[] {
-    return Object.values(this.inventory).filter(isEquipment) as EquipmentItem[];
-  }
-
-  public get equipped(): EquipmentItem[] {
-    return this.items.filter(i => i.isEquipped);
-  }
-
-  public get slots(): EquipmentSlots {
-    const slotsTaken = this.equipped.map(e => e.slot);
-    if (slotsTaken.length !== uniq(slotsTaken).length) {
-      throw new Error(`Some slot has more than one item in: ${JSON.stringify(slotsTaken)}`)
-    }
-
-    return keyBy(this.equipped, e => e.slot) as EquipmentSlots;
-  }
-
-  public get totalStats(): Stats {
-    return this.equipped
-      .map(i => i.stats)
-      .reduce((acc, s) => stats.plus(acc, s), zeroStats)
-      ;
-  }
-
-  public toggleEquipped(itemName: string): void {
-    const item = this.items.find(i => i.name === itemName);
-    if (!item) {
-      throw new Error(`Trying to toggle equipped on non-present item ${itemName}`);
-    }
-    
-    const wasEquipped = item.isEquipped;
-
-    const itemAtSameSlot = this.slots[item.slot];
-    if (itemAtSameSlot) {
-      itemAtSameSlot.isEquipped = false;
-    }
-
-    item.isEquipped = !wasEquipped;
-  }
+  // Actually toggle it
+  (nextInventory[item.name] as EquipmentItem).isEquipped = !item.isEquipped;
+  return nextInventory;
 }
 
+export default {
+  toggleEquipped,
+  from,
+  stats,
+}

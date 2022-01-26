@@ -36,20 +36,19 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { Inventory } from "@/items/inventory";
-import { EquipmentImpl } from "@/items/equipment";
 import capitalize from "lodash/capitalize";
 import {Item} from "@/items/item";
+import { storeToRefs } from "pinia";
+import { useMainStore } from "@/store";
+import equipmentOps from "@/items/equipment";
 
-const props = defineProps<{
-  inventory: Inventory
-}>();
+const { player } = storeToRefs(useMainStore());
 
 const tabs = [ "all", "stuff", "equipment" ];
 const currentTab = ref("all");
 
 const filteredItems = computed(() => {
-  const items = Object.values(props.inventory);
+  const items = Object.values(player.value.inventory);
   if (currentTab.value === "all")
     return items;
   else if (currentTab.value === "stuff")
@@ -66,7 +65,7 @@ function isEquipped(item: Item): boolean {
 
 function toggleEquipped(item: Item): void {
   if (item.type === "equipment") {
-    new EquipmentImpl(props.inventory).toggleEquipped(item.name);
+    player.value.inventory = equipmentOps.toggleEquipped(player.value.inventory, item.name);
   }
 }
 </script>

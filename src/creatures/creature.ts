@@ -5,7 +5,7 @@ import inventory, {
   Inventory,
   singleInventoryItem, 
 } from "@/items/inventory";
-import {Equipment, EquipmentImpl} from "@/items/equipment";
+import equipment, {Equipment} from "@/items/equipment";
 import { ActionFactory} from "@/battle/action";
 
 export type CreatureInitialData = {
@@ -69,12 +69,12 @@ export class CreatureImpl implements Creature {
     return stats.totalize(stats.round(stats.plus(
         stats.calculateByLevel(this.species, this.level),
         stats.calculateByLevel(this.jobClass, this.level),
-        this.equipment.totalStats
+        equipment.stats(this.equipment)
       )));
   }
 
   public get equipment() {
-    return new EquipmentImpl(this.inventory);
+    return equipment.from(this.inventory);
   }
 
   public get healthRatio() {
