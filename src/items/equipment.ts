@@ -1,5 +1,6 @@
 import { plus, Stats } from "@/creatures/stats";
-import { cloneDeep, keyBy, pickBy } from "lodash";
+import produce from "immer";
+import { keyBy, pickBy } from "lodash";
 import { Inventory } from "./inventory";
 import { EquipmentItem, EquipmentSlot, isEquipment } from "./item";
 
@@ -25,22 +26,28 @@ export function stats(equipment: Equipment): Stats {
 }
 
 export function toggleEquipped(inventory: Inventory, itemName: string): Inventory {
-  const item = equipmentItems(inventory)[itemName]
-  if (!item) {
-    throw new Error(`Trying to toggle equipped on ${itemName}, which is not in the inventory`);
-  }
+  return produce(inventory, draft => {
+    const item = draft[itemName];
+    if (!item) {
+      throw new Error(`Trying to toggle equipped on ${itemName}, which is not in the inventory`);
+    }
 
-  const nextInventory = cloneDeep(inventory);
+    if (!isEquipment(item)) {
+      throw new Error(`Trying to toggle equipped on ${itemName}, which is not equipment!`)
+    }
+    
+    if (!item.isEquipped) {
+      // Unequip previous item at same slot
+      const equipment = from(draft);
+      if (equipment[item.slot])
+        equipment[item.slot].isEquipped = false;
 
-  // Unequip previous items at same slot
-  Object.values(nextInventory).forEach(i => {
-    if (isEquipment(i) && i.slot === item.slot)
-      i.isEquipped = false;
+      // And equip it
+      item.isEquipped = true;
+    } else {
+      item.isEquipped = false;
+    }
   });
-  
-  // Actually toggle it
-  (nextInventory[item.name] as EquipmentItem).isEquipped = !item.isEquipped;
-  return nextInventory;
 }
 
 export default {

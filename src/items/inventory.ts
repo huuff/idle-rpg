@@ -1,7 +1,6 @@
 import { Item, } from "./item";
-import { isArray, cloneDeep } from "lodash";
-
-// TODO: Immer would make everything faster here
+import { isArray } from "lodash";
+import { produce } from "immer";
 
 export type InventoryItem = {
   amount: number;
@@ -28,15 +27,15 @@ export function plus(inventory: Inventory, items: Item | InventoryItem | Invento
       : [singleInventoryItem(items)]
     ;
   
-  const result = cloneDeep(inventory);
-  for (const item of itemsToAdd) {
-    if (item.name in result) {
-      result[item.name].amount += item.amount;
-    } else {
-      result[item.name] = item;
+  return produce(inventory, draft => {
+    for (const item of itemsToAdd) {
+      if (item.name in draft) {
+        draft[item.name].amount += item.amount;
+      } else {
+        draft[item.name] = item;
+      }
     }
-  }
-  return result;
+  });
 }
 
 export function merge(...inventories: Inventory[]) {
@@ -47,19 +46,17 @@ export function minus(inventory: Inventory, itemName: string, amount = 1): Inven
   if (!inventory[itemName])
     throw new Error(`${itemName} is not in ${JSON.stringify(inventory)}`)
 
-  const item = inventory[itemName];
-  if (amount > item.amount) {
-    throw new Error(`Trying to remove ${amount} ${itemName} from an inventory with ${item.amount}`)
-  }
+  return produce(inventory, draft => {
+    const item = draft[itemName];
+    if (amount > item.amount) {
+      throw new Error(`Trying to remove ${amount} ${itemName} from an inventory with ${item.amount}`)
+    }
 
-  const result = cloneDeep(inventory);
-  result[itemName].amount -= amount;
-
-  if (result[itemName].amount === 0) {
-    delete result[itemName];
-  }
-
-  return result;
+    draft[itemName].amount -= amount;
+    if (draft[itemName].amount === 0) {
+      delete draft[itemName];
+    }
+  });
 }
 
 export default {
