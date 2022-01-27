@@ -1,5 +1,6 @@
 # Tasks
 * I could test some stuff like inventory functions n shiet
+* Actually, ditch natural items and put that stuff into spoils, this will make it easier for stealing
 
 # Future
 * More equipment items!
