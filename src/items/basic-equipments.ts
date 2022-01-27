@@ -1,7 +1,6 @@
 import { EquipmentItem, isEquipmentSlot } from "./item";
 import basicEquipmentsJson from "./basic-equipments.json";
 import { mapValues } from "lodash";
-// TODO: Weapons should not give strength, but attacks!
 
 type EquipmentName = keyof typeof basicEquipmentsJson;
 type JsonValue = Omit<EquipmentItem, "type" | "slot"> & {

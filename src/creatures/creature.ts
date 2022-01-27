@@ -85,7 +85,7 @@ export class CreatureImpl implements Creature {
   }
 
   public get possibleActions() {
-    return this.species.naturalActions;
+    return this.species.naturalActions.concat(equipment.battleActions(this.equipment));
   }
 
   public get currentExp() {

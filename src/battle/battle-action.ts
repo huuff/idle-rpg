@@ -41,6 +41,7 @@ export function calculateDamage(
     return randomWithVariability(baseDamage, generalVariability) + statContribution;
 }
 
+// TODO: Round numbers please
 export function makeExecution(
     action: BattleAction,
     executor: Creature,

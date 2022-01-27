@@ -20,7 +20,7 @@ export function isEquipmentSlot(slot: string): slot is EquipmentSlot {
 export type EquipmentItem = {
   readonly type: "equipment";
   readonly slot: EquipmentSlot;
-  readonly stats: Stats;
+  readonly stats?: Stats;
   readonly battleActions?: BattleAction[],
   isEquipped?: boolean;
 } & BaseItem;

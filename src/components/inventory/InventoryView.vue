@@ -35,10 +35,13 @@
                     <td>{{ item.name }}</td>
                     <td>{{ item.amount }}</td>
                     <td>{{ item.avgValue }}</td>
-                    <template v-if="currentFilter === 'equipment'">
-                        <td>{{ (item as EquipmentItem).stats.maxHealth }}</td>
-                        <td>{{ (item as EquipmentItem).stats.strength }}</td>
-                        <td>{{ (item as EquipmentItem).stats.agility }}</td>
+                    <template v-if="
+                        currentFilter === 'equipment'
+                        && item.type === 'equipment'
+                        ">
+                        <td>{{ item.stats?.maxHealth }}</td>
+                        <td>{{ item.stats?.strength }}</td>
+                        <td>{{ item.stats?.agility }}</td>
                     </template>
                     <slot name="extraCells" :item="item"></slot>
                 </tr>

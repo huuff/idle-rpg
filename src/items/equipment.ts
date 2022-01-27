@@ -1,4 +1,5 @@
-import { plus, Stats } from "@/creatures/stats";
+import { BattleAction } from "@/battle/battle-action";
+import { plus, Stats, zeroStats } from "@/creatures/stats";
 import produce from "immer";
 import { keyBy, pickBy } from "lodash";
 import { Inventory } from "./inventory";
@@ -22,7 +23,11 @@ export function from(inventory: Inventory): Equipment {
 }
 
 export function stats(equipment: Equipment): Stats {
-  return plus(...Object.values(equipment).map(e => e.stats));
+  return plus(...Object.values(equipment).map(e => e.stats ?? zeroStats));
+}
+
+export function battleActions(equipment: Equipment): BattleAction[] {
+  return Object.values(equipment).flatMap(e => e.battleActions ?? []);
 }
 
 export function toggleEquipped(inventory: Inventory, itemName: string): Inventory {
@@ -54,4 +59,5 @@ export default {
   toggleEquipped,
   from,
   stats,
+  battleActions,
 }

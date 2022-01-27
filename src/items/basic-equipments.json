@@ -5,11 +5,17 @@
     "slot": "weapon",
     "avgValue": 100,
     "rarity": 1,
-    "stats": {
-      "strength": 1
-    }
+    "battleActions": [
+      {
+        "baseDamage": 5,
+        "statVariability": {
+          "strength": 0.8
+        },
+        "generalVariability": 0.025,
+        "description": "strikes"
+      }
+    ]
   },
-
   "ironSword": {
     "type": "equipment",
     "name": "Iron Sword",
@@ -20,7 +26,6 @@
       "strength": 10
     }
   },
-
   "ironKnife": {
     "type": "equipment",
     "name": "Iron Knife",
