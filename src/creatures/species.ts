@@ -1,13 +1,13 @@
 import { areZeroStats, Stats, zeroStats } from "@/creatures/stats";
 import { BattleAction } from "@/battle/battle-action";
-import { NaturalItem } from "@/items/natural-item";
+import { InventoryItem } from "@/items/inventory";
 
 export interface Species {
   readonly name: string;
   readonly baseStats: Stats;
   readonly levelProgression: Stats;
   readonly naturalActions:  BattleAction[];
-  readonly naturalItems?: NaturalItem[];
+  readonly naturalItems?: InventoryItem[];
 }
 
 // Null object

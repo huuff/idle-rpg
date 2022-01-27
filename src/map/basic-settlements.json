@@ -3,7 +3,7 @@
     "name": "Prontera",
     "shop": {
       "budget": 500,
-      "rarity": 1
+      "rarity": 0.95
     }
   },
 
@@ -11,7 +11,7 @@
     "name": "Aldebaran",
     "shop": {
       "budget": 1000,
-      "rarity": 2
+      "rarity": 0.90
     }
   }
 }

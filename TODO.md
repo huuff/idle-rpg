@@ -1,10 +1,8 @@
 # Tasks
 * I could test some stuff like inventory functions n shiet
-* Actually, ditch natural items and put that stuff into spoils, this will make it easier for stealing
 
 # Future
 * More equipment items!
-* Maybe stamina would make thieves steal less and die less too
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies
 * Thief can escape battle when in danger
 * Some way that thieves cannot equip swords? Maybe weapons have strength requirements and classes can have a bonus that allows them to equip them? Or just some skill that allows their usage?

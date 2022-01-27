@@ -15,7 +15,7 @@ export interface ShopSpecification {
 
 function createShopInventory({ budget, rarity}: ShopSpecification): Inventory {
   let budgetLeft = budget;
-  const possibleItems = Object.values(basicEquipments).filter(i => i.rarity <= rarity);
+  const possibleItems = Object.values(basicEquipments).filter(i => i.rarity >= rarity);
   
   let availableItems: Inventory = {};
   while (budgetLeft > 0) {

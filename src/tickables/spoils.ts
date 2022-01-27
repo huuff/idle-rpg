@@ -3,7 +3,7 @@ import { Creature } from "@/creatures/creature";
 import { Log } from "@/log";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
-import inventory from "@/items/inventory";
+import inventory, { Inventory, singleInventoryItem } from "@/items/inventory";
 import { calculateChallenge } from "@/creatures/stats";
 
 export class Spoils implements Tickable {
@@ -40,7 +40,7 @@ export class Spoils implements Tickable {
   }
 
   private shareDrops(): void {
-    const totalDrops = inventory.merge(...this.losers.map(c => c.inventory) )
+    const totalDrops = this.adjustByRarity(inventory.merge(...this.losers.map(c => c.inventory)));
 
     const { player } = storeToRefs(useMainStore());
     player.value.inventory = inventory.merge(player.value.inventory, totalDrops)
@@ -48,5 +48,21 @@ export class Spoils implements Tickable {
     for (const item of Object.values(totalDrops)) {
       this.log.messages.push(`You found ${item.amount} ${item.name}`);
     }
+  }
+
+  // Makes it so drops are only dropped according to rarity
+  // It throws a random for each item and if it's under the rarity
+  // of the item, it's added to the final drops
+  private adjustByRarity(drops: Inventory): Inventory {
+    let resultInventory: Inventory = {};
+    for (const item of Object.values(drops)) {
+      for (let i = 0; i < item.amount; i++) {
+        const randomValue = Math.random();
+        if (randomValue < item.rarity) {
+          resultInventory = inventory.plus(resultInventory, singleInventoryItem(item));
+        }
+      }
+    }
+    return resultInventory;
   }
 }
