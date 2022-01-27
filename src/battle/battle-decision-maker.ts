@@ -26,7 +26,7 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (originator: Crea
             .map(e => e.damage)
             ;
 
-        // Choose the one with the highest damage TODO: Add some variability here
+        // Choose the one with the highest damage
         const maxDamage = max(possibleOutcomes);
         const maxDamageIndex = possibleOutcomes.findIndex(o => o === maxDamage);
         return attackActions[maxDamageIndex];
