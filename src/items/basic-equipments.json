@@ -7,6 +7,7 @@
     "rarity": 1,
     "battleActions": [
       {
+        "type": "attack",
         "baseDamage": 5,
         "statVariability": {
           "strength": 0.7
@@ -24,6 +25,7 @@
     "avgValue": 1000,
     "battleActions": [
       {
+        "type": "attack",
         "baseDamage": 10,
         "statVariability": {
           "strength": 0.8
@@ -41,12 +43,22 @@
     "avgValue": 10,
     "battleActions": [
       {
+        "type": "attack",
         "baseDamage": 5,
         "statVariability": {
           "strength": 0.2
         },
-        "generalVariability": 0.1,
+        "generalVariability": 0.05,
         "description": "stabs"
+      },
+      {
+        "type": "attack",
+        "baseDamage": 5,
+        "statVariability": {
+          "strength": 0.2
+        },
+        "generalVariability": 0.2,
+        "description": "slashes"
       }
     ]
   }

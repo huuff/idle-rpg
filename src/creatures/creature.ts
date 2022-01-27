@@ -91,9 +91,9 @@ export class CreatureImpl implements Creature {
     // (or else you wouldn't have that equipped)
     const equipmentActions = equipment.battleActions(this.equipment);
     if (!isEmpty(equipmentActions))
-      return equipmentActions;
+      return equipmentActions.concat(this.jobClass.battleActions ?? []);
     else 
-      return this.species.naturalActions;
+      return this.species.naturalActions.concat(this.jobClass.battleActions ?? []);
   }
 
   public get currentExp() {

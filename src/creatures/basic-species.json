@@ -13,6 +13,7 @@
     },
     "naturalActions": [
       {
+        "type": "attack",
         "baseDamage": 2,
         "statVariability": {
           "strength": 0.8

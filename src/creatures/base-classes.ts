@@ -30,7 +30,10 @@ const thief: JobClass = {
     strength: 0.2,
     agility: 0.5,
   },
-  baseEquipment: [ {...ironKnife, isEquipped: true }]
+  baseEquipment: [ {...ironKnife, isEquipped: true }],
+  battleActions: [ 
+    { type: "steal", dexterity: 1 },
+  ]
 };
 
 const archer: JobClass = {
