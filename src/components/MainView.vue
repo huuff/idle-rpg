@@ -4,7 +4,7 @@
     <main-view />
   </template>
   <template v-slot:[Tab.Inventory]>
-    <inventory-view />
+    <player-inventory />
   </template>
   <template v-slot:[Tab.Settings]>
     <settings-view />
@@ -16,7 +16,7 @@
 import { computed } from "vue";
 import { useSceneStore } from "@/scenes/scene-store";
 import TabbedView from "@/components/ui/TabbedView.vue";
-import InventoryView from "@/components/InventoryView.vue";
+import PlayerInventory from "@/components/PlayerInventory.vue";
 import SettingsView from "@/components/SettingsView.vue";
 
 enum Tab {
