@@ -10,6 +10,7 @@ import {makeBattleScene} from "@/scenes/battle-scene";
 import { renameCreatures } from "@/creatures/rename-creatures";
 import { gameOver } from "@/game-over";
 import { Spoils } from "@/tickables/spoils";
+import { defaultBattleDecisionMaker } from "./battle-decision-maker";
 
 function allDead(creatures: Creature[]) {
   return creatures.every(c => !c.isAlive);
@@ -49,10 +50,15 @@ export class Battle implements Tickable {
       this.turns = calculateTurns([ ...aliveGoodGuys, ...aliveBadGuys]);
 
     const attacker = this.turns.pop()!;
-    const target = this.badGuys.includes(attacker) ? chooseRandom(aliveGoodGuys) : chooseRandom(aliveBadGuys);
+    const rivals = this.badGuys.includes(attacker)
+     ? aliveGoodGuys 
+     : aliveBadGuys;
 
-    const action = makeExecution(chooseRandom(attacker.possibleActions), attacker, target);
-    execute(action, this.log);
+    const action = defaultBattleDecisionMaker(attacker, rivals);
+
+    const target = chooseRandom(rivals);
+    const execution = makeExecution(action, attacker, target);
+    execute(execution, this.log);
 
     if (target.currentHealth <= 0) {
       this.turns = this.turns.filter(a => a.isAlive);
