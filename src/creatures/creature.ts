@@ -5,8 +5,9 @@ import inventory, {
   Inventory,
   singleInventoryItem, 
 } from "@/items/inventory";
-import equipment, {Equipment} from "@/items/equipment";
+import equipment, {Equipment, equipmentItems} from "@/items/equipment";
 import { BattleAction } from "@/battle/battle-action";
+import { isEmpty } from "lodash";
 
 export type CreatureInitialData = {
   species: Species;
@@ -85,7 +86,13 @@ export class CreatureImpl implements Creature {
   }
 
   public get possibleActions() {
-    return this.species.naturalActions.concat(equipment.battleActions(this.equipment));
+    // Prefer equipment actions to natural actions since they are likely to be better
+    // (or else you wouldn't have that equipped)
+    const equipmentActions = equipment.battleActions(this.equipment);
+    if (!isEmpty(equipmentActions))
+      return equipmentActions;
+    else 
+      return this.species.naturalActions;
   }
 
   public get currentExp() {
