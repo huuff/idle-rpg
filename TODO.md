@@ -6,7 +6,6 @@
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies
 * Thief can escape battle when in danger
 * Some way that thieves cannot equip swords? Maybe weapons have strength requirements and classes can have a bonus that allows them to equip them? Or just some skill that allows their usage?
-* Some better randomness in store available items
 * Some price variation (e.g. more expensive to buy than sell earning)
 * Maybe loading jobclasses from JSON as I do from the rest, but there aren't many and the interface is not set in stone yet
 * I temporarily made all `MapLocation`s settlements since that's the only type of `MapLocation` yet and for a long time to come.
