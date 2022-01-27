@@ -31,7 +31,7 @@ export function plus(inventory: Inventory, items: Item | InventoryItem | Invento
     for (const item of itemsToAdd) {
       if (item.name in draft) {
         draft[item.name].amount += item.amount;
-      } else {
+      } else if (item.amount > 0) {
         draft[item.name] = item;
       }
     }

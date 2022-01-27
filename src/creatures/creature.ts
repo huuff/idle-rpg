@@ -8,6 +8,7 @@ import inventory, {
 import equipment, {Equipment} from "@/items/equipment";
 import { BattleAction } from "@/battle/battle-action";
 import { isEmpty } from "lodash";
+import naturalItems from "@/items/natural-item";
 
 export type CreatureInitialData = {
   species: Species;
@@ -60,7 +61,7 @@ export class CreatureImpl implements Creature {
     // XXX: Only if it's a new creature we don't have items
     // so we add those of its species and class
     if (!items) {
-      this.inventory = inventory.plus(this.inventory, species.naturalItems ?? []);
+      this.inventory = inventory.merge(this.inventory, naturalItems.toInventory(species.naturalItems ?? []));
       this.inventory = inventory.plus(this.inventory, this.jobClass.baseEquipment?.map(singleInventoryItem) ?? [])
     }
     this.currentHealth = this.stats.maxHealth;
