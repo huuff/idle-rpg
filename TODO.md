@@ -1,5 +1,4 @@
 # Tasks
-* Put autoplay somewhere where it's accessible at any time
 * More equipment items!
 * Refreshing the settings tab when saving or deleting
 * Also load the map status (maybe main ticker?)

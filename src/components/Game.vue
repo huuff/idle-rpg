@@ -18,6 +18,7 @@
       </div>
     </div>
   </div>
+  <autoplay-menu />
 </template>
 
 <script setup lang="ts">
@@ -27,6 +28,7 @@ import PlayerView from "@/components/PlayerView.vue";
 import LocationIndicator from "@/components/location/LocationIndicator.vue";
 import MoneyView from "@/components/MoneyView.vue";
 import MainView from "@/components/MainView.vue";
+import AutoplayMenu from "./AutoplayMenu.vue";
 
 const { secondaryView } = storeToRefs(useSceneStore());
 
