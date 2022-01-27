@@ -1,7 +1,7 @@
 import { Creature } from "@/creatures/creature";
 import { Stats, StatType } from "@/creatures/stats";
 import { Log } from "@/log";
-import { randomBetween } from "@/util/random";
+import { variabilityRandom } from "@/util/random";
 import { sum } from "lodash";
 
 export interface BattleAction {
@@ -18,11 +18,6 @@ export interface BattleActionExecution {
     description: string;
 }
 
-// TODO: This in random?
-export function randomWithVariability(base: number, variability: number) {
-    return randomBetween(base - (base*variability), base + (base*variability));
-}
-
 export function calculateDamage(
     baseDamage: number,
     stats: Stats,
@@ -34,14 +29,13 @@ export function calculateDamage(
         .filter(([_, contrib]) => !!contrib)
         .map(([statName, contrib]) => {
             // Latest installment of "filter won't narrow my fucking types"
-            return randomWithVariability((stats[statName as StatType] ?? 0) * contrib!, generalVariability)
+            return variabilityRandom((stats[statName as StatType] ?? 0) * contrib!, generalVariability)
         })
     );
 
-    return randomWithVariability(baseDamage, generalVariability) + statContribution;
+    return variabilityRandom(baseDamage, generalVariability) + statContribution;
 }
 
-// TODO: Round numbers please
 export function makeExecution(
     action: BattleAction,
     executor: Creature,
@@ -53,12 +47,13 @@ export function makeExecution(
         action.statVariability, 
         action.generalVariability
     );
+    const displayDamage = Math.round(damage);
 
     return {
         executor,
         target,
         damage,
-        description: `${executor.name} ${action.description} ${target.name} for ${damage} damage!`
+        description: `${executor.name} ${action.description} ${target.name} for ${displayDamage} damage!`
     };
 }
 

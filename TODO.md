@@ -5,6 +5,7 @@
   * Easier as I don't have to handle travelling
   * I can fix the issue with resting as I can just start a rest ticker ;)
 * I could test some stuff like inventory functions n shiet
+* Prefer equipment actions to natural actions
 
 # Future
 * I couldn't test `basic-zones` nor `basic-settlements` since they have some quite intricate circular dependencies

@@ -5,6 +5,10 @@ export function chooseRandom<T>(options: T[]): T {
   return options[Math.floor(Math.random() * options.length)];
 }
 
+export function variabilityRandom(base: number, variability: number) {
+  return randomBetween(base - (base*variability), base + (base*variability));
+}
+
 export function randomBetween(min: number, max: number): number {
   return min + (Math.random() * (max - min));
 }
