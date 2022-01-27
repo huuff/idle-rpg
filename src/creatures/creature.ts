@@ -6,7 +6,7 @@ import inventory, {
   singleInventoryItem, 
 } from "@/items/inventory";
 import equipment, {Equipment} from "@/items/equipment";
-import { ActionFactory} from "@/battle/action";
+import { BattleAction } from "@/battle/battle-action";
 
 export type CreatureInitialData = {
   species: Species;
@@ -22,7 +22,7 @@ export interface Creature {
   inventory: Inventory,
   readonly stats: Required<Stats>;
   readonly healthRatio: number;
-  readonly possibleActions: ActionFactory[];
+  readonly possibleActions: BattleAction[];
   readonly level: number;
   readonly isAlive: boolean;
   readonly requiredExp: number;

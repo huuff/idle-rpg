@@ -1,4 +1,5 @@
 import { Stats } from "@/creatures/stats";
+import { BattleAction } from "@/battle/battle-action";
 
 export type BaseItem = {
   readonly name: string;
@@ -20,6 +21,7 @@ export type EquipmentItem = {
   readonly type: "equipment";
   readonly slot: EquipmentSlot;
   readonly stats: Stats;
+  readonly battleActions?: BattleAction[],
   isEquipped?: boolean;
 } & BaseItem;
 

@@ -3,7 +3,6 @@ import basicSpeciesJson from "./basic-species.json";
 import {mapValues} from "lodash";
 import {basicItems, isBasicItemName} from "@/items/basic-items";
 import {InventoryItem} from "@/items/inventory";
-import {BasicAttack} from "@/battle/basic-attack";
 
 type BasicSpeciesName = keyof typeof basicSpeciesJson;
 type JsonNaturalItem = {
@@ -11,8 +10,7 @@ type JsonNaturalItem = {
   amount: number;
 }
 
-type JsonValue = Omit<Species, "naturalActions" | "naturalItems"> & {
-  naturalActions: string[];
+type JsonValue = Omit<Species, "naturalItems"> & {
   naturalItems?: JsonNaturalItem[];
 }
 type JsonType = {[speciesName in BasicSpeciesName]: JsonValue};
@@ -20,12 +18,6 @@ type JsonType = {[speciesName in BasicSpeciesName]: JsonValue};
 export type BasicSpecies = {[name in BasicSpeciesName]: Species };
 
 function valueToSpecies(val: JsonValue): Species {
-
-  // TODO: Improve it when there are more attacks
-  const naturalActions = val.naturalActions;
-  if (naturalActions.length !== 1 && naturalActions[0] !== "basicAttack") {
-    throw new Error("Natural actions incorrect in JSON");
-  }
   
   const naturalItems: InventoryItem[] = []
   if (val.naturalItems) {
@@ -44,7 +36,6 @@ function valueToSpecies(val: JsonValue): Species {
 
   return {
     ...val,
-    naturalActions: [ new BasicAttack() ],
     naturalItems,
   }
 }

@@ -1,6 +1,9 @@
 # Tasks
 * More equipment items!
-* Also load the map status (maybe main ticker?)
+* Also load the map status (maybe main ticker?) UPDATE: Actually, only load resting, this improves the following:
+  * Less prone to cheating, if you save mid-travel, you save as resting at the previous settlement
+  * Easier as I don't have to handle travelling
+  * I can fix the issue with resting as I can just start a rest ticker ;)
 * I could test some stuff like inventory functions n shiet
 
 # Future

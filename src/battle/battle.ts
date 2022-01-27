@@ -3,7 +3,7 @@ import { useMainStore } from "@/store";
 import { Creature, } from "@/creatures/creature";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
-import { executeAction } from "./action";
+import { makeExecution, execute } from "./battle-action";
 import { Tickable } from "@/ticking/async-ticker";
 import {Scene} from "@/scenes/scene";
 import {makeBattleScene} from "@/scenes/battle-scene";
@@ -51,8 +51,8 @@ export class Battle implements Tickable {
     const attacker = this.turns.pop()!;
     const target = this.badGuys.includes(attacker) ? chooseRandom(aliveGoodGuys) : chooseRandom(aliveBadGuys);
 
-    const action = chooseRandom(attacker.possibleActions).create(attacker, target);
-    executeAction(action, this.log);
+    const action = makeExecution(chooseRandom(attacker.possibleActions), attacker, target);
+    execute(action, this.log);
 
     if (target.currentHealth <= 0) {
       this.turns = this.turns.filter(a => a.isAlive);
