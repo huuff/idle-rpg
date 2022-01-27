@@ -10,6 +10,7 @@ import {useTickStore} from "@/ticking/tick-store";
 import {useSceneStore} from "@/scenes/scene-store";
 import { basicSettlements } from "@/map/basic-settlements";
 import { basicZones } from "@/zones/basic-zones";
+import { Settlement, settlementToScene } from "@/map/settlements";
 
 export type TravelStoreState = {
   mapStatus: MapStatus;
@@ -55,7 +56,7 @@ export const useTravelStore = defineStore("travel", {
           (retreat) => {
             const status = this.mapStatus as RestingStatus;
             tickStore.start(makeRest());
-            sceneStore.setScene(status.at);
+            sceneStore.setScene(settlementToScene(status.at as Settlement));
           },
           (cont) => {}, //eslint-disable-line @typescript-eslint/no-empty-function
           (depart) => {

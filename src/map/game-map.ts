@@ -1,7 +1,6 @@
 import { Zone } from "@/zones/zone";
-import { Scene } from "@/scenes/scene";
 
-export interface MapLocation extends Scene {
+export interface MapLocation {
   readonly name: string;
 }
 
@@ -27,9 +26,9 @@ export function createGameMap(locations: MapLocation[], connections: LocationCon
     connections,
     optionsFrom(location: MapLocation) {
       return this.connections
-        .filter(conn => conn.locations.includes(location))
+        .filter(conn => conn.locations.some(loc => loc.name === location.name))
         .map(conn => ({
-          to: conn.locations[0] === location ? conn.locations[1] : conn.locations[0],
+          to: conn.locations[0].name === location.name ? conn.locations[1] : conn.locations[0],
           through: conn.through,
         }));
     }

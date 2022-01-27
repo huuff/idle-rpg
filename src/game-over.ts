@@ -5,6 +5,7 @@ import { useSceneStore } from "@/scenes/scene-store";
 import { useTravelStore } from "@/travel/travel-store";
 import { noCreature } from "@/creatures/creature";
 import { basicSettlements } from "@/map/basic-settlements";
+import { settlementToScene } from "./map/settlements";
 
 // FUTURE: Choose a random starting location instead of always prontera
 export function gameOver(): void {
@@ -19,7 +20,7 @@ export function gameOver(): void {
     type: "resting",
     at: prontera,
   },
-  sceneStore.setScene(prontera);
+  sceneStore.setScene(settlementToScene(prontera));
   useTickStore().stop();
 
 }

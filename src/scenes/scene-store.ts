@@ -1,6 +1,7 @@
 import { h, VNode } from "vue";
 import { useTravelStore } from "@/travel/travel-store";
 import { defineStore } from "pinia";
+import { Settlement, settlementToScene } from "@/map/settlements";
 import { Scene } from "./scene";
 
 type SceneState = {
@@ -19,7 +20,7 @@ export const useSceneStore = defineStore("scene", {
     scene: (state) => {
       const travelStore = useTravelStore(); 
       if (travelStore.mapStatus.type === "resting") {
-        return travelStore.mapStatus.at;
+        return settlementToScene(travelStore.mapStatus.at as Settlement); // FUTURE: fix when there are more locations
       } else {
         return state.internalScene;
       }

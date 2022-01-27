@@ -5,7 +5,7 @@ import { TravelDecisionMaker } from "./travel";
 export const autoTravel: TravelDecisionMaker = (status: TravellingStatus, player: Creature) => {
   if (status.through.isComplete()) {
     return { type: "arrive" };
-  } else if (player.healthRatio < 0.15) {
+  } else if (player.healthRatio < 0.3) {
     return { type: "retreat" };
   } else {
     return { type: "continue" };

@@ -22,9 +22,9 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { save, load, existsSaveData, deleteSave } from "@/save-load/save-load";
+import { save, load, saveDataExists, deleteSave } from "@/save-load/save-load";
 import ButtonColumn from "@/components/ui/ButtonColumn.vue";
 
-const saveDataPresent = ref(existsSaveData());
+const saveDataPresent = ref(saveDataExists());
 
 </script>

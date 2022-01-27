@@ -28,7 +28,7 @@ import { TravelOption } from "@/map/game-map";
 import { storeToRefs } from "pinia";
 import { useTravelStore, } from "@/travel/travel-store";
 import { useMainStore } from "@/store";
-import { emptyShop } from "@/locations/shop";
+import { createShop, emptyShop } from "@/locations/shop";
 import {Settlement} from "@/map/settlements";
 import ShopView from "@/components/shops/ShopView.vue";
 import ButtonColumn from "@/components/ui/ButtonColumn.vue";
@@ -58,7 +58,7 @@ function goTo(destination: TravelOption): void {
 const shop = ref(emptyShop);
 
 onMounted(() => {
-  shop.value = props.location.createShop();
+  shop.value = createShop(props.location.shop)
 });
 
 enum View {

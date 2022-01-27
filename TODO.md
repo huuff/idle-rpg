@@ -1,13 +1,13 @@
 # Tasks
 * More equipment items!
-* Also load the map status (maybe main ticker?) UPDATE: Actually, only load resting, this improves the following:
-  * Less prone to cheating, if you save mid-travel, you save as resting at the previous settlement
-  * Easier as I don't have to handle travelling
-  * I can fix the issue with resting as I can just start a rest ticker ;)
 * I could test some stuff like inventory functions n shiet
+* Remove `basic-settlements`
+* Rest only in settlements and remove type assertions
+* Check if there's any other json I can remove
+* Do a good round of checking whether everything is in its appropriate directory
 
 # Future
-* I couldn't test `basic-zones` nor `basic-settlements` since they have some quite intricate circular dependencies
+* I couldn't test `basic-zones` since they have some quite intricate circular dependencies
 * Thief can steal in battle for extra drops
 * Thief can escape battle when in danger
 * Some way that thieves cannot equip swords? Maybe weapons have strength requirements and classes can have a bonus that allows them to equip them? Or just some skill that allows their usage?

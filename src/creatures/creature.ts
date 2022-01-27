@@ -5,7 +5,7 @@ import inventory, {
   Inventory,
   singleInventoryItem, 
 } from "@/items/inventory";
-import equipment, {Equipment, equipmentItems} from "@/items/equipment";
+import equipment, {Equipment} from "@/items/equipment";
 import { BattleAction } from "@/battle/battle-action";
 import { isEmpty } from "lodash";
 

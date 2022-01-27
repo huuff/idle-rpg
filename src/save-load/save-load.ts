@@ -1,20 +1,31 @@
 import { playerToSavedPlayer } from "./player";
 import { useMainStore } from "@/store";
+import { useTravelStore } from "@/travel/travel-store";
+import { useSceneStore } from "@/scenes/scene-store";
 import { SaveData } from "./save-data";
 import {CreatureImpl} from "@/creatures/creature";
+import { storeToRefs } from "pinia";
+import { useTickStore } from "@/ticking/tick-store";
+import { settlementToScene, Settlement } from "@/map/settlements";
+import { makeRest } from "@/tickables/rest";
+import { fixSaveHack } from "./fix-save-hack";
 
 const SAVE_PROPERTY = "save";
 
 export function save(): void {
-  const store = useMainStore();
+  const store = storeToRefs(useMainStore());
+  const travelStore = storeToRefs(useTravelStore());
 
   localStorage.setItem(SAVE_PROPERTY, JSON.stringify({
-    player: playerToSavedPlayer(store.player),
-    money: store.money
+    player: playerToSavedPlayer(store.player.value),
+    money: store.money.value,
+    location: travelStore.mapStatus.value.type === "resting" 
+      ? travelStore.mapStatus.value.at
+      : travelStore.mapStatus.value.from
   }));
 }
 
-export function existsSaveData(): boolean {
+export function saveDataExists(): boolean {
   const value = !!localStorage.getItem(SAVE_PROPERTY);
   return value;
 }
@@ -35,9 +46,21 @@ export function load(): void {
     player.currentExp = saveData.player.currentExp;
     player.currentHealth = saveData.player.currentHealth;
 
-    const store = useMainStore();
-    store.player = player;
-    store.money = saveData.money;
+    const store = storeToRefs(useMainStore());
+    store.player.value = player;
+    store.money.value = saveData.money;
+
+    fixSaveHack();
+
+    const travelStore = useTravelStore();
+    travelStore.mapStatus = {
+      "type": "resting",
+      at: saveData.location,
+    }
+    const sceneStore = useSceneStore();
+    sceneStore.setScene(settlementToScene(saveData.location as Settlement)); // FUTURE: Fix when there are more maplocations
+    const tickStore = useTickStore();
+    tickStore.start(makeRest())
   }
 }
 
