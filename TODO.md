@@ -1,6 +1,5 @@
 # Tasks
 * More equipment items!
-* Refreshing the settings tab when saving or deleting
 * Also load the map status (maybe main ticker?)
 * I could test some stuff like inventory functions n shiet
 

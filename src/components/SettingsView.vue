@@ -3,7 +3,7 @@
   <button 
     type="button" 
     class="button is-primary"
-    @click="save(); $forceUpdate()"
+    @click="save(); saveDataPresent = true"
   >Save</button>
   <button
     type="button"
@@ -15,16 +15,16 @@
     type="button"
     class="button is-danger"
     :disabled="!saveDataPresent"
-    @click="deleteSave(); $forceUpdate()"
+    @click="deleteSave(); saveDataPresent = false"
   >Delete</button>
 </button-column>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref } from "vue";
 import { save, load, existsSaveData, deleteSave } from "@/save-load/save-load";
 import ButtonColumn from "@/components/ui/ButtonColumn.vue";
 
-const saveDataPresent = computed(() => existsSaveData());
+const saveDataPresent = ref(existsSaveData());
 
 </script>
