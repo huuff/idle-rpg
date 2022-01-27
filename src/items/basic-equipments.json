@@ -9,7 +9,7 @@
       {
         "baseDamage": 5,
         "statVariability": {
-          "strength": 0.8
+          "strength": 0.7
         },
         "generalVariability": 0.025,
         "description": "strikes"
@@ -22,9 +22,16 @@
     "slot": "weapon",
     "rarity": 2,
     "avgValue": 1000,
-    "stats": {
-      "strength": 10
-    }
+    "battleActions": [
+      {
+        "baseDamage": 10,
+        "statVariability": {
+          "strength": 0.8
+        },
+        "generalVariability": 0.1,
+        "description": "slashes"
+      }
+    ]
   },
   "ironKnife": {
     "type": "equipment",
@@ -32,8 +39,15 @@
     "slot": "weapon",
     "rarity": 1,
     "avgValue": 10,
-    "stats": {
-      "strength": 0.2
-    }
+    "battleActions": [
+      {
+        "baseDamage": 5,
+        "statVariability": {
+          "strength": 0.2
+        },
+        "generalVariability": 0.1,
+        "description": "stabs"
+      }
+    ]
   }
 }
