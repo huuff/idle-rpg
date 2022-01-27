@@ -8,6 +8,7 @@
 * Thief can steal in battle for extra drops
 * Thief can escape battle when in danger
 * Some way that thieves cannot equip swords? Maybe weapons have strength requirements and classes can have a bonus that allows them to equip them? Or just some skill that allows their usage?
+* Some better randomnes in store available items
 * Some randomness in creature drops
 * Some price variation (e.g. more expensive to buy than sell earning)
 * Maybe loading classes from JSON as I do from the rest, but there aren't many and the interface is not set in stone yet
