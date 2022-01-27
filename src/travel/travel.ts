@@ -1,3 +1,4 @@
+
 import {Creature} from "@/creatures/creature";
 import { TravellingStatus} from "@/map/map-status";
 import {TravelAction} from "./travel-action";
@@ -8,6 +9,7 @@ import { makeTickableWithEnd } from "@/ticking/tickable-with-end";
 import { autoTravel } from "@/travel/autotraveller";
 import { makeTravelScene } from "@/scenes/travel-scene";
 import {DecisionTickable} from "@/ticking/decision-tickable";
+import { newEncounter } from "@/zones/stage";
 
 export type TravelDecisionMaker = (status: TravellingStatus, player: Creature) => TravelAction;
 
@@ -45,7 +47,7 @@ export class Travel implements Tickable {
     const action = this.decisionMaker(status, this.store.player);
 
     if (action.type === "continue") {
-      const battle = status.through.currentStage().stage.newEncounter();
+      const battle = newEncounter(status.through.currentStage().stage);
       return makeTickableWithEnd(battle, () => {
         if (battle.result === "won") {
           status.steps++;

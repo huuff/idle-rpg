@@ -4,6 +4,7 @@
 * Rest only in settlements and remove type assertions
 * Check if there's any other json I can remove
 * Do a good round of checking whether everything is in its appropriate directory
+* Some padding at the bottom of the battle log
 
 # Future
 * I couldn't test `basic-zones` since they have some quite intricate circular dependencies

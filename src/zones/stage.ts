@@ -6,17 +6,12 @@ import { createEnemyFactory, EnemySpecification } from "./enemy-distribution";
 
 export interface Stage {
   steps: number;
-  newEncounter: () => Battle; // TODO: This out of here, create an encounter from an stage
+  enemies: EnemySpecification[];
 }
 
-export function createStage({ steps, enemies }: { steps: number, enemies: EnemySpecification[]}): Stage {
-  const createEnemy = createEnemyFactory(enemies);
-  return {
-    steps,
-    newEncounter: () => {
-      const { player } = useMainStore();
-      const enemies = nrange(randomInt(3)).map((_) => createEnemy());
-      return new Battle([player], enemies);
-    }
-  }
+export function newEncounter(stage: Stage): Battle {
+  const createEnemy = createEnemyFactory(stage.enemies);
+  const { player } = useMainStore();
+  const enemies = nrange(randomInt(3)).map((_) => createEnemy());
+  return new Battle([player], enemies);
 }
