@@ -6,11 +6,7 @@ import {mapValues} from "lodash";
 import { Stage } from "@/zones/stage";
 
 type ZoneName = keyof typeof basicZonesJson;
-// type JsonStageEnemy = {
-//   species: string;
-//   averageLevel: number;
-//   frequency: number;
-// };
+
 type JsonStageEnemy = Omit<EnemySpecification, "species"> & { species: string };
 type JsonStage = {
   steps: number;

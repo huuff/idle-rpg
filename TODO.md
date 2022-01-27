@@ -1,9 +1,8 @@
 # Tasks
-* More equipment items!
 * I could test some stuff like inventory functions n shiet
-* Do a good round of checking whether everything is in its appropriate directory
 
 # Future
+* More equipment items!
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies
 * Thief can steal in battle for extra drops
 * Thief can escape battle when in danger
