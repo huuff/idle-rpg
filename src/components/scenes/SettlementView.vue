@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, Ref } from "vue";
-import { TravelOption } from "@/map/game-map";
+import { optionsFrom, TravelOption } from "@/map/game-map";
 import { storeToRefs } from "pinia";
 import { useTravelStore, } from "@/travel/travel-store";
 import { useMainStore } from "@/store";
@@ -41,7 +41,7 @@ const travelStore = useTravelStore();
 const { map }= storeToRefs(travelStore);
 const { autoplay } = storeToRefs(useMainStore());
 
-const possibleDestinations = computed(() => map.value.optionsFrom(props.location));
+const possibleDestinations = computed(() => optionsFrom(map.value, props.location));
 
 function goTo(destination: TravelOption): void {
   if (autoplay.value === "enabled") {

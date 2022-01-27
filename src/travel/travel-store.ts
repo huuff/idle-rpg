@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { GameMap, createGameMap } from "@/map/game-map";
+import { GameMap } from "@/map/game-map";
 import { MapStatus, RestingStatus } from "@/map/map-status";
 import { TravelAction, resolveNextStatus, matchTravelAction } from "./travel-action";
 import { makeRest } from "@/tickables/rest";
@@ -30,11 +30,12 @@ export const useTravelStore = defineStore("travel", {
       type: "resting",
       at: prontera,
     },
-    map: createGameMap(
-      [ prontera, aldebaran ],
-      [ 
+    map: {
+      locations: [ prontera, aldebaran ],
+      connections: [ 
         { locations: [ prontera, aldebaran ], through: plains }
-      ]),
+      ],
+    },
   }) as TravelStoreState,
   actions: {
     takeAction(action: TravelAction) {
