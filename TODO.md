@@ -1,7 +1,6 @@
 # Tasks
 * Put autoplay somewhere where it's accessible at any time
 * More equipment items!
-* Make current `InventoryView` `PlayerInventoryView` and add some `InventoryView` that shows an inventory and adds the options to filter it. Maybe pass the result via a scoped slot or smth.
 * Refreshing the settings tab when saving or deleting
 * Also load the map status (maybe main ticker?)
 * I could test some stuff like inventory functions n shiet
@@ -9,6 +8,7 @@
 # Future
 * I couldn't test `basic-zones` nor `basic-settlements` since they have some quite intricate circular dependencies
 * Thief can steal in battle for extra drops
+* Thief can escape battle when in danger
 * Some way that thieves cannot equip swords? Maybe weapons have strength requirements and classes can have a bonus that allows them to equip them? Or just some skill that allows their usage?
 * Some randomness in creature drops
 * Some price variation (e.g. more expensive to buy than sell earning)
