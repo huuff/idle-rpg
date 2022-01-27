@@ -3,6 +3,7 @@
 
 # Future
 * More equipment items!
+* Maybe stamina would make thieves steal less and die less too
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies
 * Thief can escape battle when in danger
 * Some way that thieves cannot equip swords? Maybe weapons have strength requirements and classes can have a bonus that allows them to equip them? Or just some skill that allows their usage?
