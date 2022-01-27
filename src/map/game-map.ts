@@ -1,25 +1,26 @@
 import { Zone } from "@/zones/zone";
+import { Settlement } from "./settlements";
 
 export interface MapLocation {
   readonly name: string;
 }
 
 export interface LocationConnection {
-  readonly locations: [ MapLocation, MapLocation ];
+  readonly locations: [ Settlement, Settlement ];
   readonly through: Zone;
 }
 
 export type TravelOption = {
-  readonly to: MapLocation,
+  readonly to: Settlement,
   readonly through: Zone,
 }
 
 export interface GameMap {
-  readonly locations: MapLocation[];
+  readonly locations: Settlement[];
   readonly connections: LocationConnection[];
 }
 
-export function optionsFrom(map: GameMap, location: MapLocation) {
+export function optionsFrom(map: GameMap, location: Settlement) {
   return map.connections
   .filter(conn => conn.locations.some(loc => loc.name === location.name))
   .map(conn => ({

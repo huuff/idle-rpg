@@ -1,6 +1,8 @@
+
 import { MapLocation } from "@/map/game-map";
 import { Zone } from "@/zones/zone";
 import { MapStatus, matchMapStatus } from "@/map/map-status";
+import { Settlement } from "@/map/settlements";
 
 export type Arrive = {
   type: "arrive",
@@ -16,7 +18,7 @@ export type Continue = {
 
 export type Depart = {
   type: "depart";
-  to: MapLocation;
+  to: Settlement;
   through: Zone;
 };
 

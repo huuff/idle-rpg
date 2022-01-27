@@ -20,7 +20,7 @@ export const useSceneStore = defineStore("scene", {
     scene: (state) => {
       const travelStore = useTravelStore(); 
       if (travelStore.mapStatus.type === "resting") {
-        return settlementToScene(travelStore.mapStatus.at as Settlement); // FUTURE: fix when there are more locations
+        return settlementToScene(travelStore.mapStatus.at);
       } else {
         return state.internalScene;
       }

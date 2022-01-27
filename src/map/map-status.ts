@@ -1,19 +1,20 @@
 import { Zone } from "@/zones/zone";
 import { MapLocation, } from "./game-map";
+import { Settlement } from "./settlements";
 
 export type MapStatusType = "resting" | "travelling";
 
 export type TravellingStatus = {
   readonly type: "travelling";
-  readonly from: MapLocation;
-  readonly to: MapLocation;
+  readonly from: Settlement;
+  readonly to: Settlement;
   readonly through: Zone;
   steps: number;
 };
 
 export type RestingStatus = {
   readonly type: "resting";
-  readonly at: MapLocation;
+  readonly at: Settlement;
 };
 
 export type MapStatus = TravellingStatus | RestingStatus;

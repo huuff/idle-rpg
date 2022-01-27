@@ -58,7 +58,7 @@ export function load(): void {
       at: saveData.location,
     }
     const sceneStore = useSceneStore();
-    sceneStore.setScene(settlementToScene(saveData.location as Settlement)); // FUTURE: Fix when there are more maplocations
+    sceneStore.setScene(settlementToScene(saveData.location as Settlement));
     const tickStore = useTickStore();
     tickStore.start(makeRest())
   }

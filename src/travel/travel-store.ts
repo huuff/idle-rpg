@@ -57,7 +57,7 @@ export const useTravelStore = defineStore("travel", {
           (retreat) => {
             const status = this.mapStatus as RestingStatus;
             tickStore.start(makeRest());
-            sceneStore.setScene(settlementToScene(status.at as Settlement));
+            sceneStore.setScene(settlementToScene(status.at));
           },
           (cont) => {}, //eslint-disable-line @typescript-eslint/no-empty-function
           (depart) => {
