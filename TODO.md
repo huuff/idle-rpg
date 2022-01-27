@@ -1,7 +1,6 @@
 # Tasks
 * More equipment items!
 * I could test some stuff like inventory functions n shiet
-* Remove `basic-settlements`
 * Rest only in settlements and remove type assertions
 * Check if there's any other json I can remove
 * Do a good round of checking whether everything is in its appropriate directory
