@@ -12,8 +12,10 @@
         </div>
       </div>
       <div class="tile is-parent">
-        <div class="tile is-child box scroll-tile tabbed-tile">
-          <main-view /> 
+        <div class="tile is-child box tabbed-tile pb-5">
+          <div class="scroll-tile" style="height: 100%">
+            <main-view /> 
+          </div>
         </div>
       </div>
     </div>
@@ -56,4 +58,5 @@ body, body, #app {
 .scroll-tile {
   overflow-y: scroll;
 }
+
 </style>
