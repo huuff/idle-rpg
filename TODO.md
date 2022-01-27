@@ -1,7 +1,6 @@
 # Tasks
 * More equipment items!
 * I could test some stuff like inventory functions n shiet
-* Check if there's any other json I can remove
 * Do a good round of checking whether everything is in its appropriate directory
 
 # Future

@@ -15,7 +15,7 @@
       {
         "baseDamage": 2,
         "statVariability": {
-            "strength": 0.8
+          "strength": 0.8
         },
         "generalVariability": 0.05,
         "description": "blorbs"
@@ -23,12 +23,14 @@
     ],
     "naturalItems": [
       {
-        "item": "slimeJelly",
-        "amount": 1
+        "type": "stuff",
+        "name": "Slime Jelly",
+        "avgValue": 1,
+        "amount": 1,
+        "rarity": 0
       }
     ]
   },
-
   "human": {
     "name": "Human",
     "baseStats": {
@@ -45,7 +47,7 @@
       {
         "baseDamage": 0,
         "statVariability": {
-            "strength": 0.5
+          "strength": 0.5
         },
         "generalVariability": 0.1,
         "description": "punches"
