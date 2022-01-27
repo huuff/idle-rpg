@@ -9,14 +9,6 @@ export interface Settlement extends MapLocation {
   readonly shop: ShopSpecification,
 }
 
-export function makeSettlement(name: string, shop: ShopSpecification): Settlement {
-  return {
-    name,
-    shop,
-  }
-}
-
-// TODO: In `scene`
 export function settlementToScene(settlement: Settlement): Scene {
   return {
     mainView: () => h(SettlementView, { location: settlement }),
