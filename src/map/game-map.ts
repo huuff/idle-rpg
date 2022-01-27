@@ -24,7 +24,7 @@ export function createGameMap(locations: MapLocation[], connections: LocationCon
   return {
     locations,
     connections,
-    optionsFrom(location: MapLocation) {
+    optionsFrom(location: MapLocation) { // TODO: This out of here
       return this.connections
         .filter(conn => conn.locations.some(loc => loc.name === location.name))
         .map(conn => ({

@@ -6,7 +6,7 @@ import { createEnemyFactory, EnemySpecification } from "./enemy-distribution";
 
 export interface Stage {
   steps: number;
-  newEncounter: () => Battle;
+  newEncounter: () => Battle; // TODO: This out of here, create an encounter from an stage
 }
 
 export function createStage({ steps, enemies }: { steps: number, enemies: EnemySpecification[]}): Stage {

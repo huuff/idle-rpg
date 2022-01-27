@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { useSceneStore } from "@/scenes/scene-store";
 import { useTravelStore } from "@/travel/travel-store";
 import { noCreature } from "@/creatures/creature";
-import { basicSettlements } from "@/map/basic-settlements";
+import basicSettlements from "@/map/basic-settlements.json";
 import { settlementToScene } from "./map/settlements";
 
 // FUTURE: Choose a random starting location instead of always prontera
