@@ -104,6 +104,7 @@ export function makeExecution(action: BattleAction, originator: Creature, target
     return matchBattleAction<Execution>(action,
             (attack) => makeAttackExecution(attack, originator, target),
             (steal) => makeStealExecution(steal, originator, target),
+            (escape) => {throw new Error("Can't execute an escape! (Must be handled before execution)")},
         )
 } 
 

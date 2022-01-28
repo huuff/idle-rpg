@@ -33,6 +33,7 @@ const thief: JobClass = {
   baseEquipment: [ {...ironKnife, isEquipped: true }],
   battleActions: [ 
     { type: "steal", dexterity: 1 },
+    { type: "escape" },
   ]
 };
 

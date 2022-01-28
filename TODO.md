@@ -4,7 +4,6 @@
 # Future
 * More equipment items!
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies
-* Thief can escape battle when in danger
 * Some way that thieves cannot equip swords? Maybe weapons have strength requirements and classes can have a bonus that allows them to equip them? Or just some skill that allows their usage?
 * Some price variation (e.g. more expensive to buy than sell earning)
 * Maybe loading jobclasses from JSON as I do from the rest, but there aren't many and the interface is not set in stone yet

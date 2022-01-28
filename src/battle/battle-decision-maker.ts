@@ -12,7 +12,16 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (originator: Crea
     const naturalActions = originator.species.naturalActions ?? [];
     const classActions = originator.jobClass.battleActions ?? [];
 
-    const allActions = equipmentActions.concat(naturalActions).concat(classActions);
+    let allActions = equipmentActions.concat(naturalActions).concat(classActions);
+
+
+    if (originator.healthRatio < 0.15 && allActions.some(a => a.type === "escape")) {
+        // If possible and necessary, escape
+        return allActions.find(c => c.type === "escape")!;
+    } else {
+        // Else, do not consider escaping
+        allActions = allActions.filter(a => a.type !== "escape");
+    }
 
     if (hasUtilityAction(allActions) && originator.healthRatio > 0.5 && Math.random() < 0.2) {
         // Choose to use one utility action if it has one, once in 5 attacks

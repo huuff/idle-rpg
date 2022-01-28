@@ -52,6 +52,8 @@ export class Travel implements Tickable {
         if (battle.result === "won") {
           status.steps++;
           this.travelStore.takeAction(action);
+        } else if (battle.result === "escaped") {
+          this.travelStore.takeAction({ type: "retreat" })
         }
       })
     } else {

@@ -16,7 +16,7 @@ function allDead(creatures: Creature[]) {
   return creatures.every(c => !c.isAlive);
 }
 
-export type BattleResult = "lost" | "won";
+export type BattleResult = "lost" | "won" | "escaped";
 
 export class Battle implements Tickable {
   public readonly scene: Scene;
@@ -56,6 +56,11 @@ export class Battle implements Tickable {
 
     const action = defaultBattleDecisionMaker(attacker, rivals);
 
+    if (action.type === "escape") {
+      this.result = "escaped";
+      return;
+    }
+
     const target = chooseRandom(rivals);
     const execution = makeExecution(action, attacker, target);
     execute(execution, this.log);
@@ -67,7 +72,7 @@ export class Battle implements Tickable {
   }
   
   public isOver(): boolean {
-    return allDead(this.goodGuys) || allDead(this.badGuys);
+    return allDead(this.goodGuys) || allDead(this.badGuys) || !!this.result;
   }
 
   public lastTick(): void | Tickable {
@@ -78,8 +83,10 @@ export class Battle implements Tickable {
       this.result = "won";
       this.log.messages.push("You won!");
       return new Spoils(this.goodGuys, this.badGuys, this.log);
+    } else if (this.result === "escaped") {
+      this.log.messages.push("You escape the battle");
     } else {
-      throw new Error("Called Battle's `endTick` but all teams are still alive!");
+      throw new Error("Called Battle's `endTick` but no end condition is reached!");
     }
   }
 

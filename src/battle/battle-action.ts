@@ -4,6 +4,7 @@ import { Stats } from "@/creatures/stats";
 export type ActionTypes = 
     "attack" 
     | "steal"
+    | "escape"
     ; 
 
 export interface Attack {
@@ -29,11 +30,14 @@ export function matchBattleAction<T>(
     action: BattleAction, 
     onAttack: (attack: Attack) => T,
     onSteal: (steal: Steal) => T,
+    onEscape: (escape: Escape) => T,
 ) {
     if (action.type === "attack") {
         return onAttack(action);
     } else if (action.type === "steal") {
         return onSteal(action);
+    } else if (action.type === "escape") {
+        return onEscape(action);
     } else {
         throw new Error(`Battle action ${JSON.stringify(action)} not handled`);
     }
