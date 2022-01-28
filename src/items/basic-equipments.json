@@ -4,6 +4,7 @@
     "name": "Wooden Sword",
     "slot": "weapon",
     "avgValue": 100,
+    "weight": 7,
     "rarity": 0.97,
     "battleActions": [
       {
@@ -22,6 +23,7 @@
     "name": "Iron Sword",
     "slot": "weapon",
     "rarity": 0.9,
+    "weight": 12,
     "avgValue": 1000,
     "battleActions": [
       {
@@ -40,6 +42,7 @@
     "name": "Iron Knife",
     "slot": "weapon",
     "rarity": 0.95,
+    "weight": 2,
     "avgValue": 10,
     "battleActions": [
       {

@@ -1,6 +1,6 @@
 import { storeToRefs } from "pinia";
 import { useMainStore } from "@/store";
-import equipment, { toggleEquipped } from "@/items/equipment";
+import equipment from "@/items/equipment";
 
 // HACK
 // I don't know what happens nor why (likely because I am using `reactive` in battle for creatures)
@@ -14,7 +14,7 @@ export function fixSaveHack() {
     const { player } = storeToRefs(useMainStore());
 
     for (const item of Object.values(player.value.equipment)) {
-        player.value.inventory = equipment.toggleEquipped(player.value.inventory, item.name);
-        player.value.inventory = equipment.toggleEquipped(player.value.inventory, item.name);
+        equipment.toggleEquipped(player.value, item.name);
+        equipment.toggleEquipped(player.value, item.name);
     }
 }

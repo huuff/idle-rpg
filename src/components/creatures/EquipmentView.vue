@@ -1,6 +1,11 @@
 <template>
 <div class="content">
-  <p class="title has-text-dark mb-2"> {{ creature.name }}</p>
+  <p class="title has-text-dark mb-5"> {{ creature.name }}</p>
+  <p class="subtitle mb-2" :class="loadColor">
+    Load: {{ equipment.totalLoad(equipment.from(creature.inventory)) }}
+    /
+    {{ stats.maxLoad(creature.stats.strength) }}
+  </p>
   <template v-for="(item, slotName) in equipment.from(creature.inventory) "
     :key="slotName"
   >
@@ -12,12 +17,23 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { Creature } from "@/creatures/creature";
 import capitalize from "lodash/capitalize";
 import equipment from "@/items/equipment";
+import stats from "@/creatures/stats";
 
 const props = defineProps<{
   creature: Creature;
 }>();
+
+const loadColor = computed(() => {
+  if (props.creature.loadCapacity > 15)
+    return "has-text-dark";
+  else if (props.creature.loadCapacity >= 5)
+    return "has-text-warning";
+  else
+    return "has-text-danger";
+});
 
 </script>

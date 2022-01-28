@@ -27,6 +27,7 @@
         "type": "stuff",
         "name": "Slime Jelly",
         "avgValue": 1,
+        "weight": 1,
         "amount": 1,
         "rarity": 0.8
       }

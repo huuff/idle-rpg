@@ -5,6 +5,7 @@ export type BaseItem = {
   readonly name: string;
   readonly avgValue: number;
   readonly rarity: number;
+  readonly weight: number;
 }
 
 export type StuffItem = {

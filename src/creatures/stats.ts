@@ -43,8 +43,6 @@ export function times(stats: Stats, factor: number) {
   }
 }
 
-
-
 export interface LevelableStats {
   baseStats: Stats,
   levelProgression: Stats,
@@ -66,10 +64,20 @@ export function totalize(stats: Stats): Required<Stats> {
   }
 }
 
+export function maxLoad(strength: number): number {
+  return Math.floor(strength * 1.2);
+}
+
+export function carryingCapacity(strength: number): number {
+  return strength * 10;
+}
+
 export default {
   plus,
   times,
   totalize,
   round,
   calculateByLevel,
+  maxLoad,
+  carryingCapacity
 }

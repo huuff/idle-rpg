@@ -28,6 +28,7 @@ export interface Creature {
   readonly isAlive: boolean;
   readonly requiredExp: number;
   readonly equipment: Equipment;
+  readonly loadCapacity: number;
   name: string;
   currentHealth: number;
   currentExp: number;
@@ -85,7 +86,7 @@ export class CreatureImpl implements Creature {
     return this.level * 100;
   }
 
-  public get possibleActions() {
+  public get possibleActions(): BattleAction[] {
     // Prefer equipment actions to natural actions since they are likely to be better
     // (or else you wouldn't have that equipped)
     const equipmentActions = equipment.battleActions(this.equipment);
@@ -93,6 +94,10 @@ export class CreatureImpl implements Creature {
       return equipmentActions.concat(this.jobClass.battleActions ?? []);
     else 
       return this.species.naturalActions.concat(this.jobClass.battleActions ?? []);
+  }
+
+  public get loadCapacity(): number {
+    return equipment.totalLoad(this.equipment) / stats.maxLoad(this.stats.strength);
   }
 
   public get currentExp() {
