@@ -28,9 +28,9 @@ const props = defineProps<{
 }>();
 
 const loadColor = computed(() => {
-  if (props.creature.loadCapacity > 15)
+  if (props.creature.loadCapacity < 0.75)
     return "has-text-dark";
-  else if (props.creature.loadCapacity >= 5)
+  else if (props.creature.loadCapacity <= 0.95)
     return "has-text-warning";
   else
     return "has-text-danger";

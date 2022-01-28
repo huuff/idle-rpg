@@ -15,6 +15,7 @@
                 <th>Name</th>
                 <th>Amount</th>
                 <th>Value</th>
+                <th>Weight</th>
                 <template v-if="currentFilter === 'equipment'">
                     <th>Max Health</th>
                     <th>Strength</th>
@@ -35,6 +36,7 @@
                     <td>{{ item.name }}</td>
                     <td>{{ item.amount }}</td>
                     <td>{{ item.avgValue }}</td>
+                    <td>{{ item.weight }}</td>
                     <template v-if="
                         currentFilter === 'equipment'
                         && item.type === 'equipment'
