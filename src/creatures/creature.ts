@@ -9,6 +9,7 @@ import equipment, {Equipment} from "@/items/equipment";
 import { BattleAction } from "@/battle/battle-action";
 import { isEmpty } from "lodash";
 import load, { Load } from "@/items/load";
+import { calculateSkill, Skill } from "@/skills/skill";
 
 export type CreatureInitialData = {
   species: Species;
@@ -30,6 +31,7 @@ export interface Creature {
   readonly requiredExp: number;
   readonly equipment: Equipment;
   readonly load: Load;
+  readonly skills: Skill[];
   name: string;
   currentHealth: number;
   currentExp: number;
@@ -95,6 +97,10 @@ export class CreatureImpl implements Creature {
       return equipmentActions.concat(this.jobClass.battleActions ?? []);
     else 
       return this.species.naturalActions.concat(this.jobClass.battleActions ?? []);
+  }
+
+  public get skills(): Skill[] {
+    return this.jobClass.skills?.map(s => calculateSkill(s, this.level)) ?? []
   }
 
   public get load(): Load {

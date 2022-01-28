@@ -16,6 +16,12 @@ const swordsman: JobClass = {
     agility: 0.2,
   },
   baseEquipment: [ {...woodenSword, isEquipped: true} ],
+  skills: [
+    {
+      type: "armor-mastery",
+      levelProgression: 0.25,
+    }
+  ]
 };
 
 const thief: JobClass = {

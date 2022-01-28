@@ -1,6 +1,7 @@
 import { Stats, zeroStats, areZeroStats } from "./stats"
 import { EquipmentItem } from "@/items/item";
 import { BattleAction } from "@/battle/battle-action";
+import { Skill, SkillSpec } from "@/skills/skill";
 
 export interface JobClass {
   name: string;
@@ -8,6 +9,7 @@ export interface JobClass {
   levelProgression: Stats;
   baseEquipment?: EquipmentItem[];
   battleActions?: BattleAction[];
+  skills?: SkillSpec<Skill>[];
 }
 
 export const noClass: JobClass =  {

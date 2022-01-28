@@ -5,7 +5,6 @@ import { keyBy, pickBy } from "lodash";
 import { Inventory } from "./inventory";
 import { EquipmentItem, EquipmentSlot, isEquipment } from "./item";
 import { Creature } from "@/creatures/creature";
-import statOps from "@/creatures/stats";
 import load from "./load";
 
 export type EquipmentInventory<T> = { [ itemName in keyof T ]: EquipmentItem}
