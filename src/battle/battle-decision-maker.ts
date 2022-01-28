@@ -1,8 +1,9 @@
 import { Creature } from "@/creatures/creature";
-import { BattleAction, makeExecution, makeAttackExecution, Attack } from "./battle-action";
-import equipment, { equipmentItems } from "@/items/equipment";
-import { isEmpty, max } from "lodash";
-import { chooseRandom, randomBetween } from "@/util/random";
+import { BattleAction, Attack } from "./battle-action";
+import equipment from "@/items/equipment";
+import { max } from "lodash";
+import { chooseRandom } from "@/util/random";
+import { makeAttackExecution,  } from "./action-execution";
 
 export type BattleDecisionMaker = (originator: Creature, rivals: Creature[]) => BattleAction;
 

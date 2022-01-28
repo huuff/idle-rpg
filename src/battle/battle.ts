@@ -3,7 +3,7 @@ import { useMainStore } from "@/store";
 import { Creature, } from "@/creatures/creature";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
-import { makeExecution, execute } from "./battle-action";
+import { makeExecution, execute } from "./action-execution";
 import { Tickable } from "@/ticking/async-ticker";
 import {Scene} from "@/scenes/scene";
 import {makeBattleScene} from "@/scenes/battle-scene";

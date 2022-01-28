@@ -10,7 +10,7 @@ import {useTickStore} from "@/ticking/tick-store";
 import {useSceneStore} from "@/scenes/scene-store";
 import basicSettlements from "@/map/basic-settlements.json";
 import { basicZones } from "@/zones/basic-zones";
-import { Settlement, settlementToScene } from "@/map/settlements";
+import { settlementToScene } from "@/map/settlements";
 
 export type TravelStoreState = {
   mapStatus: MapStatus;
