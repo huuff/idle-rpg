@@ -5,7 +5,7 @@
   <strong>Species:</strong> {{ creature.species.name }} <br/>
   <strong>Class:</strong> {{ creature.jobClass.name }} <br/>
   <stat-detail 
-    name="Max health"
+    name="Max Health"
     :value="creature.stats.maxHealth"
     :details="getDetails('maxHealth')"
   /> <br />
@@ -39,9 +39,9 @@ const speciesStats = computed(() => stats.calculateByLevel(props.creature.specie
 
 function getDetails(statName: keyof typeof props.creature.stats) {
   return {
-    Equipment: equipmentStats.value[statName],
-    Class: classStats.value[statName],
-    Species: speciesStats.value[statName],
+    Equipment: equipmentStats.value[statName]?.toFixed(1),
+    Class: classStats.value[statName].toFixed(1),
+    Species: speciesStats.value[statName].toFixed(1),
   }
 }
 </script>

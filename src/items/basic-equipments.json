@@ -64,5 +64,69 @@
         "description": "slashes"
       }
     ]
+  },
+  "leatherHelmet": {
+    "type": "equipment",
+    "name": "Leather Helmet",
+    "slot": "head",
+    "rarity": 0.98,
+    "weight": 5,
+    "avgValue": 150,
+    "stats": {
+      "maxHealth": 15
+    }
+  },
+  "leatherArmor": {
+    "type": "equipment",
+    "name": "Leather Armor",
+    "slot": "body",
+    "rarity": 0.94,
+    "weight": 15,
+    "avgValue": 500,
+    "stats": {
+      "maxHealth": 40
+    }
+  },
+  "leatherGloves": {
+    "type": "equipment",
+    "name": "Leather Gloves",
+    "slot": "hands",
+    "rarity": 0.96,
+    "weight": 3,
+    "avgValue": 50,
+    "stats": {
+      "maxHealth": 5
+    }
+  },
+  "ironHelmet": {
+    "type": "equipment",
+    "name": "Iron Helmet",
+    "slot": "head",
+    "rarity": 0.92,
+    "weight": 15,
+    "avgValue": 750,
+    "stats": {
+      "maxHealth": 20
+    }
+  },
+  "ironGloves": {
+    "type": "equipment",
+    "name": "Iron Gloves",
+    "slot": "hands",
+    "rarity": 0.94,
+    "avgValue": 500,
+    "stats": {
+      "maxHealth": 12
+    }
+  },
+  "ironArmor": {
+    "type": "equipment",
+    "name": "Iron Armor",
+    "slot": "body",
+    "rarity": 0.90,
+    "avgValue": 2000,
+    "stats": {
+      "maxHealth": 80
+    }
   }
 }

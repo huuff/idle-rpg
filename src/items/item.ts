@@ -13,9 +13,9 @@ export type StuffItem = {
 } & BaseItem;
 
 
-export type EquipmentSlot = "weapon";
+export type EquipmentSlot = "weapon" | "head" | "hands" | "body";
 export function isEquipmentSlot(slot: string): slot is EquipmentSlot {
-  return slot === "weapon";
+  return [ "weapon", "head", "hands", "body" ].includes(slot);
 }
 
 export type EquipmentItem = {

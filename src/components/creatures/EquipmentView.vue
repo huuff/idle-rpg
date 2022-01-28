@@ -10,7 +10,7 @@
     :key="slotName"
   >
     <template v-if="item">
-      <strong>{{ capitalize(slotName) }}:</strong> {{ item.name }}
+      <strong>{{ capitalize(slotName) }}:</strong> {{ item.name }} <br/>
     </template>
   </template>
 </div>
