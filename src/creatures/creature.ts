@@ -99,7 +99,7 @@ export class CreatureImpl implements Creature {
       return this.species.naturalActions.concat(this.jobClass.battleActions ?? []);
   }
 
-  public get skills(): Skill[] {
+  public get skills(): (Skill & {progress: number})[] {
     return this.jobClass.skills?.map(s => calculateSkill(s, this.level)) ?? []
   }
 

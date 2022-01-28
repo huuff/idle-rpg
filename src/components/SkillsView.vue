@@ -16,6 +16,7 @@
             <p class="subtitle level-item has-text-dark"> Level {{ skill.level }}</p>
         </div>
     </div>
+    <progress class="progress is-info" :value="skill.progress" max="1" />
 </div>
 </template>
 

@@ -35,10 +35,14 @@ export type SkillSpec<T extends Skill> = Omit<T, "level"> & {
     levelProgression: number
 }
 
-export function calculateSkill<T extends Skill>(skillSpec: SkillSpec<T>, level: number): Skill {
+export function calculateSkill<T extends Skill>(skillSpec: SkillSpec<T>, creatureLevel: number)
+    : Skill & { progress: number} {
     const { levelProgression, ...res } = skillSpec;
+    const skillLevel = Math.floor(levelProgression * creatureLevel);
+    const progress = (levelProgression * creatureLevel) - skillLevel;
     return {
         ...res,
-        level: Math.floor(levelProgression * level),
+        level: skillLevel,
+        progress
     };
 }
