@@ -5,6 +5,7 @@ const { woodenSword, ironKnife } = basicEquipments;
 
 const swordsman: JobClass = {
   name: "Swordsman",
+  description: "All-around powerful and resilient.",
   baseStats: {
     maxHealth: 20,
     strength: 4,
@@ -27,6 +28,7 @@ const swordsman: JobClass = {
 
 const thief: JobClass = {
   name: "Thief",
+  description: "Not powerful nor resilient, but has many tricks.",
   baseStats: {
     maxHealth: 10,
     strength: 2,
@@ -46,6 +48,7 @@ const thief: JobClass = {
 
 const archer: JobClass = {
   name: "Archer",
+  description: "TODO",
   baseStats: {
     maxHealth: 5,
     strength: 1,

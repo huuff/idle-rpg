@@ -1,7 +1,7 @@
 <template>
 <div class="modal is-active">
   <div class="modal-background"></div>
-  <div class="modal-content">
+  <div class="modal-content" style="width: 65%">
     <div class="box">
       <p class="title has-text-dark">
         Choose a class
@@ -19,7 +19,17 @@
             </header>
             <div class="card-content">
               <div class="content">
-                Class description
+                <p class="has-text-centered"> {{jobClass.description }} </p>
+                <div>
+                  <p class="has-text-weight-semibold"> Equipment </p>
+                  <ul>
+                    <li v-for="equipment in jobClass.baseEquipment ?? []"
+                        :key="equipment.name"
+                      >
+                      {{ equipment.name }}
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
             <footer class="card-footer">
