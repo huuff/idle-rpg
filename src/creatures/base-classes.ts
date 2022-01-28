@@ -19,6 +19,7 @@ const swordsman: JobClass = {
   skills: [
     {
       type: "armor-mastery",
+      name: "Armor Mastery",
       levelProgression: 0.25,
     }
   ]

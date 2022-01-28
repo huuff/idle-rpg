@@ -1,5 +1,6 @@
 # Tasks
 * I could test some stuff like inventory functions n shiet
+* Show a bar to next level in skills
 
 # Future
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies
