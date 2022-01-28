@@ -17,7 +17,7 @@ export interface Attack {
 
 export interface Steal {
     type: "steal";
-    dexterity: number; // XXX: Unused yet. Use rarity?
+    rarityModifier: number; // Effective chance is `rarity + (rarityModifier * rarity)`
 }
 
 export interface Escape {

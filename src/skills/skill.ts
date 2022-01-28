@@ -1,20 +1,31 @@
-export type SkillType = "armor-mastery" | "test";
+import { Steal } from "@/battle/battle-action";
 
-export type ArmorMastery = {
+export type SkillType = "armor-mastery" | "steal";
+
+
+export interface ArmorMastery {
+    name: string;
     type: "armor-mastery";
+    level: number;
 }
 
-export type Skill = (ArmorMastery) & {
+export interface StealSkill {
     name: string;
-    type: SkillType;
+    type: "steal";
+    action: true;
     level: number;
-};
+}
+
+export type Skill = (ArmorMastery | StealSkill);
 
 export function matchSkill<T>(skill: Skill,
-    onArmorMastery: (armorMastery: ArmorMastery) => T
+    onArmorMastery: (armorMastery: ArmorMastery) => T,
+    onSteal: (steal: StealSkill) => T,
 ): T {
     if (skill.type === "armor-mastery") {
         return onArmorMastery(skill);
+    } else if (skill.type === "steal") {
+        return onSteal(skill);
     } else {
         throw new Error(`Skill type ${JSON.stringify(skill)} not handled`);
     }
@@ -25,18 +36,35 @@ export function armorMasteryLoadBonus(skills: Skill[]): number {
     return (skills.find(s => s.type === "armor-mastery")?.level ?? 0) * AMOR_MASTERY_MODIFIER;
 }
 
+export function skillToBattleAction(skill: Skill & { action: true}) {
+    if (skill.type === "steal") {
+        return stealSkillToBattleAction(skill);
+    } else {
+        throw new Error(`Skill ${JSON.stringify(skill)} not handled in toBattleAction`)
+    }
+}
+
+export const STEAL_MODIFIER = 0.1;
+export function stealSkillToBattleAction(skill: StealSkill): Steal {
+    return {
+        type: "steal",
+        rarityModifier: skill.level * STEAL_MODIFIER,
+    }
+}
+
 export function describeSkill(skill: Skill): string {
     return matchSkill(skill,
-        (armorMastery) => `Load capacity +${(skill.level * AMOR_MASTERY_MODIFIER) * 100}%`
+        (armorMastery) => `Load capacity +${(skill.level * AMOR_MASTERY_MODIFIER) * 100}%`,
+        (steal) => `Steal chance +${(skill.level * STEAL_MODIFIER) * 100}%`,
     )
 }
 
-export type SkillSpec<T extends Skill> = Omit<T, "level"> & {
+type OmitBetter<T, K extends keyof any> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
+export type SkillSpec = OmitBetter<Skill, "level"> & {
     levelProgression: number
 }
 
-export function calculateSkill<T extends Skill>(skillSpec: SkillSpec<T>, creatureLevel: number)
-    : Skill & { progress: number} {
+export function calculateSkill(skillSpec: SkillSpec, creatureLevel: number) {
     const { levelProgression, ...res } = skillSpec;
     const skillLevel = Math.floor(levelProgression * creatureLevel);
     const progress = (levelProgression * creatureLevel) - skillLevel;
@@ -45,4 +73,8 @@ export function calculateSkill<T extends Skill>(skillSpec: SkillSpec<T>, creatur
         level: skillLevel,
         progress
     };
+}
+
+export function isSkillWithAction(skill: Skill): skill is (Skill & { action: true }) {
+    return ("action" in skill) && skill.action;
 }

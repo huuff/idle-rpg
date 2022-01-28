@@ -1,2 +1,2 @@
-export const tickDuration = 50;
+export const tickDuration = 100;
 export const longTickDuration = tickDuration * 2;

@@ -10,7 +10,7 @@ export interface JobClass {
   description: string;
   baseEquipment?: EquipmentItem[];
   battleActions?: BattleAction[];
-  skills?: SkillSpec<Skill>[];
+  skills?: SkillSpec[];
 }
 
 export const noClass: JobClass =  {

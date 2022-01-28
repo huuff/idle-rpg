@@ -9,7 +9,7 @@ import equipment, {Equipment} from "@/items/equipment";
 import { BattleAction } from "@/battle/battle-action";
 import { isEmpty } from "lodash";
 import load, { Load } from "@/items/load";
-import { calculateSkill, Skill } from "@/skills/skill";
+import { calculateSkill, isSkillWithAction, Skill, skillToBattleAction } from "@/skills/skill";
 
 export type CreatureInitialData = {
   species: Species;
@@ -92,11 +92,13 @@ export class CreatureImpl implements Creature {
   public get possibleActions(): BattleAction[] {
     // Prefer equipment actions to natural actions since they are likely to be better
     // (or else you wouldn't have that equipped)
+    const naturalActions = this.species.naturalActions;
     const equipmentActions = equipment.battleActions(this.equipment);
-    if (!isEmpty(equipmentActions))
-      return equipmentActions.concat(this.jobClass.battleActions ?? []);
-    else 
-      return this.species.naturalActions.concat(this.jobClass.battleActions ?? []);
+    const classActions = this.jobClass.battleActions ?? [];
+    const skillActions = this.skills
+      .filter(isSkillWithAction)
+      .map(s => skillToBattleAction(s as (Skill & {action: true})));
+    return equipmentActions.concat(classActions).concat(skillActions).concat(naturalActions);
   }
 
   public get skills(): (Skill & {progress: number})[] {

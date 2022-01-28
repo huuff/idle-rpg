@@ -1,19 +1,14 @@
 import { Creature } from "@/creatures/creature";
 import { BattleAction, Attack } from "./battle-action";
-import equipment from "@/items/equipment";
 import { max } from "lodash";
 import { chooseRandom } from "@/util/random";
 import { makeAttackExecution,  } from "./action-execution";
+import { cloneDeep } from "lodash";
 
 export type BattleDecisionMaker = (originator: Creature, rivals: Creature[]) => BattleAction;
 
 export const defaultBattleDecisionMaker: BattleDecisionMaker = (originator: Creature, rivals: Creature[]) => {
-    const equipmentActions = equipment.battleActions(originator.equipment) ?? [];
-    const naturalActions = originator.species.naturalActions ?? [];
-    const classActions = originator.jobClass.battleActions ?? [];
-
-    let allActions = equipmentActions.concat(naturalActions).concat(classActions);
-
+    let allActions = cloneDeep(originator.possibleActions);
 
     if (originator.healthRatio < 0.15 && allActions.some(a => a.type === "escape")) {
         // If possible and necessary, escape

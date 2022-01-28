@@ -85,7 +85,15 @@ export function makeStealExecution(
     target: Creature,
 ): StealExecution {
     const targetItems = Object.values(target.inventory);
-    const stolenItem = !isEmpty(targetItems) ? chooseRandom(targetItems) : undefined;
+    const itemToSteal = !isEmpty(targetItems) ? chooseRandom(targetItems) : undefined;
+
+    let stolenItem: undefined | Item;
+    if (itemToSteal) {
+        const chanceToStealIt = itemToSteal.rarity + (itemToSteal.rarity * action.rarityModifier);
+        if (Math.random() < chanceToStealIt) {
+            stolenItem = itemToSteal;
+        }
+    }
 
     const description = stolenItem
         ? `${executor.name} steals ${stolenItem.name} from ${target.name}!`

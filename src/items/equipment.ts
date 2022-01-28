@@ -52,7 +52,6 @@ export function toggleEquipped(creature: Creature, itemName: string): void | "ov
 
       const loadLeft = load.creatureCapacity(creature) 
       - (load.total(equipment) - (previousItemAtSlot?.weight ?? 0));
-      console.log(`loadLeft: ${loadLeft}`)
       if (loadLeft >= item.weight) {
         // Unequip previous item at same slot
         if (previousItemAtSlot) {
