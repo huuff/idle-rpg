@@ -6,7 +6,7 @@ import { Inventory } from "./inventory";
 import { EquipmentItem, EquipmentSlot, isEquipment } from "./item";
 import { Creature } from "@/creatures/creature";
 import statOps from "@/creatures/stats";
-import { sum } from "lodash";
+import load from "./load";
 
 export type EquipmentInventory<T> = { [ itemName in keyof T ]: EquipmentItem}
 
@@ -34,10 +34,6 @@ export function battleActions(equipment: Equipment): BattleAction[] {
 
 }
 
-export function totalLoad(equipment: Equipment): number {
-  return sum(Object.values(equipment).map(e => e.weight));
-}
-
 export function toggleEquipped(creature: Creature, itemName: string): void | "overload" {
   const result = produce<Inventory | "overload">(creature.inventory, draft => {
     const inventoryDraft = draft as Inventory;
@@ -55,8 +51,8 @@ export function toggleEquipped(creature: Creature, itemName: string): void | "ov
       const equipment = from(inventoryDraft);
       const previousItemAtSlot = equipment[item.slot];
 
-      const loadLeft = statOps.maxLoad(creature.stats.strength) 
-      - (totalLoad(equipment) - (previousItemAtSlot?.weight ?? 0));
+      const loadLeft = load.creatureCapacity(creature) 
+      - (load.total(equipment) - (previousItemAtSlot?.weight ?? 0));
       console.log(`loadLeft: ${loadLeft}`)
       if (loadLeft >= item.weight) {
         // Unequip previous item at same slot
@@ -86,5 +82,4 @@ export default {
   from,
   stats,
   battleActions,
-  totalLoad,
 }

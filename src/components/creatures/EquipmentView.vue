@@ -2,9 +2,7 @@
 <div class="content">
   <p class="title has-text-dark mb-5"> {{ creature.name }}</p>
   <p class="subtitle mb-2" :class="loadColor">
-    Load: {{ equipment.totalLoad(equipment.from(creature.inventory)) }}
-    /
-    {{ stats.maxLoad(creature.stats.strength) }}
+    Load: {{ creatureLoad.current }}  /  {{ creatureLoad.max }}
   </p>
   <template v-for="(item, slotName) in equipment.from(creature.inventory) "
     :key="slotName"
@@ -21,16 +19,19 @@ import { computed } from "vue";
 import { Creature } from "@/creatures/creature";
 import capitalize from "lodash/capitalize";
 import equipment from "@/items/equipment";
-import stats from "@/creatures/stats";
+import load from "@/items/load";
 
 const props = defineProps<{
   creature: Creature;
 }>();
 
+const creatureLoad = computed(() => props.creature.load);
+
 const loadColor = computed(() => {
-  if (props.creature.loadCapacity < 0.75)
+  const loadProportion = load.proportion(creatureLoad.value);
+  if (loadProportion < 0.75)
     return "has-text-dark";
-  else if (props.creature.loadCapacity <= 0.95)
+  else if (loadProportion <= 0.95)
     return "has-text-warning";
   else
     return "has-text-danger";

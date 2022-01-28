@@ -8,6 +8,7 @@ import inventory, {
 import equipment, {Equipment} from "@/items/equipment";
 import { BattleAction } from "@/battle/battle-action";
 import { isEmpty } from "lodash";
+import load, { Load } from "@/items/load";
 
 export type CreatureInitialData = {
   species: Species;
@@ -28,7 +29,7 @@ export interface Creature {
   readonly isAlive: boolean;
   readonly requiredExp: number;
   readonly equipment: Equipment;
-  readonly loadCapacity: number;
+  readonly load: Load;
   name: string;
   currentHealth: number;
   currentExp: number;
@@ -96,8 +97,11 @@ export class CreatureImpl implements Creature {
       return this.species.naturalActions.concat(this.jobClass.battleActions ?? []);
   }
 
-  public get loadCapacity(): number {
-    return equipment.totalLoad(this.equipment) / stats.maxLoad(this.stats.strength);
+  public get load(): Load {
+    return {
+      current: load.total(this.equipment),
+      max: load.creatureCapacity(this),
+    }
   }
 
   public get currentExp() {
