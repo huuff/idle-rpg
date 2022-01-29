@@ -10,7 +10,7 @@ function isActionSkill(skill: Skill): skill is ActionSkill {
 function stealToBattleAction(skill: StealSkill): Steal {
     return {
         type: "steal",
-        rarityModifier: Skills.stealChance(skill),
+        chance: Skills.stealChance(skill),
     }
 }
 

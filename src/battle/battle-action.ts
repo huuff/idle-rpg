@@ -17,8 +17,7 @@ export interface Attack {
 
 export interface Steal {
     type: "steal";
-    // TODO: Rename to chance?
-    rarityModifier: number; // Effective chance is `rarity + (rarityModifier * rarity)`
+    chance: number; // Effective chance is `rarity + (chance * rarity)`
 }
 
 export interface Escape {

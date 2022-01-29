@@ -95,7 +95,7 @@ export function makeStealExecution(
 
     let stolenItem: undefined | Item;
     if (itemToSteal) {
-        const chanceToStealIt = itemToSteal.rarity + (itemToSteal.rarity * action.rarityModifier);
+        const chanceToStealIt = itemToSteal.rarity + (itemToSteal.rarity * action.chance);
         if (Math.random() < chanceToStealIt) {
             stolenItem = itemToSteal;
         }
