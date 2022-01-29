@@ -5,9 +5,8 @@ import inventory, {
   Inventory,
   singleItem, 
 } from "@/items/inventory";
-import equipment, {Equipment} from "@/items/equipment";
+import equipment, { Equipment } from "@/items/equipment";
 import { BattleAction } from "@/battle/battle-action";
-import { isEmpty } from "lodash";
 import load, { Load } from "@/items/load";
 import { calculateSkill, isSkillWithAction, Skill, skillToBattleAction } from "@/skills/skill";
 
@@ -90,8 +89,6 @@ export class CreatureImpl implements Creature {
   }
 
   public get possibleActions(): BattleAction[] {
-    // Prefer equipment actions to natural actions since they are likely to be better
-    // (or else you wouldn't have that equipped)
     const naturalActions = this.species.naturalActions;
     const equipmentActions = equipment.battleActions(this.equipment);
     const classActions = this.jobClass.battleActions ?? [];
@@ -101,7 +98,7 @@ export class CreatureImpl implements Creature {
     return equipmentActions.concat(classActions).concat(skillActions).concat(naturalActions);
   }
 
-  public get skills(): (Skill & {progress: number})[] {
+  public get skills(): Skill[] {
     return this.jobClass.skills?.map(s => calculateSkill(s, this.level)) ?? []
   }
 

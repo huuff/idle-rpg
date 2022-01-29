@@ -16,7 +16,9 @@ export interface StealSkill {
     level: number;
 }
 
-export type Skill = (ArmorMastery | StealSkill);
+export type Skill = (ArmorMastery | StealSkill) & {
+     progress: number // Progress to next level
+ };
 
 export function matchSkill<T>(skill: Skill,
     onArmorMastery: (armorMastery: ArmorMastery) => T,
@@ -59,12 +61,12 @@ export function describeSkill(skill: Skill): string {
     )
 }
 
-type OmitBetter<T, K extends keyof any> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
-export type SkillSpec = OmitBetter<Skill, "level"> & {
+type UnionOmit<T, K extends keyof any> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
+export type SkillSpec = UnionOmit<Skill, "level" | "progress"> & {
     levelProgression: number
 }
 
-export function calculateSkill(skillSpec: SkillSpec, creatureLevel: number) {
+export function calculateSkill(skillSpec: SkillSpec, creatureLevel: number): Skill {
     const { levelProgression, ...res } = skillSpec;
     const skillLevel = Math.floor(levelProgression * creatureLevel);
     const progress = (levelProgression * creatureLevel) - skillLevel;
