@@ -1,30 +1,28 @@
 export type SkillType = "armor-mastery" | "steal" | "escape";
 
-export type BaseSkill = {
-    type: SkillType;
-}
+export type BaseSkill<T extends { type: SkillType }> = T;
 
 export type ArmorMastery = {
     name: string;
     type: "armor-mastery";
     level: number;
-} & BaseSkill;
+};
 
 export type StealSkill =  {
     name: string;
     type: "steal";
     action: true;
     level: number;
-} & BaseSkill
+};
 
 export type EscapeSkill = {
     name: string;
     type: "escape";
     action: true;
     level: number;
-} & BaseSkill
+};
 
-export type Skill = (ArmorMastery | StealSkill | EscapeSkill) & {
+export type Skill = BaseSkill<(ArmorMastery | StealSkill | EscapeSkill)> & {
      progress: number // Progress to next level
  };
 

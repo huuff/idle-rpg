@@ -3,9 +3,9 @@ import { Item } from "@/items/item";
 import { variabilityRandom, chooseRandom } from "@/util/random";
 import { sum, isEmpty } from "lodash";
 import { Stats, StatType } from "@/creatures/stats";
-import { Steal, Attack, BattleAction, matchBattleAction, Escape } from "./battle-action";
+import { Steal, Attack, BattleAction, matchBattleAction, Escape, BaseAction } from "./battle-action";
 
-export type Execution = AttackExecution | StealExecution | EscapeExecution;
+export type Execution = BaseAction<AttackExecution | StealExecution | EscapeExecution>;
 
 export interface AttackExecution {
     type: "attack"

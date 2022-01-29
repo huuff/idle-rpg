@@ -1,11 +1,12 @@
 import { Stats } from "@/creatures/stats";
 
-// TODO: Force battle action and execution to use this
-export type ActionTypes = 
+export type ActionType = 
     "attack" 
     | "steal"
     | "escape"
     ; 
+
+export type BaseAction<T extends { type: ActionType}> = T;
 
 export interface Attack {
     type: "attack";
@@ -16,6 +17,7 @@ export interface Attack {
 }
 
 export interface Steal {
+
     type: "steal";
     chance: number; // Effective chance is `rarity + (chance * rarity)`
 }
@@ -25,7 +27,7 @@ export interface Escape {
     chance: number;
 }
 
-export type BattleAction = Attack | Steal | Escape;
+export type BattleAction = BaseAction<Attack | Steal | Escape>;
 
 export function matchBattleAction<T>(
     action: BattleAction, 
