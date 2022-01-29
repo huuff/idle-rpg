@@ -1,7 +1,6 @@
 # Tasks
 * I could test some stuff like inventory functions n shiet
 * Archer prepare and shoot
-* Health slider ui component for escape and retreat
 * Unlock escape settings at some level
 * ChooseCharacter modal take full width on smaller screensizes
 * Autosave & Autoload

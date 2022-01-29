@@ -15,18 +15,10 @@
           Autoplay
           <span v-if="isEngaged" class="has-text-weight-semibold">{{ objective }}</span>
         </label>
-        <div>
-          <p>Retreat at:</p>
-          <div class="is-flex flex-direction-row">
-            <input  v-model="retreatHealth"
-            type="range" 
-            min="0" max="1" 
-            step="0.01" 
-            class="mr-2"
-            />
-            <span>{{ Math.round(retreatHealth * 100) }}% Health</span>
-          </div>
-        </div>
+        <proportion-slider v-model:value="retreatHealth"
+          label="Retreat at"
+          end-label="Health"
+        />
       </div>
     </div>
   </div>
@@ -40,6 +32,7 @@ import { TravelOption } from "@/map/game-map";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faAngleUp, faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import ProportionSlider from "./ui/ProportionSlider.vue";
 
 library.add(faAngleUp, faAngleDown);
 

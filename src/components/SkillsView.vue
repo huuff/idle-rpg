@@ -14,20 +14,11 @@
             </div>
         </div>
         <progress class="progress is-info" :value="skill.progress" max="1" />
-        <div v-if="skill.type === 'escape'">
-            <p>Escape at:</p>
-            <div class="is-flex flex-direction-row">
-                <input
-                    v-model="escapeHealth"
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    class="mr-2"
-                />
-                <span>{{ Math.round(escapeHealth * 100) }}% Health</span>
-            </div>
-        </div>
+        <proportion-slider v-if="skill.type === 'escape'"
+            label="Escape at"
+            end-label="Health"
+            v-model:value="escapeHealth"
+        />
     </div>
 </template>
 
@@ -36,6 +27,7 @@ import { Creature } from '@/creatures/creature';
 import Skills from '@/skills/skill';
 import { useSettingsStore } from '@/settings-store';
 import { storeToRefs } from 'pinia';
+import ProportionSlider from './ui/ProportionSlider.vue';
 
 const props = defineProps<{
     creature: Creature;
