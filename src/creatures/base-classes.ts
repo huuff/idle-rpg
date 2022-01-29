@@ -69,6 +69,13 @@ const archer: JobClass = {
     strength: 0.2,
     agility: 0.2,
   },
+  skills: [
+    {
+      name: "Initiative",
+      type: "initiative",
+      levelProgression: "MAX",
+    }
+  ]
 };
 
 export const baseClasses: { [className: string]: JobClass} = {

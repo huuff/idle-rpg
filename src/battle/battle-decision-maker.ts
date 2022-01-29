@@ -43,7 +43,6 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
             .map(e => [e, e.damage] as [AttackExecution, number])
             .sort(([_1, damage1], [_2, damage2]) => damage1 - damage2)
             ;
-        console.log(`Possible outcomes: ${JSON.stringify(possibleOutcomes)}`);
 
         // Choose the one with the highest damage
         return possibleOutcomes[possibleOutcomes.length - 1][0];
