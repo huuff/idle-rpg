@@ -4,6 +4,8 @@ import { max } from "lodash";
 import { chooseRandom } from "@/util/random";
 import { makeAttackExecution, } from "./action-execution";
 import { cloneDeep } from "lodash";
+import { storeToRefs } from "pinia";
+import { useSettingsStore } from "@/settings-store";
 
 export type BattleDecisionMaker = (originator: Creature, rivals: Creature[]) => BattleAction;
 
@@ -14,7 +16,9 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
 ) => {
     let allActions = cloneDeep(originator.possibleActions);
 
-    if (originator.healthRatio < 0.05 && allActions.some(a => a.type === "escape")) {
+    const { escapeHealth } = storeToRefs(useSettingsStore());
+
+    if (originator.healthRatio < escapeHealth.value && allActions.some(a => a.type === "escape")) {
         // If possible and necessary, escape
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         return allActions.find(c => c.type === "escape")!;
