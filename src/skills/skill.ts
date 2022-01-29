@@ -34,24 +34,10 @@ export function matchSkill<T>(skill: Skill,
 }
 
 export const AMOR_MASTERY_MODIFIER = 0.1;
+export const STEAL_MODIFIER = 0.1;
+
 export function armorMasteryLoadBonus(skills: Skill[]): number {
     return (skills.find(s => s.type === "armor-mastery")?.level ?? 0) * AMOR_MASTERY_MODIFIER;
-}
-
-export function skillToBattleAction(skill: Skill & { action: true}) {
-    if (skill.type === "steal") {
-        return stealSkillToBattleAction(skill);
-    } else {
-        throw new Error(`Skill ${JSON.stringify(skill)} not handled in toBattleAction`)
-    }
-}
-
-export const STEAL_MODIFIER = 0.1;
-export function stealSkillToBattleAction(skill: StealSkill): Steal {
-    return {
-        type: "steal",
-        rarityModifier: skill.level * STEAL_MODIFIER,
-    }
 }
 
 export function describeSkill(skill: Skill): string {
@@ -77,6 +63,3 @@ export function calculateSkill(skillSpec: SkillSpec, creatureLevel: number): Ski
     };
 }
 
-export function isSkillWithAction(skill: Skill): skill is (Skill & { action: true }) {
-    return ("action" in skill) && skill.action;
-}

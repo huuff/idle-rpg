@@ -8,7 +8,8 @@ import inventory, {
 import equipment, { Equipment } from "@/items/equipment";
 import { BattleAction } from "@/battle/battle-action";
 import load, { Load } from "@/items/load";
-import { calculateSkill, isSkillWithAction, Skill, skillToBattleAction } from "@/skills/skill";
+import { calculateSkill, Skill, } from "@/skills/skill";
+import ActionSkills, { ActionSkill } from "@/skills/action-skill";
 
 export type CreatureInitialData = {
   species: Species;
@@ -93,8 +94,8 @@ export class CreatureImpl implements Creature {
     const equipmentActions = equipment.battleActions(this.equipment);
     const classActions = this.jobClass.battleActions ?? [];
     const skillActions = this.skills
-      .filter(isSkillWithAction)
-      .map(s => skillToBattleAction(s as (Skill & {action: true})));
+      .filter(ActionSkills.isActionSkill)
+      .map(s => ActionSkills.toBattleAction(s as ActionSkill));
     return equipmentActions.concat(classActions).concat(skillActions).concat(naturalActions);
   }
 
