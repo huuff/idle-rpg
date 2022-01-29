@@ -1,7 +1,7 @@
 import { basicEquipments } from "@/items/basic-equipments";
 import { JobClass } from "./job-class";
 
-const { woodenSword, ironKnife } = basicEquipments;
+const { woodenSword, ironKnife, woodenBow } = basicEquipments;
 
 const swordsman: JobClass = {
   name: "Swordsman",
@@ -69,6 +69,9 @@ const archer: JobClass = {
     strength: 0.2,
     agility: 0.2,
   },
+  baseEquipment: [
+    { ...woodenBow, isEquipped: true },
+  ],
   skills: [
     {
       name: "Initiative",

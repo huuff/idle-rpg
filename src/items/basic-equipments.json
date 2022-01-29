@@ -9,6 +9,7 @@
     "battleActions": [
       {
         "type": "attack",
+        "attackType": "melee",
         "baseDamage": 5,
         "statVariability": {
           "strength": 0.7
@@ -28,6 +29,7 @@
     "battleActions": [
       {
         "type": "attack",
+        "attackType": "melee",
         "baseDamage": 10,
         "statVariability": {
           "strength": 0.8
@@ -47,6 +49,7 @@
     "battleActions": [
       {
         "type": "attack",
+        "attackType": "melee",
         "baseDamage": 5,
         "statVariability": {
           "strength": 0.2
@@ -56,6 +59,7 @@
       },
       {
         "type": "attack",
+        "attackType": "melee",
         "baseDamage": 5,
         "statVariability": {
           "strength": 0.2
@@ -114,6 +118,7 @@
     "name": "Iron Gloves",
     "slot": "hands",
     "rarity": 0.94,
+    "weight": 10,
     "avgValue": 500,
     "stats": {
       "maxHealth": 12
@@ -123,10 +128,30 @@
     "type": "equipment",
     "name": "Iron Armor",
     "slot": "body",
+    "weight": 25,
     "rarity": 0.90,
     "avgValue": 2000,
     "stats": {
       "maxHealth": 80
     }
+  },
+  "woodenBow": {
+    "type": "equipment",
+    "name": "Wooden Bow",
+    "slot": "weapon",
+    "rarity": 0.92,
+    "avgValue": 500,
+    "battleActions": [
+      {
+        "type": "attack",
+        "attackType": "ranged",
+        "baseDamage": 22,
+        "statVariability": {
+          "strength": 0.001
+        },
+        "generalVariability": 0.15,
+        "description": "shoots"
+      }
+    ]
   }
 }

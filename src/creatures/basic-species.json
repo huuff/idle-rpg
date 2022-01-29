@@ -14,6 +14,7 @@
     "naturalActions": [
       {
         "type": "attack",
+        "attackType": "melee",
         "baseDamage": 2,
         "statVariability": {
           "strength": 0.8
@@ -48,6 +49,7 @@
     "naturalActions": [
       {
         "type": "attack",
+        "attackType": "melee",
         "baseDamage": 0,
         "statVariability": {
           "strength": 0.5

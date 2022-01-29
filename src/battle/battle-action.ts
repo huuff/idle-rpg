@@ -9,6 +9,7 @@ export type BaseAction<T extends { type: ActionType}> = T;
 
 export interface Attack {
     type: "attack";
+    attackType: "melee" | "ranged";
     baseDamage: number;
     statVariability: Partial<Stats>;
     generalVariability: number; // This is applied to determine the minimum and maximum possible damages
