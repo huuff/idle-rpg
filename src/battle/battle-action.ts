@@ -1,5 +1,5 @@
 import { Stats } from "@/creatures/stats";
-
+// TODO: Make bag-of-functions
 export type ActionType = 
     "attack" 
     | "steal"
@@ -25,6 +25,14 @@ export interface Steal {
 export interface Escape {
     type: "escape";
     chance: number;
+}
+
+export function isEscape(action: BattleAction): action is Escape {
+    return action.type === "escape";
+}
+
+export function isSteal(action: BattleAction): action is Steal {
+    return action.type === "steal";
 }
 
 export type BattleAction = BaseAction<Attack | Steal | Escape>;

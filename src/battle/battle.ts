@@ -3,7 +3,7 @@ import { useMainStore } from "@/store";
 import { Creature, } from "@/creatures/creature";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
-import { makeExecution} from "./action-execution";
+import { isEscapeExecution, makeExecution} from "./action-execution";
 import { execute } from "./execute-action";
 import { Tickable } from "@/ticking/async-ticker";
 import {Scene} from "@/scenes/scene";
@@ -57,19 +57,18 @@ export class Battle implements Tickable {
      ? aliveGoodGuys 
      : aliveBadGuys;
 
-    const action = defaultBattleDecisionMaker(attacker, rivals);
+    const execution = defaultBattleDecisionMaker(attacker, rivals);
 
-    const target = chooseRandom(rivals);
-    const execution = makeExecution(action, attacker, target);
     execute(execution, this.log);
 
-    if (execution.type === "escape" && execution.success) {
-      this.result = "escaped";
-    }
-
-    if (target.currentHealth <= 0) {
-      this.turns = this.turns.filter(a => a.isAlive);
-      this.log.messages.push(`${attacker.name} killed ${target.name}!`)
+    if (isEscapeExecution(execution)) {
+      if (execution.success)
+        this.result = "escaped";
+    } else {
+      if (execution.target.currentHealth <= 0) {
+        this.turns = this.turns.filter(a => a.isAlive);
+        this.log.messages.push(`${attacker.name} killed ${execution.target.name}!`)
+      }
     }
   }
   

@@ -122,10 +122,18 @@ export function makeEscapeExecution(escape: Escape): EscapeExecution {
     }
 }
 
-export function makeExecution(action: BattleAction, originator: Creature, target: Creature): Execution {
+export function isEscapeExecution(execution: Execution): execution is EscapeExecution {
+    return execution.type === "escape";
+}
+
+type NonEscape<T> = T extends Escape ? never : T;
+
+export function makeExecution(action: Escape): Execution
+export function makeExecution(action: NonEscape<BattleAction>, originator: Creature, target: Creature): Execution
+export function makeExecution(action: BattleAction, originator?: Creature, target?: Creature): Execution {
     return matchBattleAction<Execution>(action,
-            (attack) => makeAttackExecution(attack, originator, target),
-            (steal) => makeStealExecution(steal, originator, target),
+            (attack) => makeAttackExecution(attack, originator!, target!),
+            (steal) => makeStealExecution(steal, originator!, target!),
             (escape) => makeEscapeExecution(escape),
         )
 } 

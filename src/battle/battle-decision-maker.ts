@@ -1,15 +1,13 @@
 import { Creature } from "@/creatures/creature";
-import { BattleAction, Attack } from "./battle-action";
-import { max } from "lodash";
+import { BattleAction, Attack, isEscape, isSteal } from "./battle-action";
 import { chooseRandom } from "@/util/random";
-import { makeAttackExecution, } from "./action-execution";
+import { Execution, makeAttackExecution, makeEscapeExecution, makeStealExecution, AttackExecution } from "./action-execution";
 import { cloneDeep } from "lodash";
 import { storeToRefs } from "pinia";
 import { useSettingsStore } from "@/settings-store";
 
-export type BattleDecisionMaker = (originator: Creature, rivals: Creature[]) => BattleAction;
+export type BattleDecisionMaker = (originator: Creature, rivals: Creature[]) => Execution;
 
-// TODO: Return the actual execution
 export const defaultBattleDecisionMaker: BattleDecisionMaker = (
     originator: Creature,
     rivals: Creature[]
@@ -21,16 +19,20 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
     if (originator.healthRatio < escapeHealth.value && allActions.some(a => a.type === "escape")) {
         // If possible and necessary, escape
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return allActions.find(c => c.type === "escape")!;
+        return makeEscapeExecution(allActions.find(isEscape)!);
     } else {
         // Else, do not consider escaping
-        allActions = allActions.filter(a => a.type !== "escape");
+        allActions = allActions.filter(a => !isEscape(a));
     }
 
     if (hasUtilityAction(allActions) && originator.healthRatio > 0.5 && Math.random() < 0.2) {
         // XXX: this will break once steal is no longer the only utility action
         // Choose to use one utility action if it has one, once in 5 attacks
-        return chooseRandom(allActions.filter(a => a.type !== "attack"));
+        return makeStealExecution(
+            chooseRandom(allActions.filter(isSteal)),
+            originator,
+            chooseRandom(rivals)
+            );
     } else {
         const attackActions = allActions.filter(a => a.type === "attack") as Attack[];
 
@@ -38,13 +40,12 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
         const randomTarget = chooseRandom(rivals.filter(c => c.isAlive));
         const possibleOutcomes = attackActions
             .map(a => makeAttackExecution(a, originator, randomTarget))
-            .map(e => e.damage)
+            .map(e => [e, e.damage] as [AttackExecution, number])
+            .sort(([_1, damage1], [_2, damage2]) => damage2 - damage1)
             ;
 
         // Choose the one with the highest damage
-        const maxDamage = max(possibleOutcomes);
-        const maxDamageIndex = possibleOutcomes.findIndex(o => o === maxDamage);
-        return attackActions[maxDamageIndex];
+        return possibleOutcomes[possibleOutcomes.length - 1][0];
     }
 }
 
