@@ -45,10 +45,13 @@ function match<T>(skill: Skill,
 }
 
 export const AMOR_MASTERY_MODIFIER = 0.1;
-export const STEAL_MODIFIER = 0.1;
-
-function armorMasteryLoadBonus(skills: Skill[]): number {
+function loadBonus(skills: Skill[]): number {
     return (skills.find(s => s.type === "armor-mastery")?.level ?? 0) * AMOR_MASTERY_MODIFIER;
+}
+
+export const STEAL_MODIFIER = 0.1;
+function stealChance(steal: StealSkill): number {
+    return steal.level * STEAL_MODIFIER;
 }
 
 export const ESCAPE_CHANCE_MODIFIER = 0.1;
@@ -61,7 +64,7 @@ function escapeChance(escape: EscapeSkill): number {
 function describe(skill: Skill): string {
     return match(skill,
         (armorMastery) => `Load capacity +${(armorMastery.level * AMOR_MASTERY_MODIFIER) * 100}%`,
-        (steal) => `Steal chance +${(steal.level * STEAL_MODIFIER) * 100}%`,
+        (steal) => `Steal chance +${(stealChance(steal)) * 100}%`,
         (escape) => `Escape when under 5% health with ${(escapeChance(escape)) * 100}% chance`
     )
 }
@@ -85,7 +88,8 @@ function calculateFromLevel(skillSpec: SkillSpec, creatureLevel: number): Skill 
 export default {
     calculateFromLevel,
     describe,
-    armorMasteryLoadBonus,
+    loadBonus,
+    stealChance,
     escapeChance,
     match,
 }
