@@ -1,9 +1,9 @@
 # Tasks
 * I could test some stuff like inventory functions n shiet
-* A slider for retreat autoplay HP
 * A slider for escape HP
 * Archer prepare and shoot
 * ChooseCharacter modal take full width on smaller screensizes
+* Autosave & Autoload
 
 # Future
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies

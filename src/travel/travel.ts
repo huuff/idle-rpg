@@ -10,12 +10,14 @@ import { autoTravel } from "@/travel/autotraveller";
 import { makeTravelScene } from "@/scenes/travel-scene";
 import {DecisionTickable} from "@/ticking/decision-tickable";
 import { newEncounter } from "@/zones/stage";
+import { useSettingsStore } from "@/settings-store";
 
 export type TravelDecisionMaker = (status: TravellingStatus, player: Creature) => TravelAction;
 
 export class Travel implements Tickable {
   public readonly scene = makeTravelScene();
   private readonly travelStore: ReturnType<typeof useTravelStore>
+  private readonly settingsStore: ReturnType<typeof useSettingsStore>
   private readonly store: ReturnType<typeof useMainStore>
   private lastAction: TravelAction | undefined;
 
@@ -23,6 +25,7 @@ export class Travel implements Tickable {
     private decisionMaker: TravelDecisionMaker = autoTravel,
   ){
     this.travelStore = useTravelStore();
+    this.settingsStore = useSettingsStore();
     this.store = useMainStore();
     this.store.travelLog.clear();
   }
@@ -34,7 +37,7 @@ export class Travel implements Tickable {
     // AUTOPLAY
     const status = this.travelStore.mapStatus as TravellingStatus;
     if (status.through.isCheckpoint()
-        && this.store.autoplay === "disabled") {
+        && this.settingsStore.autoplay === "disabled") {
       return new DecisionTickable(5, (decision) => {
         if (decision.type === "retreat"){
           this.lastAction = decision;

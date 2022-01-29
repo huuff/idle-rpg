@@ -27,11 +27,11 @@ import { ref, computed, onMounted, Ref } from "vue";
 import { optionsFrom, TravelOption } from "@/map/game-map";
 import { storeToRefs } from "pinia";
 import { useTravelStore, } from "@/travel/travel-store";
-import { useMainStore } from "@/store";
 import { createShop, emptyShop } from "@/locations/shop";
 import {Settlement} from "@/map/settlements";
 import ShopView from "@/components/shops/ShopView.vue";
 import ButtonColumn from "@/components/ui/ButtonColumn.vue";
+import { useSettingsStore } from "@/settings-store";
 
 const props = defineProps<{
   location: Settlement;
@@ -39,7 +39,7 @@ const props = defineProps<{
 
 const travelStore = useTravelStore();
 const { map }= storeToRefs(travelStore);
-const { autoplay } = storeToRefs(useMainStore());
+const { autoplay } = storeToRefs(useSettingsStore());
 
 const possibleDestinations = computed(() => optionsFrom(map.value, props.location));
 

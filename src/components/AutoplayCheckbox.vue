@@ -8,10 +8,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
-import { useMainStore } from "@/store";
+import { useSettingsStore } from "@/settings-store";
 import { TravelOption } from "@/map/game-map";
 
-const { autoplay } = storeToRefs(useMainStore());
+const { autoplay } = storeToRefs(useSettingsStore());
 
 const checkbox = computed({
   get: () => autoplay.value !== "disabled",

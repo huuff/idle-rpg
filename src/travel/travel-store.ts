@@ -5,12 +5,12 @@ import { TravelAction, resolveNextStatus, matchTravelAction } from "./travel-act
 import { makeRest } from "@/tickables/rest";
 import { Travel } from "@/travel/travel";
 import { hasDestination } from "@/autoplay";
-import { useMainStore } from "@/store";
 import {useTickStore} from "@/ticking/tick-store";
 import {useSceneStore} from "@/scenes/scene-store";
 import basicSettlements from "@/map/basic-settlements.json";
 import { basicZones } from "@/zones/basic-zones";
 import { settlementToScene } from "@/map/settlements";
+import { useSettingsStore } from "@/settings-store";
 
 export type TravelStoreState = {
   mapStatus: MapStatus;
@@ -40,18 +40,18 @@ export const useTravelStore = defineStore("travel", {
   actions: {
     takeAction(action: TravelAction) {
         this.mapStatus = (resolveNextStatus(this.mapStatus, action));
-        const store = useMainStore();
         const sceneStore = useSceneStore();
         const tickStore = useTickStore();
+        const settingsStore = useSettingsStore();
         matchTravelAction<void>(
           action, 
           (arrive) => {  // eslint-disable-line @typescript-eslint/no-unused-vars
             const status = this.mapStatus as RestingStatus;
             tickStore.start(makeRest())
             // AUTOPLAY 
-            if (hasDestination(store.autoplay)
-                && status.at === store.autoplay.to) {
-                store.autoplay = "disabled";
+            if (hasDestination(settingsStore.autoplay)
+                && status.at === settingsStore.autoplay.to) {
+                settingsStore.autoplay = "disabled";
             }
           }, 
           (retreat) => {  // eslint-disable-line @typescript-eslint/no-unused-vars
