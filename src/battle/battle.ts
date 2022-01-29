@@ -12,8 +12,7 @@ import { gameOver } from "@/game-over";
 import { Spoils } from "@/tickables/spoils";
 import { defaultBattleDecisionMaker } from "./battle-decision-maker";
 import { isEmpty } from "lodash";
-import Skills from "@/skills/skill";
-import BattleAreas, { BattleArea } from "./battle-area";
+import { BattleArea } from "./battle-area";
 import BattleStatuses, { CreatureWithStatus } from "./battle-status";
 
 function allDead(creatures: Creature[]) {
