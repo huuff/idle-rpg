@@ -4,6 +4,7 @@
     type="button" 
     class="button is-primary"
     @click="save(); saveDataPresent = true"
+    :disabled="mapStatus.type !== 'resting'"
   >Save</button>
   <button
     type="button"
@@ -23,8 +24,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { save, load, saveDataExists, deleteSave } from "@/save-load/save-load";
+import { useTravelStore } from "@/travel/travel-store";
+import { storeToRefs } from "pinia";
 import ButtonColumn from "@/components/ui/ButtonColumn.vue";
 
 const saveDataPresent = ref(saveDataExists());
+
+const { mapStatus } = storeToRefs(useTravelStore());
 
 </script>
