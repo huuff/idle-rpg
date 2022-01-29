@@ -8,7 +8,7 @@
             <div class="level-item">
                 <div class="content">
                     <p class="title has-text-dark mb-4"> {{ skill.name }}</p>
-                    <p class="subtitle has-text-dark"> {{ describeSkill(skill) }} </p>
+                    <p class="subtitle has-text-dark"> {{ Skills.describe(skill) }} </p>
                 </div>
             </div>
         </div>
@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { Creature } from '@/creatures/creature';
-import { describeSkill } from '@/skills/skill';
+import Skills from '@/skills/skill';
 
 const props = defineProps<{
     creature: Creature;

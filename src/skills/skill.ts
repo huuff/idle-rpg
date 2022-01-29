@@ -1,5 +1,3 @@
-import { Steal } from "@/battle/battle-action";
-
 export type SkillType = "armor-mastery" | "steal";
 
 
@@ -20,7 +18,7 @@ export type Skill = (ArmorMastery | StealSkill) & {
      progress: number // Progress to next level
  };
 
-export function matchSkill<T>(skill: Skill,
+function match<T>(skill: Skill,
     onArmorMastery: (armorMastery: ArmorMastery) => T,
     onSteal: (steal: StealSkill) => T,
 ): T {
@@ -36,12 +34,12 @@ export function matchSkill<T>(skill: Skill,
 export const AMOR_MASTERY_MODIFIER = 0.1;
 export const STEAL_MODIFIER = 0.1;
 
-export function armorMasteryLoadBonus(skills: Skill[]): number {
+function armorMasteryLoadBonus(skills: Skill[]): number {
     return (skills.find(s => s.type === "armor-mastery")?.level ?? 0) * AMOR_MASTERY_MODIFIER;
 }
 
-export function describeSkill(skill: Skill): string {
-    return matchSkill(skill,
+function describe(skill: Skill): string {
+    return match(skill,
         (armorMastery) => `Load capacity +${(skill.level * AMOR_MASTERY_MODIFIER) * 100}%`,
         (steal) => `Steal chance +${(skill.level * STEAL_MODIFIER) * 100}%`,
     )
@@ -52,7 +50,7 @@ export type SkillSpec = UnionOmit<Skill, "level" | "progress"> & {
     levelProgression: number
 }
 
-export function calculateSkill(skillSpec: SkillSpec, creatureLevel: number): Skill {
+function calculateFromLevel(skillSpec: SkillSpec, creatureLevel: number): Skill {
     const { levelProgression, ...res } = skillSpec;
     const skillLevel = Math.floor(levelProgression * creatureLevel);
     const progress = (levelProgression * creatureLevel) - skillLevel;
@@ -61,5 +59,12 @@ export function calculateSkill(skillSpec: SkillSpec, creatureLevel: number): Ski
         level: skillLevel,
         progress
     };
+}
+
+export default {
+    calculateFromLevel,
+    describe,
+    armorMasteryLoadBonus,
+    match,
 }
 

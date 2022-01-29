@@ -8,7 +8,7 @@ import inventory, {
 import equipment, { Equipment } from "@/items/equipment";
 import { BattleAction } from "@/battle/battle-action";
 import load, { Load } from "@/items/load";
-import { calculateSkill, Skill, } from "@/skills/skill";
+import Skills, { Skill, } from "@/skills/skill";
 import ActionSkills, { ActionSkill } from "@/skills/action-skill";
 
 export type CreatureInitialData = {
@@ -100,7 +100,7 @@ export class CreatureImpl implements Creature {
   }
 
   public get skills(): Skill[] {
-    return this.jobClass.skills?.map(s => calculateSkill(s, this.level)) ?? []
+    return this.jobClass.skills?.map(s => Skills.calculateFromLevel(s, this.level)) ?? []
   }
 
   public get load(): Load {
