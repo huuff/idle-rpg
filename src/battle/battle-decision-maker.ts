@@ -1,5 +1,5 @@
 import { Creature } from "@/creatures/creature";
-import { BattleAction, Attack, isEscape, isSteal } from "./battle-action";
+import BattleActions, { BattleAction, Attack } from "./battle-action";
 import { chooseRandom } from "@/util/random";
 import { Execution, makeAttackExecution, makeEscapeExecution, makeStealExecution, AttackExecution } from "./action-execution";
 import { cloneDeep } from "lodash";
@@ -19,17 +19,17 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
     if (originator.healthRatio < escapeHealth.value && allActions.some(a => a.type === "escape")) {
         // If possible and necessary, escape
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return makeEscapeExecution(allActions.find(isEscape)!);
+        return makeEscapeExecution(allActions.find(BattleActions.isEscape)!);
     } else {
         // Else, do not consider escaping
-        allActions = allActions.filter(a => !isEscape(a));
+        allActions = allActions.filter(a => !BattleActions.isEscape(a));
     }
 
     if (hasUtilityAction(allActions) && originator.healthRatio > 0.5 && Math.random() < 0.2) {
         // XXX: this will break once steal is no longer the only utility action
         // Choose to use one utility action if it has one, once in 5 attacks
         return makeStealExecution(
-            chooseRandom(allActions.filter(isSteal)),
+            chooseRandom(allActions.filter(BattleActions.isSteal)),
             originator,
             chooseRandom(rivals)
             );

@@ -1,9 +1,8 @@
 import { reactive } from "vue";
 import { useMainStore } from "@/store";
 import { Creature, } from "@/creatures/creature";
-import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
-import { isEscapeExecution, makeExecution} from "./action-execution";
+import { isEscapeExecution} from "./action-execution";
 import { execute } from "./execute-action";
 import { Tickable } from "@/ticking/async-ticker";
 import {Scene} from "@/scenes/scene";

@@ -3,7 +3,7 @@ import { Item } from "@/items/item";
 import { variabilityRandom, chooseRandom } from "@/util/random";
 import { sum, isEmpty } from "lodash";
 import { Stats, StatType } from "@/creatures/stats";
-import { Steal, Attack, BattleAction, matchBattleAction, Escape, BaseAction } from "./battle-action";
+import BattleActions, { Steal, Attack, BattleAction, Escape, BaseAction } from "./battle-action";
 
 export type Execution = BaseAction<AttackExecution | StealExecution | EscapeExecution>;
 
@@ -131,9 +131,9 @@ type NonEscape<T> = T extends Escape ? never : T;
 export function makeExecution(action: Escape): Execution
 export function makeExecution(action: NonEscape<BattleAction>, originator: Creature, target: Creature): Execution
 export function makeExecution(action: BattleAction, originator?: Creature, target?: Creature): Execution {
-    return matchBattleAction<Execution>(action,
-            (attack) => makeAttackExecution(attack, originator!, target!),
-            (steal) => makeStealExecution(steal, originator!, target!),
+    return BattleActions.match<Execution>(action,
+            (attack) => makeAttackExecution(attack, originator!, target!), // eslint-disable-line @typescript-eslint/no-non-null-assertion
+            (steal) => makeStealExecution(steal, originator!, target!), // eslint-disable-line @typescript-eslint/no-non-null-assertion
             (escape) => makeEscapeExecution(escape),
         )
 } 

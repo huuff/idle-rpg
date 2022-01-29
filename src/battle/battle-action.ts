@@ -1,5 +1,4 @@
 import { Stats } from "@/creatures/stats";
-// TODO: Make bag-of-functions
 export type ActionType = 
     "attack" 
     | "steal"
@@ -27,17 +26,17 @@ export interface Escape {
     chance: number;
 }
 
-export function isEscape(action: BattleAction): action is Escape {
+function isEscape(action: BattleAction): action is Escape {
     return action.type === "escape";
 }
 
-export function isSteal(action: BattleAction): action is Steal {
+function isSteal(action: BattleAction): action is Steal {
     return action.type === "steal";
 }
 
 export type BattleAction = BaseAction<Attack | Steal | Escape>;
 
-export function matchBattleAction<T>(
+function match<T>(
     action: BattleAction, 
     onAttack: (attack: Attack) => T,
     onSteal: (steal: Steal) => T,
@@ -54,3 +53,8 @@ export function matchBattleAction<T>(
     }
 }
 
+export default {
+    match,
+    isEscape,
+    isSteal
+}
