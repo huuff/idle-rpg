@@ -1,13 +1,11 @@
 import { Creature } from "@/creatures/creature";
 import { Item } from "@/items/item";
-import inventory, { singleItem} from "@/items/inventory";
 import { variabilityRandom, chooseRandom } from "@/util/random";
 import { sum, isEmpty } from "lodash";
 import { Stats, StatType } from "@/creatures/stats";
-import { Steal, Attack, BattleAction, matchBattleAction } from "./battle-action";
-import { Log } from "@/log";
+import { Steal, Attack, BattleAction, matchBattleAction, Escape } from "./battle-action";
 
-export type Execution = AttackExecution | StealExecution;
+export type Execution = AttackExecution | StealExecution | EscapeExecution;
 
 export interface AttackExecution {
     type: "attack"
@@ -23,6 +21,11 @@ export interface StealExecution {
     target: Creature;
     item?: Item;
     description: string;
+}
+
+export interface EscapeExecution {
+    type: "escape";
+    success: boolean;
 }
 
 export function calculateDamage(
@@ -47,11 +50,14 @@ export function matchExecution<T>(
     execution: Execution, 
     onAttack: (attack: AttackExecution) => T,
     onSteal: (steal: StealExecution) => T,
+    onEscape: (escape: EscapeExecution) => T,
 ) {
     if (execution.type === "attack") {
         return onAttack(execution);
     } else if (execution.type === "steal") {
         return onSteal(execution);
+    } else if (execution.type === "escape") {
+        return onEscape(execution);
     } else {
         throw new Error(`Battle action ${JSON.stringify(execution)} not handled`);
     }
@@ -108,11 +114,17 @@ export function makeStealExecution(
     }
 }
 
+export function makeEscapeExecution(escape: Escape): EscapeExecution {
+    return {
+        type: "escape",
+        success: Math.random() < escape.chance,
+    }
+}
+
 export function makeExecution(action: BattleAction, originator: Creature, target: Creature): Execution {
     return matchBattleAction<Execution>(action,
             (attack) => makeAttackExecution(attack, originator, target),
             (steal) => makeStealExecution(steal, originator, target),
-            (escape) => {throw new Error("Can't execute an escape! (Must be handled before execution)")},
+            (escape) => makeEscapeExecution(escape),
         )
 } 
-

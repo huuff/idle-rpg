@@ -7,13 +7,14 @@ import { cloneDeep } from "lodash";
 
 export type BattleDecisionMaker = (originator: Creature, rivals: Creature[]) => BattleAction;
 
+// TODO: Return the actual execution
 export const defaultBattleDecisionMaker: BattleDecisionMaker = (
     originator: Creature,
     rivals: Creature[]
 ) => {
     let allActions = cloneDeep(originator.possibleActions);
 
-    if (originator.healthRatio < 0.15 && allActions.some(a => a.type === "escape")) {
+    if (originator.healthRatio < 0.05 && allActions.some(a => a.type === "escape")) {
         // If possible and necessary, escape
         return allActions.find(c => c.type === "escape")!;
     } else {

@@ -1,31 +1,44 @@
-export type SkillType = "armor-mastery" | "steal";
+export type SkillType = "armor-mastery" | "steal" | "escape";
 
+export type BaseSkill = {
+    type: SkillType;
+}
 
-export interface ArmorMastery {
+export type ArmorMastery = {
     name: string;
     type: "armor-mastery";
     level: number;
-}
+} & BaseSkill;
 
-export interface StealSkill {
+export type StealSkill =  {
     name: string;
     type: "steal";
     action: true;
     level: number;
-}
+} & BaseSkill
 
-export type Skill = (ArmorMastery | StealSkill) & {
+export type EscapeSkill = {
+    name: string;
+    type: "escape";
+    action: true;
+    level: number;
+} & BaseSkill
+
+export type Skill = (ArmorMastery | StealSkill | EscapeSkill) & {
      progress: number // Progress to next level
  };
 
 function match<T>(skill: Skill,
     onArmorMastery: (armorMastery: ArmorMastery) => T,
     onSteal: (steal: StealSkill) => T,
+    onEscape: (escape: EscapeSkill) => T,
 ): T {
     if (skill.type === "armor-mastery") {
         return onArmorMastery(skill);
     } else if (skill.type === "steal") {
         return onSteal(skill);
+    } else if (skill.type === "escape") {
+        return onEscape(skill);
     } else {
         throw new Error(`Skill type ${JSON.stringify(skill)} not handled`);
     }
@@ -38,10 +51,18 @@ function armorMasteryLoadBonus(skills: Skill[]): number {
     return (skills.find(s => s.type === "armor-mastery")?.level ?? 0) * AMOR_MASTERY_MODIFIER;
 }
 
+export const ESCAPE_CHANCE_MODIFIER = 0.1;
+export const ESCAPE_MIN_CHANCE = 0.5;
+function escapeChance(escape: EscapeSkill): number {
+    return ESCAPE_MIN_CHANCE + (escape.level * ESCAPE_CHANCE_MODIFIER);
+}
+
+
 function describe(skill: Skill): string {
     return match(skill,
         (armorMastery) => `Load capacity +${(skill.level * AMOR_MASTERY_MODIFIER) * 100}%`,
         (steal) => `Steal chance +${(skill.level * STEAL_MODIFIER) * 100}%`,
+        (escape) => `Escape when under 5% health with ${(escapeChance(escape)) * 100}% chance`
     )
 }
 
@@ -65,6 +86,7 @@ export default {
     calculateFromLevel,
     describe,
     armorMasteryLoadBonus,
+    escapeChance,
     match,
 }
 

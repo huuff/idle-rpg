@@ -58,14 +58,13 @@ export class Battle implements Tickable {
 
     const action = defaultBattleDecisionMaker(attacker, rivals);
 
-    if (action.type === "escape") {
-      this.result = "escaped";
-      return;
-    }
-
     const target = chooseRandom(rivals);
     const execution = makeExecution(action, attacker, target);
     execute(execution, this.log);
+
+    if (execution.type === "escape" && execution.success) {
+      this.result = "escaped";
+    }
 
     if (target.currentHealth <= 0) {
       this.turns = this.turns.filter(a => a.isAlive);
@@ -85,10 +84,6 @@ export class Battle implements Tickable {
       this.result = "won";
       this.log.messages.push("You won!");
       return new Spoils(this.goodGuys, this.badGuys, this.log);
-    } else if (this.result === "escaped") {
-      this.log.messages.push("You escape the battle");
-    } else {
-      throw new Error("Called Battle's `endTick` but no end condition is reached!");
     }
   }
 

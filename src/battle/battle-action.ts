@@ -17,11 +17,13 @@ export interface Attack {
 
 export interface Steal {
     type: "steal";
+    // TODO: Rename to chance?
     rarityModifier: number; // Effective chance is `rarity + (rarityModifier * rarity)`
 }
 
 export interface Escape {
     type: "escape";
+    chance: number;
 }
 
 export type BattleAction = Attack | Steal | Escape;
