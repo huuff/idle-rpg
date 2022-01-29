@@ -2,7 +2,6 @@
 * I could test some stuff like inventory functions n shiet
 * Archer prepare and shoot
 * Unlock escape settings at some level
-* ChooseCharacter modal take full width on smaller screensizes
 * Autosave & Autoload
 
 # Future
