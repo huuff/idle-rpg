@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
 import { ref, Ref, computed } from "vue";
-import { Item, EquipmentItem } from "@/items/item";
+import { Item } from "@/items/item";
 import { InventoryItem } from "@/items/inventory";
 import { Inventory } from "@/items/inventory";
 import { capitalize } from "lodash";

@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import inventory, { InventoryItem } from "@/items/inventory";
+import inventory from "@/items/inventory";
 import { Item } from "@/items/item";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";

@@ -69,6 +69,7 @@ function describe(skill: Skill): string {
     )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UnionOmit<T, K extends keyof any> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
 export type SkillSpec = UnionOmit<Skill, "level" | "progress"> & {
     levelProgression: number

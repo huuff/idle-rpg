@@ -1,7 +1,7 @@
 import { Stats, zeroStats, areZeroStats } from "./stats"
 import { EquipmentItem } from "@/items/item";
 import { BattleAction } from "@/battle/battle-action";
-import { Skill, SkillSpec } from "@/skills/skill";
+import { SkillSpec } from "@/skills/skill";
 
 export interface JobClass {
   name: string;

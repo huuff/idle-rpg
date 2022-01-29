@@ -39,6 +39,7 @@ export function calculateDamage(
         .filter(([_, contrib]) => !!contrib)
         .map(([statName, contrib]) => {
             // Latest installment of "filter won't narrow my fucking types"
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             return variabilityRandom((stats[statName as StatType] ?? 0) * contrib!, generalVariability)
         })
     );

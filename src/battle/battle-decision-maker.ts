@@ -16,6 +16,7 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
 
     if (originator.healthRatio < 0.05 && allActions.some(a => a.type === "escape")) {
         // If possible and necessary, escape
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         return allActions.find(c => c.type === "escape")!;
     } else {
         // Else, do not consider escaping

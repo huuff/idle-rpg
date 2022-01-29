@@ -1,5 +1,4 @@
 import { Zone } from "@/zones/zone";
-import { MapLocation, } from "./game-map";
 import { Settlement } from "./settlements";
 
 export type MapStatusType = "resting" | "travelling";

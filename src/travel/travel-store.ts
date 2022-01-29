@@ -45,7 +45,7 @@ export const useTravelStore = defineStore("travel", {
         const tickStore = useTickStore();
         matchTravelAction<void>(
           action, 
-          (arrive) => {
+          (arrive) => {  // eslint-disable-line @typescript-eslint/no-unused-vars
             const status = this.mapStatus as RestingStatus;
             tickStore.start(makeRest())
             // AUTOPLAY 
@@ -54,13 +54,13 @@ export const useTravelStore = defineStore("travel", {
                 store.autoplay = "disabled";
             }
           }, 
-          (retreat) => {
+          (retreat) => {  // eslint-disable-line @typescript-eslint/no-unused-vars
             const status = this.mapStatus as RestingStatus;
             tickStore.start(makeRest());
             sceneStore.setScene(settlementToScene(status.at));
           },
-          (cont) => {}, //eslint-disable-line @typescript-eslint/no-empty-function
-          (depart) => {
+          (cont) => {}, //eslint-disable-line
+          (depart) => { // eslint-disable-line @typescript-eslint/no-unused-vars
             tickStore.stop();
             tickStore.start(new Travel());
           }

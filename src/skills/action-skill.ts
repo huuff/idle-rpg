@@ -1,4 +1,4 @@
-import Skills, { EscapeSkill, Skill, StealSkill, STEAL_MODIFIER } from "./skill";
+import Skills, { EscapeSkill, Skill, StealSkill } from "./skill";
 import { Escape, Steal } from "@/battle/battle-action";
 
 export type ActionSkill = Skill & { action: true };

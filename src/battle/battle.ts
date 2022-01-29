@@ -51,6 +51,7 @@ export class Battle implements Tickable {
     if (isEmpty(this.turns))
       this.turns = calculateTurns([ ...aliveGoodGuys, ...aliveBadGuys]);
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const attacker = this.turns.pop()!;
     const rivals = this.badGuys.includes(attacker)
      ? aliveGoodGuys 

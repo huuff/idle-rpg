@@ -1,6 +1,5 @@
-import { EquipmentItem, isEquipmentSlot } from "./item";
+import { EquipmentItem } from "./item";
 import basicEquipmentsJson from "./basic-equipments.json";
-import { mapValues } from "lodash";
 
 type EquipmentName = keyof typeof basicEquipmentsJson;
 

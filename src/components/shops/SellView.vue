@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import inventoryOps, { InventoryItem } from "@/items/inventory";
+import inventoryOps from "@/items/inventory";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
 import InventoryView from "../inventory/InventoryView.vue";

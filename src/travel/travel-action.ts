@@ -1,5 +1,4 @@
 
-import { MapLocation } from "@/map/game-map";
 import { Zone } from "@/zones/zone";
 import { MapStatus, matchMapStatus } from "@/map/map-status";
 import { Settlement } from "@/map/settlements";

@@ -1,7 +1,7 @@
 import { h, VNode } from "vue";
 import { useTravelStore } from "@/travel/travel-store";
 import { defineStore } from "pinia";
-import { Settlement, settlementToScene } from "@/map/settlements";
+import { settlementToScene } from "@/map/settlements";
 import { Scene } from "./scene";
 
 type SceneState = {
