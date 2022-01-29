@@ -60,8 +60,8 @@ function escapeChance(escape: EscapeSkill): number {
 
 function describe(skill: Skill): string {
     return match(skill,
-        (armorMastery) => `Load capacity +${(skill.level * AMOR_MASTERY_MODIFIER) * 100}%`,
-        (steal) => `Steal chance +${(skill.level * STEAL_MODIFIER) * 100}%`,
+        (armorMastery) => `Load capacity +${(armorMastery.level * AMOR_MASTERY_MODIFIER) * 100}%`,
+        (steal) => `Steal chance +${(steal.level * STEAL_MODIFIER) * 100}%`,
         (escape) => `Escape when under 5% health with ${(escapeChance(escape)) * 100}% chance`
     )
 }

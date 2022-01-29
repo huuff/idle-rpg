@@ -3,8 +3,8 @@
 * A slider for retreat autoplay HP
 * A slider for escape HP
 * Archer prepare and shoot
-* Fix an issue with thief's escape not cancelling ticker
 * ChooseCharacter modal take full width on smaller screensizes
+* Make it so you can only save when resting
 
 # Future
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies
