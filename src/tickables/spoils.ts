@@ -3,7 +3,7 @@ import { Creature } from "@/creatures/creature";
 import { Log } from "@/log";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
-import inventory, { Inventory, singleInventoryItem } from "@/items/inventory";
+import inventory, { Inventory, singleItem } from "@/items/inventory";
 import { calculateChallenge } from "@/creatures/stats";
 
 export class Spoils implements Tickable {
@@ -59,7 +59,7 @@ export class Spoils implements Tickable {
       for (let i = 0; i < item.amount; i++) {
         const randomValue = Math.random();
         if (randomValue < item.rarity) {
-          resultInventory = inventory.plus(resultInventory, singleInventoryItem(item));
+          resultInventory = inventory.plus(resultInventory, singleItem(item));
         }
       }
     }

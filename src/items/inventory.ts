@@ -12,7 +12,7 @@ export function isInventoryItem(item: Item): item is InventoryItem {
 
 export type Inventory = { [itemName: string]: InventoryItem };
 
-export function singleInventoryItem(item: Item): InventoryItem {
+export function singleItem(item: Item): InventoryItem {
   return { ...item, amount: 1 };
 }
 
@@ -24,7 +24,7 @@ export function plus(inventory: Inventory, items: Item | InventoryItem | Invento
     ? items
     : isInventoryItem(items)
       ? [items]
-      : [singleInventoryItem(items)]
+      : [singleItem(items)]
     ;
   
   return produce(inventory, draft => {
@@ -63,4 +63,5 @@ export default {
   plus,
   merge,
   minus,
+  singleItem,
 }

@@ -1,6 +1,6 @@
 import { Creature } from "@/creatures/creature";
 import { Item } from "@/items/item";
-import inventory, { singleInventoryItem} from "@/items/inventory";
+import inventory, { singleItem} from "@/items/inventory";
 import { variabilityRandom, chooseRandom } from "@/util/random";
 import { sum, isEmpty } from "lodash";
 import { Stats, StatType } from "@/creatures/stats";
@@ -116,25 +116,3 @@ export function makeExecution(action: BattleAction, originator: Creature, target
         )
 } 
 
-export function executeAttack(attack: AttackExecution, logger: Log): void {
-    attack.target.currentHealth -= attack.damage;
-    logger.messages.push(attack.description);
-}
-
-export function executeSteal(steal: StealExecution, logger: Log): void {
-    if (steal.item) {
-        steal.originator.inventory = inventory.plus(
-            steal.originator.inventory, 
-            singleInventoryItem(steal.item),
-        )
-    }
-    
-    logger.messages.push(steal.description);
-}
-
-export function execute(execution: Execution, logger: Log): void {
-    return matchExecution(execution,
-            (attack) => executeAttack(attack, logger),
-            (steal) => executeSteal(steal, logger)
-        );
-}

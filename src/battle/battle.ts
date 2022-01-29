@@ -3,7 +3,8 @@ import { useMainStore } from "@/store";
 import { Creature, } from "@/creatures/creature";
 import { chooseRandom } from "@/util/random";
 import { calculateTurns } from "./turns";
-import { makeExecution, execute } from "./action-execution";
+import { makeExecution} from "./action-execution";
+import { execute } from "./execute-action";
 import { Tickable } from "@/ticking/async-ticker";
 import {Scene} from "@/scenes/scene";
 import {makeBattleScene} from "@/scenes/battle-scene";
@@ -11,6 +12,7 @@ import { renameCreatures } from "@/creatures/rename-creatures";
 import { gameOver } from "@/game-over";
 import { Spoils } from "@/tickables/spoils";
 import { defaultBattleDecisionMaker } from "./battle-decision-maker";
+import { isEmpty } from "lodash";
 
 function allDead(creatures: Creature[]) {
   return creatures.every(c => !c.isAlive);
@@ -46,7 +48,7 @@ export class Battle implements Tickable {
     const aliveGoodGuys = this.goodGuys.filter(a => a.isAlive);
     const aliveBadGuys = this.badGuys.filter(a => a.isAlive);
 
-    if (this.turns.length === 0)
+    if (isEmpty(this.turns))
       this.turns = calculateTurns([ ...aliveGoodGuys, ...aliveBadGuys]);
 
     const attacker = this.turns.pop()!;

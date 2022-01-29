@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import inventoryOps, { InventoryItem, singleInventoryItem } from "@/items/inventory";
+import inventory, { InventoryItem } from "@/items/inventory";
 import { Item } from "@/items/item";
 import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
@@ -26,7 +26,7 @@ function hasMoneyForItem(item: Item) {
 function buy(itemName: string) {
   const item = props.shop.inventory[itemName];
   if (hasMoneyForItem(item)) {
-    player.value.inventory = inventoryOps.plus(player.value.inventory, singleInventoryItem(item))
+    player.value.inventory = inventory.plus(player.value.inventory, inventory.singleItem(item))
 
     sellItem(props.shop, item.name);
     money.value -= item.avgValue;

@@ -3,7 +3,7 @@ import { JobClass, noClass, isNoClass } from "./job-class";
 import { Species, noSpecies, isNoSpecies } from "./species";
 import inventory, { 
   Inventory,
-  singleInventoryItem, 
+  singleItem, 
 } from "@/items/inventory";
 import equipment, {Equipment} from "@/items/equipment";
 import { BattleAction } from "@/battle/battle-action";
@@ -65,7 +65,7 @@ export class CreatureImpl implements Creature {
     // so we add those of its species and class
     if (!items) {
       this.inventory = inventory.plus(this.inventory, species.naturalItems ?? []);
-      this.inventory = inventory.plus(this.inventory, this.jobClass.baseEquipment?.map(singleInventoryItem) ?? [])
+      this.inventory = inventory.plus(this.inventory, this.jobClass.baseEquipment?.map(singleItem) ?? [])
     }
     this.currentHealth = this.stats.maxHealth;
   }
