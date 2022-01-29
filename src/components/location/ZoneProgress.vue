@@ -29,6 +29,7 @@
 import { computed, } from "vue";
 import { range } from "@/util/range";
 import {TravellingStatus} from "@/map/map-status";
+import Zones from "@/zones/zone";
 
 const props = defineProps<{
   status: TravellingStatus;
@@ -39,8 +40,8 @@ const to = computed(() => props.status.to);
 const from = computed(() => props.status.from);
 
 const currentStage = computed(() => {
-  if (!zone.value.isComplete()) 
-    return zone.value.currentStage().index
+  if (!Zones.isComplete(zone.value, props.status.steps)) 
+    return Zones.currentStage(zone.value, props.status.steps).index;
   else
     return undefined;
 });

@@ -1,6 +1,19 @@
-export type SkillType = "armor-mastery" | "steal" | "escape";
+import { Creature } from "@/creatures/creature";
 
-export type BaseSkill<T extends { type: SkillType }> = T;
+export type SkillType =
+ "armor-mastery" 
+ | "steal" 
+ | "escape"
+ | "initiative"
+ ;
+
+export type BaseSkill<T extends { 
+    type: SkillType;
+    level: number;
+} | {
+    type: SkillType;
+    level: "MAX";
+}> = T;
 
 export type ArmorMastery = {
     name: string;
@@ -22,14 +35,26 @@ export type EscapeSkill = {
     level: number;
 };
 
-export type Skill = BaseSkill<(ArmorMastery | StealSkill | EscapeSkill)> & {
-     progress: number // Progress to next level
+export type InitiativeSkill = {
+    name: string;
+    level: "MAX";
+    type: "initiative";
+}
+
+export type Skill = BaseSkill<
+     ArmorMastery 
+     | StealSkill
+     | EscapeSkill
+     | InitiativeSkill
+     > & {
+     progress?: number // Progress to next level
  };
 
 function match<T>(skill: Skill,
     onArmorMastery: (armorMastery: ArmorMastery) => T,
     onSteal: (steal: StealSkill) => T,
     onEscape: (escape: EscapeSkill) => T,
+    onInitiative: (rearguard: InitiativeSkill) => T,
 ): T {
     if (skill.type === "armor-mastery") {
         return onArmorMastery(skill);
@@ -37,14 +62,20 @@ function match<T>(skill: Skill,
         return onSteal(skill);
     } else if (skill.type === "escape") {
         return onEscape(skill);
+    } else if (skill.type === "initiative") {
+        return onInitiative(skill);
     } else {
         throw new Error(`Skill type ${JSON.stringify(skill)} not handled`);
     }
 }
 
+function isArmorMastery(skill: Skill): skill is ArmorMastery {
+    return skill.type === "armor-mastery";
+}
+
 export const AMOR_MASTERY_MODIFIER = 0.1;
 function loadBonus(skills: Skill[]): number {
-    return (skills.find(s => s.type === "armor-mastery")?.level ?? 0) * AMOR_MASTERY_MODIFIER;
+    return (skills.find(isArmorMastery)?.level ?? 0) * AMOR_MASTERY_MODIFIER;
 }
 
 export const STEAL_MODIFIER = 0.1;
@@ -63,25 +94,36 @@ function describe(skill: Skill): string {
     return match(skill,
         (armorMastery) => `Load capacity +${(armorMastery.level * AMOR_MASTERY_MODIFIER) * 100}%`,
         (steal) => `Steal chance +${(stealChance(steal)) * 100}%`,
-        (escape) => `Escape when under 5% health with ${(escapeChance(escape)) * 100}% chance`
+        (escape) => `Escape when under 5% health with ${(escapeChance(escape)) * 100}% chance`,
+        (initiative) => `Starts battles at the rearguard`,
     )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type UnionOmit<T, K extends keyof any> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
-export type SkillSpec = UnionOmit<Skill, "level" | "progress"> & {
-    levelProgression: number
+type DistributedOmit<T, K extends keyof any> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
+export type SkillSpec = DistributedOmit<Skill, "level" | "progress"> & {
+    levelProgression: number | "MAX";
 }
 
 function calculateFromLevel(skillSpec: SkillSpec, creatureLevel: number): Skill {
     const { levelProgression, ...res } = skillSpec;
-    const skillLevel = Math.floor(levelProgression * creatureLevel);
-    const progress = (levelProgression * creatureLevel) - skillLevel;
+    const skillLevel = levelProgression !== "MAX" 
+        ? Math.floor(levelProgression * creatureLevel)
+        : "MAX"
+        ;
+    const progress = (levelProgression !== "MAX" && skillLevel !== "MAX")
+    ? (levelProgression * creatureLevel) - skillLevel
+    : undefined
+    ;
     return {
         ...res,
         level: skillLevel,
         progress
-    };
+    } as Skill; // TODO it's hard
+}
+
+function hasInitiative(creature: Creature): boolean {
+    return !!creature.skills.find(s => s.type === "initiative");
 }
 
 export default {
@@ -91,5 +133,5 @@ export default {
     stealChance,
     escapeChance,
     match,
+    hasInitiative,
 }
-

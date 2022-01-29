@@ -1,4 +1,4 @@
-import { createZone, Zone } from "./zone";
+import { Zone } from "./zone";
 import basicZonesJson from "./basic-zones.json";
 import {EnemySpecification} from "./enemy-distribution";
 import { basicSpecies, isBasicSpeciesName } from "@/creatures/basic-species";
@@ -45,10 +45,10 @@ function convertJsonStage(json: JsonStage): Stage {
 function convertJsonZone(json: JsonZone): Zone {
   const stages = json.stages.map(convertJsonStage);
 
-  return createZone({
-    name: json.name,
+  return {
+    ...json,
     stages,
-  });
+  } as Zone;
 }
 
 function loadJson(json: JsonType): BasicZones {

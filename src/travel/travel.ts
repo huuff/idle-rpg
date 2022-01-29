@@ -9,8 +9,9 @@ import { makeTickableWithEnd } from "@/ticking/tickable-with-end";
 import { autoTravel } from "@/travel/autotraveller";
 import { makeTravelScene } from "@/scenes/travel-scene";
 import {DecisionTickable} from "@/ticking/decision-tickable";
-import { newEncounter } from "@/zones/stage";
+import { newEncounter } from "@/zones/encounter";
 import { useSettingsStore } from "@/settings-store";
+import Zones from "@/zones/zone";
 
 export type TravelDecisionMaker = (status: TravellingStatus, player: Creature) => TravelAction;
 
@@ -36,7 +37,7 @@ export class Travel implements Tickable {
     
     // AUTOPLAY
     const status = this.travelStore.mapStatus as TravellingStatus;
-    if (status.through.isCheckpoint()
+    if (Zones.isCheckpoint(status.through, status.steps)
         && this.settingsStore.autoplay === "disabled") {
       return new DecisionTickable(5, (decision) => {
         if (decision.type === "retreat"){
@@ -50,7 +51,7 @@ export class Travel implements Tickable {
     const action = this.decisionMaker(status, this.store.player);
 
     if (action.type === "continue") {
-      const battle = newEncounter(status.through.currentStage().stage);
+      const battle = newEncounter(status.through, status.steps);
       return makeTickableWithEnd(battle, () => {
         if (battle.result === "won") {
           status.steps++;

@@ -12,6 +12,9 @@ import { gameOver } from "@/game-over";
 import { Spoils } from "@/tickables/spoils";
 import { defaultBattleDecisionMaker } from "./battle-decision-maker";
 import { isEmpty } from "lodash";
+import Skills from "@/skills/skill";
+import BattleAreas, { BattleArea } from "./battle-area";
+import BattleStatuses, { CreatureWithStatus } from "./battle-status";
 
 function allDead(creatures: Creature[]) {
   return creatures.every(c => !c.isAlive);
@@ -21,17 +24,22 @@ export type BattleResult = "lost" | "won" | "escaped";
 
 export class Battle implements Tickable {
   public readonly scene: Scene;
-  public readonly badGuys: Creature[];
+  public readonly badGuys: CreatureWithStatus[];
+  public readonly goodGuys: CreatureWithStatus[];
   public result: BattleResult | undefined;
   private readonly log = useMainStore().battleLog;
-  private turns: Creature[];
+  private turns: CreatureWithStatus[];
   
   constructor(
-    public readonly goodGuys: Creature[],
+    goodGuys: Creature[],
     badGuys: Creature[],
+    private readonly areas: BattleArea[],
   ) {
     this.log.clear();
-    this.badGuys = reactive(renameCreatures(badGuys));
+    this.badGuys = reactive(renameCreatures(badGuys)
+    .map(c => BattleStatuses.initialStatus(c, this.areas)));
+    this.goodGuys = goodGuys
+    .map(c => BattleStatuses.initialStatus(c, this.areas));
     this.turns = calculateTurns([...this.goodGuys, ...this.badGuys]);
     this.scene = makeBattleScene(this.badGuys);
   }

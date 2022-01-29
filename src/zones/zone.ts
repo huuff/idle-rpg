@@ -1,14 +1,12 @@
-import { useTravelStore } from "@/travel/travel-store";
 import { Stage, } from "./stage";
 import { accumulate } from "@/util/accumulate";
+import { sum } from "lodash";
+import { BattleArea } from "@/battle/battle-area";
 
 export interface Zone {
   name: string;
   stages: Stage[];
-  totalSteps: () => number;
-  isComplete: () => boolean;
-  currentStage: () => { stage: Stage, index: number};
-  isCheckpoint: () => boolean;
+  areas: BattleArea[];
 }
 
 function accumulateStagesBySteps(stages: Stage[]): Stage[] {
@@ -18,39 +16,35 @@ function accumulateStagesBySteps(stages: Stage[]): Stage[] {
       (s, accSteps) => ({ ...s, steps: accSteps }));
 }
 
-export function createZone({ name, stages }: { name: string, stages: Stage[]}): Zone {
+function totalSteps(zone: Zone): number {
+  // Sum all stages' steps and add one for each for a checkpoint
+  return sum(zone.stages.map(s => s.steps)) + zone.stages.length
+}
+
+function isComplete(zone: Zone, steps: number): boolean {
+  return steps >= totalSteps(zone);
+}
+
+export type StageAndIndex = {
+  stage: Stage;
+  index: number;
+}
+
+function currentStage(zone: Zone, steps: number): StageAndIndex {
+  const index = accumulateStagesBySteps(zone.stages).findIndex(s => steps < s.steps);
   return {
-    name,
-    stages,
-    totalSteps: () => {
-      // Sum all stages' steps and add one for each for a checkpoint
-      return stages.map(s => s.steps).reduce((s1, s2) => s1 + s2, 0) + stages.length;
-    },
-    isComplete() {
-      const { mapStatus: status } = useTravelStore();
-      return status.type === "travelling"
-        && status.steps >= this.totalSteps();
-    },
-    currentStage() {
-      const { mapStatus: status } = useTravelStore();
-      if (status.type !== "travelling") {
-        throw new Error(`Shouldn't call 'currentStage' when not travelling`);
-      }
-
-      const index = accumulateStagesBySteps(stages).findIndex(s => status.steps < s.steps);
-      return {
-        stage: stages[index],
-        index,
-      }
-    },
-    isCheckpoint() {
-      const { mapStatus: status } = useTravelStore();
-      if (status.type !== "travelling") {
-        throw new Error(`Shouldn't call 'isCheckpoint' when not travelling!`)
-      }
-
-      return accumulateStagesBySteps(stages).some(s => s.steps === status.steps)
-    }
+    stage: zone.stages[index],
+    index,
   }
 }
 
+function isCheckpoint(zone: Zone, steps: number): boolean {
+  return accumulateStagesBySteps(zone.stages).some(s => s.steps === steps);
+}
+
+export default {
+  totalSteps,
+  isComplete,
+  currentStage,
+  isCheckpoint,
+}

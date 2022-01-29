@@ -1,6 +1,16 @@
 {
   "plains": {
     "name": "Plains",
+    "areas": [
+      {
+        "name": "field",
+        "type": "front"
+      },
+      {
+        "name": "hill",
+        "type": "rearguard"
+      }
+    ],
     "stages": [
       {
         "steps": 1,
@@ -14,7 +24,7 @@
       },
 
       {
-        "steps": 5,
+        "steps": 2,
         "enemies": [
           {
             "species": "slime",
@@ -25,7 +35,7 @@
       },
 
       {
-        "steps": 5,
+        "steps": 3,
         "enemies": [
           {
             "species": "slime",
@@ -36,7 +46,7 @@
       },
 
       {
-        "steps": 5,
+        "steps": 4,
         "enemies": [
           {
             "species": "slime",

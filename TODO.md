@@ -3,6 +3,7 @@
 * Archer prepare and shoot
 * Unlock escape settings at some level
 * Autosave & Autoload
+* Characters are not using their weapons
 
 # Future
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies
