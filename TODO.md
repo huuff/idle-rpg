@@ -5,6 +5,7 @@
 * Autosave & Autoload
 * Levelling up skills by adding points manually
 * Showing in what area everyone is in battle
+* Autoplay option to autosell stuff on arriving to setlements
 
 # Future
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies
