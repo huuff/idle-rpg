@@ -10,7 +10,7 @@
         </ul>
     </div>
     <div>
-        <table class="table is-fullwidth is-hoverable">
+        <table class="table is-fullwidth is-hoverable is-unselectable">
             <thead>
                 <th>Name</th>
                 <th>Amount</th>

@@ -1,4 +1,5 @@
 <template>
+<notification-message />
 <component :is="componentToShow" />
 </template>
 
@@ -9,6 +10,7 @@ import { storeToRefs } from "pinia";
 import { isNoCreature } from "@/creatures/creature";
 import Game from "@/components/Game.vue";
 import ChooseCharacter from "@/components/modals/ChooseCharacter";
+import NotificationMessage from "./components/NotificationMessage.vue";
 
 const { player } = storeToRefs(useMainStore());
 
