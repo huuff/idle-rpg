@@ -1,11 +1,7 @@
 import BattleActions, { BattleAction, Attack } from "./battle-action";
-import { 
+import Executions, { 
     AttackExecution,
-    canExecute,
     Execution,
-    makeEscapeExecution,
-    makeAttackExecution,
-    makeExecution,
 } from "./action-execution";
 import { cloneDeep, isEmpty } from "lodash";
 import { storeToRefs } from "pinia";
@@ -32,7 +28,7 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
     if (originator.healthRatio < escapeHealth.value && allActions.some(a => a.type === "escape")) {
         // If possible and necessary, escape
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return makeEscapeExecution(allActions.find(BattleActions.isEscape)!);
+        return Executions.makeEscape(allActions.find(BattleActions.isEscape)!);
     } // Else do not consider escaping
 
     const attackActions =  allActions
@@ -42,8 +38,8 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
     for (const action of attackActions) {
         // Test each action against each rival
         for (const rival of rivals) {
-            if (canExecute(action, originator, rival)){
-                allPossibleAttacks.push(makeAttackExecution(
+            if (Executions.canExecute(action, originator, rival)){
+                allPossibleAttacks.push(Executions.makeAttack(
                     action,
                     originator,
                     rival
@@ -64,7 +60,7 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
         // XXX: Obviously a better solution than moven randomly would be needed if there
         // were more than 2 areas
         return chooseRandom(BattleAreas.possibleMoves(originator.status.in, areas)
-            .map(move => makeExecution(move, originator))
+            .map(move => Executions.make(move, originator))
         );
     }
 }

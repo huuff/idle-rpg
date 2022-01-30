@@ -35,10 +35,9 @@ export class Battle implements Tickable {
     private readonly areas: BattleArea[],
   ) {
     this.log.clear();
-    this.badGuys = reactive(renameCreatures(badGuys)
-    .map(c => BattleStatuses.initialStatus(c, this.areas)));
-    this.goodGuys = goodGuys
-    .map(c => BattleStatuses.initialStatus(c, this.areas));
+    const setupTeams = BattleStatuses.setupTeams(goodGuys, renameCreatures(badGuys), this.areas);
+    this.badGuys = reactive(setupTeams.badGuys);
+    this.goodGuys = setupTeams.goodGuys;
     this.turns = calculateTurns([...this.goodGuys, ...this.badGuys]);
     this.scene = makeBattleScene(this.badGuys);
   }

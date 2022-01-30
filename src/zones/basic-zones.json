@@ -4,11 +4,17 @@
     "areas": [
       {
         "name": "field",
-        "type": "front"
+        "coordinates": {
+          "x": 0,
+          "y": 0
+        }
       },
       {
         "name": "hill",
-        "type": "rearguard"
+        "coordinates": {
+          "x": 1,
+          "y": 1
+        }
       }
     ],
     "stages": [
