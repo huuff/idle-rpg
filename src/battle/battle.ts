@@ -3,7 +3,7 @@ import { useMainStore } from "@/store";
 import { Creature, } from "@/creatures/creature";
 import { calculateTurns } from "./turns";
 import { isEscapeExecution, isAttackExecution } from "./action-execution";
-import { execute } from "./execute-action";
+import Execute from "./execute-action";
 import { Tickable } from "@/ticking/async-ticker";
 import {Scene} from "@/scenes/scene";
 import {makeBattleScene} from "@/scenes/battle-scene";
@@ -68,7 +68,7 @@ export class Battle implements Tickable {
       rivals as StillCreature[],
       this.areas);
 
-    execute(execution, this.log);
+    Execute.execute(execution, this.log);
 
     if (isEscapeExecution(execution)) {
       if (execution.success)
