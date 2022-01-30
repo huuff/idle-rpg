@@ -6,7 +6,7 @@ import Executions, {
 import { cloneDeep, isEmpty } from "lodash";
 import { storeToRefs } from "pinia";
 import { useSettingsStore } from "@/settings-store";
-import { CreatureWithStatus, StillCreature } from "./battle-status";
+import { CreatureWithStatus } from "./battle-status";
 import BattleAreas, { BattleArea } from "./battle-area";
 import { chooseRandom } from "@/util/random";
 
@@ -29,9 +29,6 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
             to: originator.status.to
         }, originator)
     }
-
-    // We know it's still because we just checked. Typescript doesn't
-    const originatorAsStill = originator as StillCreature;
 
     const allActions = cloneDeep(originator.possibleActions)
         .concat();
@@ -69,7 +66,7 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
         // Choose the one with the highest damage
         return possibleOutcomes[possibleOutcomes.length - 1][0];
     } else { // No attack possible, so move
-        // XXX: Obviously a better solution than moven randomly would be needed if there
+        // XXX: Obviously a better solution than moving randomly would be needed if there
         // were more than 2 areas
         return chooseRandom(BattleAreas.possibleMoves(originator.status.in, areas)
             .map(move => Executions.make(move, originator))
@@ -77,6 +74,3 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
     }
 }
 
-function hasUtilityAction(actions: BattleAction[]): boolean {
-    return actions.some(a => a.type !== "attack");
-}

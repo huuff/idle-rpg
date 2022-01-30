@@ -63,8 +63,8 @@ export class Battle implements Tickable {
      : aliveBadGuys;
 
     const execution = defaultBattleDecisionMaker(
-      attacker as StillCreature, // TODO: Deal with moving creatures
-      rivals as StillCreature[],
+      attacker,
+      rivals,
       this.areas);
 
     Execute.execute(execution, this.log);
