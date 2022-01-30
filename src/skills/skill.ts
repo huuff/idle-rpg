@@ -101,11 +101,11 @@ function describe(skill: Skill): string {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type DistributedOmit<T, K extends keyof any> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
-export type SkillSpec = DistributedOmit<Skill, "level" | "progress"> & {
-    levelProgression: number | "MAX";
+export type SkillSpec<T extends Skill> = DistributedOmit<T, "level" | "progress"> & {
+    levelProgression: T["level"];
 }
 
-function calculateFromLevel(skillSpec: SkillSpec, creatureLevel: number): Skill {
+function calculateFromLevel<T extends Skill>(skillSpec: SkillSpec<T>, creatureLevel: number): Skill {
     const { levelProgression, ...res } = skillSpec;
 
     if (levelProgression === "MAX") {
