@@ -6,8 +6,6 @@
 * Levelling up skills by adding points manually
 * Showing in what area everyone is in battle
 * Autoplay option to autosell stuff on arriving to setlements
-* Add notifications:
-  * For when unable to equip something due to load
 
 # Future
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies

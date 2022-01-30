@@ -5,6 +5,8 @@ export type Notification = {
   level: NotificationLevel
 }
 
+// XXX: Casting all literals is a bit tiresome, find a way to type
+// this so that keyof typeof this autocompletes the messages
 const defaultNotifications = {
   "not-enough-money": {
     message: "You don't have enough money to buy that item!",
@@ -21,6 +23,10 @@ const defaultNotifications = {
   "loaded": {
     message: "Loaded a saved game",
     level: "info" as NotificationLevel,
+  },
+  "overload": {
+    message: "You're carrying too much weight to equip that item",
+    level: "warning" as NotificationLevel,
   }
 }
 
