@@ -42,7 +42,7 @@ export function randomByNormalizedFrequency<T>(optionsToFrequencies: [T, number]
 export function normalizeFrequencies<T>(optionsToFrequency: [T, number][]): [T, number][] {
   const totalFrequency = optionsToFrequency.reduce((acc, [_, freq]) => acc + freq, 0);
   return optionsToFrequency
-    .map(([option, freq]) => [option, freq/totalFrequency] as [T, number])
+    .map<[T, number]>(([option, freq]) => [option, freq/totalFrequency])
     .sort(([_1, a], [_2, b]) => b - a)
     ;
 }

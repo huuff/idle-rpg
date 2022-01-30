@@ -1,4 +1,4 @@
-import BattleActions, { BattleAction, Attack } from "./battle-action";
+import BattleActions, { Attack } from "./battle-action";
 import Executions, { 
     AttackExecution,
     Execution,

@@ -55,7 +55,7 @@ type SetupTeams = {
     goodGuys: StillCreature[],
     badGuys: StillCreature[],
 }
-function setupTeams(goodGuys: Creature[], badGuys: Creature[], areas: BattleArea[]) {
+function setupTeams(goodGuys: Creature[], badGuys: Creature[], areas: BattleArea[]): SetupTeams {
     // First, choose a random area to be the frontguard
     const front = chooseRandom(areas);
 

@@ -13,7 +13,7 @@ import { Spoils } from "@/tickables/spoils";
 import { defaultBattleDecisionMaker } from "./battle-decision-maker";
 import { isEmpty } from "lodash";
 import { BattleArea } from "./battle-area";
-import BattleStatuses, { CreatureWithStatus, StillCreature } from "./battle-status";
+import BattleStatuses, { CreatureWithStatus } from "./battle-status";
 
 function allDead(creatures: Creature[]) {
   return creatures.every(c => !c.isAlive);
