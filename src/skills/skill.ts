@@ -107,19 +107,23 @@ export type SkillSpec = DistributedOmit<Skill, "level" | "progress"> & {
 
 function calculateFromLevel(skillSpec: SkillSpec, creatureLevel: number): Skill {
     const { levelProgression, ...res } = skillSpec;
-    const skillLevel = levelProgression !== "MAX" 
-        ? Math.floor(levelProgression * creatureLevel)
-        : "MAX"
-        ;
-    const progress = (levelProgression !== "MAX" && skillLevel !== "MAX")
-    ? (levelProgression * creatureLevel) - skillLevel
-    : undefined
-    ;
-    return {
-        ...res,
-        level: skillLevel,
-        progress
-    } as Skill; // TODO it's hard
+
+    if (levelProgression === "MAX") {
+        return  {
+            ...res,
+            level: "MAX",
+        } as Skill;
+    } else if (typeof levelProgression === "number"){
+        const skillLevel = Math.floor(levelProgression * creatureLevel);
+        const progress = (levelProgression * creatureLevel) - skillLevel;
+        return {
+            ...res,
+            level: skillLevel,
+            progress
+        } as Skill;
+    } else {
+        throw new Error(`Level progression of ${levelProgression} not handled`);
+    }
 }
 
 function hasInitiative(creature: Creature): boolean {
