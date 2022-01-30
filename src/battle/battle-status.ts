@@ -17,6 +17,8 @@ export type CreatureWithStatus = {
     status: BattleStatus;
 } & Creature;
 
+export type StillCreature = Creature & { status: StillStatus };
+
 function isMoving(status: BattleStatus): status is MovingStatus {
     return "to" in status;
 }

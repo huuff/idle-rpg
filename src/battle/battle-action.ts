@@ -1,8 +1,11 @@
 import { Stats } from "@/creatures/stats";
+import { BattleArea } from "./battle-area";
+import { StillCreature } from "./battle-status";
 export type ActionType = 
     "attack" 
     | "steal"
     | "escape"
+    | "move"
     ; 
 
 export type BaseAction<T extends { type: ActionType}> = T;
@@ -17,7 +20,6 @@ export interface Attack {
 }
 
 export interface Steal {
-
     type: "steal";
     chance: number; // Effective chance is `rarity + (chance * rarity)`
 }
@@ -25,6 +27,11 @@ export interface Steal {
 export interface Escape {
     type: "escape";
     chance: number;
+}
+
+export interface Move {
+    type: "move";
+    to: BattleArea,
 }
 
 function isEscape(action: BattleAction): action is Escape {
@@ -35,13 +42,18 @@ function isSteal(action: BattleAction): action is Steal {
     return action.type === "steal";
 }
 
-export type BattleAction = BaseAction<Attack | Steal | Escape>;
+function isAttack(action: BattleAction): action is Attack {
+    return action.type === "attack";
+}
+
+export type BattleAction = BaseAction<Attack | Steal | Escape | Move>;
 
 function match<T>(
     action: BattleAction, 
     onAttack: (attack: Attack) => T,
     onSteal: (steal: Steal) => T,
     onEscape: (escape: Escape) => T,
+    onMove: (move: Move) => T,
 ) {
     if (action.type === "attack") {
         return onAttack(action);
@@ -49,6 +61,8 @@ function match<T>(
         return onSteal(action);
     } else if (action.type === "escape") {
         return onEscape(action);
+    } else if (action.type === "move") {
+        return onMove(action);
     } else {
         throw new Error(`Battle action ${JSON.stringify(action)} not handled`);
     }
@@ -57,5 +71,6 @@ function match<T>(
 export default {
     match,
     isEscape,
-    isSteal
+    isSteal,
+    isAttack,
 }

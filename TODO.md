@@ -1,6 +1,6 @@
 # Tasks
 * I could test some stuff like inventory functions n shiet
-* Archer prepare and shoot
+* Now there are areas, but an archer just tries to punch everything to death instead of moving to be able to shoot. Also, make moving around take some turns at least.
 * Unlock escape settings at some level
 * Autosave & Autoload
 * Characters are not using their weapons

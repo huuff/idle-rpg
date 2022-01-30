@@ -1,3 +1,5 @@
+import { Move } from "./battle-action";
+
 export type BattleArea = {
     name: string;
     type: "front" | "rearguard";
@@ -10,6 +12,15 @@ function find(areas: BattleArea[], type: BattleArea["type"]): BattleArea {
     return areas.find(a => a.type === type) ?? areas[0];
 }
 
+function possibleMoves(currentArea: BattleArea, allAreas: BattleArea[]): Move[] {
+    return allAreas.filter(a => a.name !== currentArea.name)
+        .map(a => ({
+            type: "move",
+            to: a,
+        }))
+}
+
 export default {
     find,
+    possibleMoves,
 }

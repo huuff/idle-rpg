@@ -1,51 +1,71 @@
-import { Creature } from "@/creatures/creature";
 import BattleActions, { BattleAction, Attack } from "./battle-action";
-import { chooseRandom } from "@/util/random";
-import { Execution, makeAttackExecution, makeEscapeExecution, makeStealExecution, AttackExecution } from "./action-execution";
-import { cloneDeep } from "lodash";
+import { 
+    AttackExecution,
+    canExecute,
+    Execution,
+    makeEscapeExecution,
+    makeAttackExecution,
+    makeExecution,
+} from "./action-execution";
+import { cloneDeep, isEmpty } from "lodash";
 import { storeToRefs } from "pinia";
 import { useSettingsStore } from "@/settings-store";
+import { StillCreature } from "./battle-status";
+import BattleAreas, { BattleArea } from "./battle-area";
+import { chooseRandom } from "@/util/random";
 
-export type BattleDecisionMaker = (originator: Creature, rivals: Creature[]) => Execution;
+export type BattleDecisionMaker = (
+    originator: StillCreature, 
+    rivals: StillCreature[],
+    areas: BattleArea[],
+    ) => Execution;
 
 export const defaultBattleDecisionMaker: BattleDecisionMaker = (
-    originator: Creature,
-    rivals: Creature[]
+    originator: StillCreature,
+    rivals: StillCreature[],
+    areas: BattleArea[],
 ) => {
-    let allActions = cloneDeep(originator.possibleActions);
+    const allActions = cloneDeep(originator.possibleActions)
+        .concat();
 
     const { escapeHealth } = storeToRefs(useSettingsStore());
-
     if (originator.healthRatio < escapeHealth.value && allActions.some(a => a.type === "escape")) {
         // If possible and necessary, escape
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         return makeEscapeExecution(allActions.find(BattleActions.isEscape)!);
-    } else {
-        // Else, do not consider escaping
-        allActions = allActions.filter(a => !BattleActions.isEscape(a));
+    } // Else do not consider escaping
+
+    const attackActions =  allActions
+        .filter((a): a is Attack => BattleActions.isAttack(a));
+
+    const allPossibleAttacks: AttackExecution[] = [];
+    for (const action of attackActions) {
+        // Test each action against each rival
+        for (const rival of rivals) {
+            if (canExecute(action, originator, rival)){
+                allPossibleAttacks.push(makeAttackExecution(
+                    action,
+                    originator,
+                    rival
+                ))
+            }
+        }
     }
-
-    if (hasUtilityAction(allActions) && originator.healthRatio > 0.5 && Math.random() < 0.2) {
-        // XXX: this will break once steal is no longer the only utility action
-        // Choose to use one utility action if it has one, once in 5 attacks
-        return makeStealExecution(
-            chooseRandom(allActions.filter(BattleActions.isSteal)),
-            originator,
-            chooseRandom(rivals)
-            );
-    } else {
-        const attackActions = allActions.filter(a => a.type === "attack") as Attack[];
-
-        // Test each attack against a random target
-        const randomTarget = chooseRandom(rivals.filter(c => c.isAlive));
-        const possibleOutcomes = attackActions
-            .map(a => makeAttackExecution(a, originator, randomTarget))
+    
+    if (!isEmpty(allPossibleAttacks)) {
+        const possibleOutcomes = allPossibleAttacks
             .map(e => [e, e.damage] as [AttackExecution, number])
             .sort(([_1, damage1], [_2, damage2]) => damage1 - damage2)
             ;
 
         // Choose the one with the highest damage
         return possibleOutcomes[possibleOutcomes.length - 1][0];
+    } else { // No attack possible, so move
+        // XXX: Obviously a better solution than moven randomly would be needed if there
+        // were more than 2 areas
+        return chooseRandom(BattleAreas.possibleMoves(originator.status.in, areas)
+            .map(move => makeExecution(move, originator))
+        );
     }
 }
 

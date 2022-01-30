@@ -1,24 +1,31 @@
-import { Creature } from "@/creatures/creature";
 import { Item } from "@/items/item";
 import { variabilityRandom, chooseRandom } from "@/util/random";
 import { sum, isEmpty } from "lodash";
 import { Stats, StatType } from "@/creatures/stats";
-import BattleActions, { Steal, Attack, BattleAction, Escape, BaseAction } from "./battle-action";
+import BattleActions, { Steal, Attack, BattleAction, Escape, BaseAction, Move } from "./battle-action";
+import { CreatureWithStatus, StillCreature } from "./battle-status";
+import { extend } from "lodash";
 
-export type Execution = BaseAction<AttackExecution | StealExecution | EscapeExecution>;
+// TODO: as bag-of-functions
+
+export type Execution = BaseAction<
+AttackExecution
+ | StealExecution
+ | EscapeExecution
+ | MoveExecution>;
 
 export interface AttackExecution {
     type: "attack"
-    executor: Creature;
-    target: Creature;
+    executor: CreatureWithStatus;
+    target: CreatureWithStatus;
     damage: number;
     description: string;
 }
 
 export interface StealExecution {
     type: "steal"
-    originator: Creature;
-    target: Creature;
+    originator: CreatureWithStatus;
+    target: CreatureWithStatus;
     item?: Item;
     description: string;
 }
@@ -26,6 +33,10 @@ export interface StealExecution {
 export interface EscapeExecution {
     type: "escape";
     success: boolean;
+}
+
+export type MoveExecution = Move & {
+    originator: StillCreature;
 }
 
 export function calculateDamage(
@@ -52,6 +63,7 @@ export function matchExecution<T>(
     onAttack: (attack: AttackExecution) => T,
     onSteal: (steal: StealExecution) => T,
     onEscape: (escape: EscapeExecution) => T,
+    onMove: (move: MoveExecution) => T,
 ) {
     if (execution.type === "attack") {
         return onAttack(execution);
@@ -59,6 +71,8 @@ export function matchExecution<T>(
         return onSteal(execution);
     } else if (execution.type === "escape") {
         return onEscape(execution);
+    } else if (execution.type === "move") {
+        return onMove(execution);
     } else {
         throw new Error(`Battle action ${JSON.stringify(execution)} not handled`);
     }
@@ -66,8 +80,8 @@ export function matchExecution<T>(
 
 export function makeAttackExecution(
     action: Attack,
-    executor: Creature,
-    target: Creature
+    executor: StillCreature,
+    target: StillCreature
 ): AttackExecution {
     const damage = calculateDamage(
         action.baseDamage,
@@ -86,10 +100,24 @@ export function makeAttackExecution(
     };
 }
 
+export function canExecute(
+    attack: Attack,
+    executor: StillCreature,
+    target: StillCreature
+): boolean {
+    if (attack.attackType === "melee") {
+        return executor.status.in.name === target.status.in.name;
+    } else if (attack.attackType === "ranged") {
+        return executor.status.in.name !== target.status.in.name;
+    } else {
+        throw new Error(`Attack type ${JSON.stringify(attack)} not handled in 'canExecute`);
+    }
+}
+
 export function makeStealExecution(
     action: Steal,
-    executor: Creature,
-    target: Creature,
+    executor: CreatureWithStatus,
+    target: CreatureWithStatus,
 ): StealExecution {
     const targetItems = Object.values(target.inventory);
     const itemToSteal = !isEmpty(targetItems) ? chooseRandom(targetItems) : undefined;
@@ -126,14 +154,27 @@ export function isEscapeExecution(execution: Execution): execution is EscapeExec
     return execution.type === "escape";
 }
 
-type NonEscape<T> = T extends Escape ? never : T;
+export function isAttackExecution(execution: Execution): execution is AttackExecution {
+    return execution.type === "attack";
+}
 
 export function makeExecution(action: Escape): Execution
-export function makeExecution(action: NonEscape<BattleAction>, originator: Creature, target: Creature): Execution
-export function makeExecution(action: BattleAction, originator?: Creature, target?: Creature): Execution {
+export function makeExecution(
+    action: Exclude<BattleAction, Escape | Move>, 
+    originator: StillCreature,
+    target: StillCreature): Execution
+export function makeExecution(
+    action: Move,
+    originator: StillCreature,
+): Execution
+export function makeExecution(
+    action: BattleAction, 
+    originator?: StillCreature, 
+    target?: StillCreature): Execution {
     return BattleActions.match<Execution>(action,
             (attack) => makeAttackExecution(attack, originator!, target!), // eslint-disable-line @typescript-eslint/no-non-null-assertion
             (steal) => makeStealExecution(steal, originator!, target!), // eslint-disable-line @typescript-eslint/no-non-null-assertion
             (escape) => makeEscapeExecution(escape),
+            (move) => extend(move, { originator: originator! }),
         )
 } 
