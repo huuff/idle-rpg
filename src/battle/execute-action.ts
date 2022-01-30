@@ -5,6 +5,8 @@ import Executions, {
     EscapeExecution,
     MoveExecution
 } from "./action-execution";
+import BattleStatuses, { BattleStatus } from "./battle-status";
+import BattleAreas from "./battle-area";
 import inventory from "@/items/inventory";
 import { Log } from "@/log";
 
@@ -32,8 +34,32 @@ function executeEscape(escape: EscapeExecution, logger: Log): void {
 }
 
 function executeMove(move: MoveExecution, logger: Log): void {
-    move.originator.status.in = move.to;
-    logger.messages.push(`${move.originator.name} moved to ${move.to.name}`);
+    move.originator.status = BattleStatuses.match<BattleStatus>(
+        move.originator.status, 
+        (still) => ({
+            type: "moving",
+            from: still.in,
+            to: move.to,
+            steps: 0,
+        }),
+        (moving) => {
+            const distance = BattleAreas.distance(moving.from.coordinates, moving.to.coordinates);
+            if (moving.steps < distance) {
+                return { ...moving, steps: moving.steps+1 };
+            } else {
+                return {
+                    type: "still",
+                    in: moving.to,
+                }
+            }
+        }
+    )
+    
+    const nextStatus = move.originator.status;
+    if (BattleStatuses.isMoving(nextStatus)) 
+        logger.messages.push(`${move.originator.name} moved towards ${nextStatus.to.name}`);
+    else if (BattleStatuses.isStill(nextStatus))
+        logger.messages.push(`${move.originator.name} arrived at ${nextStatus.in.name}`)
 }
 
 function execute(execution: Execution, logger: Log): void {

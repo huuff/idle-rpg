@@ -4,17 +4,33 @@ import { extend } from "lodash";
 import Skills from "@/skills/skill";
 import { chooseRandom } from "@/util/random";
 import { last } from "lodash";
-import { setUseProxies } from "immer";
 
 export type StillStatus = {
+    type: "still";
     in: BattleArea;
 }
 
 export type MovingStatus = {
+    type: "moving";
+    from: BattleArea;
     to: BattleArea;
+    steps: number;
 }
 
 export type BattleStatus = StillStatus | MovingStatus;
+
+function match<T>(status: BattleStatus,
+    onStill: (still: StillStatus) => T,
+    onMoving: (moving: MovingStatus) => T,
+) {
+    if (status.type === "still") {
+        return onStill(status);
+    } else if (status.type === "moving") {
+        return onMoving(status);
+    } else {
+        throw new Error(`Status ${JSON.stringify(status)} not matched in BattleStatus.match`)
+    }
+}
 
 export type CreatureWithStatus = {
     status: BattleStatus;
@@ -24,15 +40,15 @@ export type StillCreature = Creature & { status: StillStatus };
 export type MovingCreature = Creature & { status: MovingStatus };
 
 function isMoving(status: BattleStatus): status is MovingStatus {
-    return "to" in status;
+    return status.type === "moving";
 }
 
 function isStill(status: BattleStatus): status is StillStatus {
-    return "in" in status;
+    return status.type === "still";
 }
 
 function setup<T extends BattleStatus>(creature: Creature, status: T) {
-    return extend(creature, { status } );
+    return extend(creature, { status });
 }
 
 type SetupTeams = {
@@ -46,10 +62,10 @@ function setupTeams(goodGuys: Creature[], badGuys: Creature[], areas: BattleArea
     // Setup everyone without initiative in the front
     const frontGoodGuys: StillCreature[] = goodGuys
         .filter(c => !Skills.hasInitiative(c))
-        .map(c => setup(c, { in: front }))
+        .map(c => setup(c, { type: "still", in: front }))
     const frontBadGuys: StillCreature[] = badGuys
         .filter(c => !Skills.hasInitiative(c))
-        .map(c => setup(c, { in: front }))
+        .map(c => setup(c, { type: "still", in: front }))
 
     // Choose the furthest away area for the guys in the rearguard
     const areasByDistanceToFront = areas
@@ -60,8 +76,8 @@ function setupTeams(goodGuys: Creature[], badGuys: Creature[], areas: BattleArea
     const firstRearguard = last(areasByDistanceToFront)![0];
     const rearguardGoodGuys: StillCreature[] = goodGuys
         .filter(Skills.hasInitiative)
-        .map(c => setup(c, { in: firstRearguard}))
-    
+        .map(c => setup(c, { type: "still", in: firstRearguard }))
+
     // If there are more rearguards, use another for the other team,
     // else just use the same
     const secondRearguard = areasByDistanceToFront.length > 1
@@ -69,7 +85,7 @@ function setupTeams(goodGuys: Creature[], badGuys: Creature[], areas: BattleArea
         : firstRearguard;
     const rearguardBadGuys: StillCreature[] = badGuys
         .filter(Skills.hasInitiative)
-        .map(c => setup(c, { in: secondRearguard}))
+        .map(c => setup(c, { type: "still", in: secondRearguard }))
 
     return {
         goodGuys: frontGoodGuys.concat(rearguardGoodGuys),
@@ -77,8 +93,17 @@ function setupTeams(goodGuys: Creature[], badGuys: Creature[], areas: BattleArea
     }
 }
 
+function currentLocation(creature: CreatureWithStatus): BattleArea {
+    return match(creature.status,
+        (still) => still.in,
+        (moving) => moving.from
+    );
+}
+
 export default {
     isMoving,
     isStill,
     setupTeams,
+    match,
+    currentLocation,
 }

@@ -6,21 +6,33 @@ import Executions, {
 import { cloneDeep, isEmpty } from "lodash";
 import { storeToRefs } from "pinia";
 import { useSettingsStore } from "@/settings-store";
-import { StillCreature } from "./battle-status";
+import { CreatureWithStatus, StillCreature } from "./battle-status";
 import BattleAreas, { BattleArea } from "./battle-area";
 import { chooseRandom } from "@/util/random";
 
 export type BattleDecisionMaker = (
-    originator: StillCreature, 
-    rivals: StillCreature[],
+    originator: CreatureWithStatus, 
+    rivals: CreatureWithStatus[],
     areas: BattleArea[],
     ) => Execution;
 
 export const defaultBattleDecisionMaker: BattleDecisionMaker = (
-    originator: StillCreature,
-    rivals: StillCreature[],
+    originator: CreatureWithStatus,
+    rivals: CreatureWithStatus[],
     areas: BattleArea[],
 ) => {
+
+    // If it's moving, can't do anything, keep moving
+    if (originator.status.type === "moving") {
+        return Executions.make({
+            type: "move",
+            to: originator.status.to
+        }, originator)
+    }
+
+    // We know it's still because we just checked. Typescript doesn't
+    const originatorAsStill = originator as StillCreature;
+
     const allActions = cloneDeep(originator.possibleActions)
         .concat();
 

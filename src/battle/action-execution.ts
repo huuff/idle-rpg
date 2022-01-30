@@ -3,7 +3,7 @@ import { variabilityRandom, chooseRandom } from "@/util/random";
 import { sum, isEmpty } from "lodash";
 import { Stats, StatType } from "@/creatures/stats";
 import BattleActions, { Steal, Attack, BattleAction, Escape, BaseAction, Move } from "./battle-action";
-import { CreatureWithStatus, StillCreature } from "./battle-status";
+import BattleStatuses, { CreatureWithStatus, StillCreature } from "./battle-status";
 import { extend } from "lodash";
 
 export type Execution = BaseAction<
@@ -34,7 +34,7 @@ export interface EscapeExecution {
 }
 
 export type MoveExecution = Move & {
-    originator: StillCreature;
+    originator: CreatureWithStatus;
 }
 
 function calculateDamage(
@@ -78,8 +78,8 @@ function match<T>(
 
 function makeAttack(
     action: Attack,
-    executor: StillCreature,
-    target: StillCreature
+    executor: CreatureWithStatus,
+    target: CreatureWithStatus
 ): AttackExecution {
     const damage = calculateDamage(
         action.baseDamage,
@@ -100,13 +100,15 @@ function makeAttack(
 
 function canExecute(
     attack: Attack,
-    executor: StillCreature,
-    target: StillCreature
+    executor: CreatureWithStatus,
+    target: CreatureWithStatus
 ): boolean {
+    const executorLocation = BattleStatuses.currentLocation(executor);
+    const targetLocation = BattleStatuses.currentLocation(target);
     if (attack.attackType === "melee") {
-        return executor.status.in.name === target.status.in.name;
+        return executorLocation.name === targetLocation.name;
     } else if (attack.attackType === "ranged") {
-        return executor.status.in.name !== target.status.in.name;
+        return executorLocation.name !== targetLocation.name;
     } else {
         throw new Error(`Attack type ${JSON.stringify(attack)} not handled in 'canExecute`);
     }
@@ -159,16 +161,16 @@ function isAttack(execution: Execution): execution is AttackExecution {
 function make(action: Escape): Execution
 function make(
     action: Exclude<BattleAction, Escape | Move>, 
-    originator: StillCreature,
-    target: StillCreature): Execution
+    originator: CreatureWithStatus,
+    target: CreatureWithStatus): Execution
 function make(
     action: Move,
-    originator: StillCreature,
+    originator: CreatureWithStatus,
 ): Execution
 function make(
     action: BattleAction, 
-    originator?: StillCreature, 
-    target?: StillCreature): Execution {
+    originator?: CreatureWithStatus, 
+    target?: CreatureWithStatus): Execution {
     return BattleActions.match<Execution>(action,
             (attack) => makeAttack(attack, originator!, target!), // eslint-disable-line @typescript-eslint/no-non-null-assertion
             (steal) => makeSteal(steal, originator!, target!), // eslint-disable-line @typescript-eslint/no-non-null-assertion

@@ -1,9 +1,10 @@
 # Tasks
 * I could test some stuff like inventory functions n shiet
-* Now there are areas, but an archer just tries to punch everything to death instead of moving to be able to shoot. Also, make moving around take some turns at least.
+* Now there are areas, but an archer just tries to punch everything to death instead of moving to be able to shoot
 * Unlock escape settings at some level
 * Autosave & Autoload
 * Levelling up skills by adding points manually
+* Showing in what area everyone is in battle
 
 # Future
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies

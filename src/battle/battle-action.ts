@@ -1,6 +1,5 @@
 import { Stats } from "@/creatures/stats";
 import { BattleArea } from "./battle-area";
-import { StillCreature } from "./battle-status";
 export type ActionType = 
     "attack" 
     | "steal"
