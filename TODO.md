@@ -4,6 +4,7 @@
 * Unlock escape settings at some level
 * Autosave & Autoload
 * Characters are not using their weapons
+* Levelling up skills by adding points manually
 
 # Future
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies
