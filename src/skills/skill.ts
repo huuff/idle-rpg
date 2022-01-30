@@ -105,6 +105,12 @@ export type SkillSpec<T extends Skill> = DistributedOmit<T, "level" | "progress"
     levelProgression: T["level"];
 }
 
+// XXX: I'd love to type this better but I can't. I know basically no usage can break it
+// yet I can't get TypeScript to accept it without assertions. Maybe conditional types
+// would do but then typescript can't narrow the conditional inside the body of the function,
+// so I'd need overloads and maybe got with `any`s for the implementation? No option seems
+// especially good, but I enjoy coming here and spending a whole afternoon trying to remove
+// the type assertions.
 function calculateFromLevel<T extends Skill>(skillSpec: SkillSpec<T>, creatureLevel: number): Skill {
     const { levelProgression, ...res } = skillSpec;
 
