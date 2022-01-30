@@ -1,4 +1,10 @@
-import { AttackExecution, StealExecution, Execution, matchExecution, EscapeExecution, MoveExecution } from "./action-execution";
+import Executions, {
+    AttackExecution,
+    StealExecution,
+    Execution,
+    EscapeExecution,
+    MoveExecution
+} from "./action-execution";
 import inventory from "@/items/inventory";
 import { Log } from "@/log";
 
@@ -10,11 +16,11 @@ function executeAttack(attack: AttackExecution, logger: Log): void {
 function executeSteal(steal: StealExecution, logger: Log): void {
     if (steal.item) {
         steal.originator.inventory = inventory.plus(
-            steal.originator.inventory, 
+            steal.originator.inventory,
             inventory.singleItem(steal.item),
         )
     }
-    
+
     logger.messages.push(steal.description);
 }
 
@@ -31,12 +37,12 @@ function executeMove(move: MoveExecution, logger: Log): void {
 }
 
 function execute(execution: Execution, logger: Log): void {
-    return matchExecution(execution,
-            (attack) => executeAttack(attack, logger),
-            (steal) => executeSteal(steal, logger),
-            (escape) => executeEscape(escape, logger),
-            (move) => executeMove(move, logger),
-        );
+    return Executions.match(execution,
+        (attack) => executeAttack(attack, logger),
+        (steal) => executeSteal(steal, logger),
+        (escape) => executeEscape(escape, logger),
+        (move) => executeMove(move, logger),
+    );
 }
 
 export default {

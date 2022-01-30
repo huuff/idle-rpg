@@ -6,8 +6,6 @@ import BattleActions, { Steal, Attack, BattleAction, Escape, BaseAction, Move } 
 import { CreatureWithStatus, StillCreature } from "./battle-status";
 import { extend } from "lodash";
 
-// TODO: as bag-of-functions
-
 export type Execution = BaseAction<
 AttackExecution
  | StealExecution
@@ -39,7 +37,7 @@ export type MoveExecution = Move & {
     originator: StillCreature;
 }
 
-export function calculateDamage(
+function calculateDamage(
     baseDamage: number,
     stats: Stats,
     statVariability: Partial<Stats>,
@@ -58,7 +56,7 @@ export function calculateDamage(
     return variabilityRandom(baseDamage, generalVariability) + statContribution;
 }
 
-export function matchExecution<T>(
+function match<T>(
     execution: Execution, 
     onAttack: (attack: AttackExecution) => T,
     onSteal: (steal: StealExecution) => T,
@@ -78,7 +76,7 @@ export function matchExecution<T>(
     }
 }
 
-export function makeAttackExecution(
+function makeAttack(
     action: Attack,
     executor: StillCreature,
     target: StillCreature
@@ -100,7 +98,7 @@ export function makeAttackExecution(
     };
 }
 
-export function canExecute(
+function canExecute(
     attack: Attack,
     executor: StillCreature,
     target: StillCreature
@@ -114,7 +112,7 @@ export function canExecute(
     }
 }
 
-export function makeStealExecution(
+function makeSteal(
     action: Steal,
     executor: CreatureWithStatus,
     target: CreatureWithStatus,
@@ -143,38 +141,49 @@ export function makeStealExecution(
     }
 }
 
-export function makeEscapeExecution(escape: Escape): EscapeExecution {
+function makeEscape(escape: Escape): EscapeExecution {
     return {
         type: "escape",
         success: Math.random() < escape.chance,
     }
 }
 
-export function isEscapeExecution(execution: Execution): execution is EscapeExecution {
+function isEscape(execution: Execution): execution is EscapeExecution {
     return execution.type === "escape";
 }
 
-export function isAttackExecution(execution: Execution): execution is AttackExecution {
+function isAttack(execution: Execution): execution is AttackExecution {
     return execution.type === "attack";
 }
 
-export function makeExecution(action: Escape): Execution
-export function makeExecution(
+function make(action: Escape): Execution
+function make(
     action: Exclude<BattleAction, Escape | Move>, 
     originator: StillCreature,
     target: StillCreature): Execution
-export function makeExecution(
+function make(
     action: Move,
     originator: StillCreature,
 ): Execution
-export function makeExecution(
+function make(
     action: BattleAction, 
     originator?: StillCreature, 
     target?: StillCreature): Execution {
     return BattleActions.match<Execution>(action,
-            (attack) => makeAttackExecution(attack, originator!, target!), // eslint-disable-line @typescript-eslint/no-non-null-assertion
-            (steal) => makeStealExecution(steal, originator!, target!), // eslint-disable-line @typescript-eslint/no-non-null-assertion
-            (escape) => makeEscapeExecution(escape),
+            (attack) => makeAttack(attack, originator!, target!), // eslint-disable-line @typescript-eslint/no-non-null-assertion
+            (steal) => makeSteal(steal, originator!, target!), // eslint-disable-line @typescript-eslint/no-non-null-assertion
+            (escape) => makeEscape(escape),
             (move) => extend(move, { originator: originator! }),
         )
 } 
+
+export default {
+    makeAttack,
+    makeSteal,
+    makeEscape,
+    isAttack,
+    isEscape,
+    canExecute,
+    match,
+    make,
+}

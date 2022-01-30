@@ -2,7 +2,7 @@ import { reactive } from "vue";
 import { useMainStore } from "@/store";
 import { Creature, } from "@/creatures/creature";
 import { calculateTurns } from "./turns";
-import { isEscapeExecution, isAttackExecution } from "./action-execution";
+import Executions from "./action-execution";
 import Execute from "./execute-action";
 import { Tickable } from "@/ticking/async-ticker";
 import {Scene} from "@/scenes/scene";
@@ -70,10 +70,10 @@ export class Battle implements Tickable {
 
     Execute.execute(execution, this.log);
 
-    if (isEscapeExecution(execution)) {
+    if (Executions.isEscape(execution)) {
       if (execution.success)
         this.result = "escaped";
-    } else if (isAttackExecution(execution)){
+    } else if (Executions.isAttack(execution)){
       if (execution.target.currentHealth <= 0) {
         this.turns = this.turns.filter(a => a.isAlive);
         this.log.messages.push(`${attacker.name} killed ${execution.target.name}!`)
