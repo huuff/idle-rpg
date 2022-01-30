@@ -58,7 +58,7 @@ const thief: JobClass = {
 
 const archer: JobClass = {
   name: "Archer",
-  description: "TODO",
+  description: "They excel at the rearguard, but are vulnerable in the front. You might consider hiring a bodyguard to keep you safe",
   baseStats: {
     maxHealth: 5,
     strength: 1,
