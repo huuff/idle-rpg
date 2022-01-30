@@ -7,7 +7,6 @@
 * Showing in what area everyone is in battle
 * Autoplay option to autosell stuff on arriving to setlements
 * Add notifications:
-  * For save/delete/load
   * For when unable to equip something due to load
 
 # Future

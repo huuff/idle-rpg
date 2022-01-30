@@ -6,19 +6,21 @@ import Notifications, { Notification } from "./notification";
 
 type NotificationStoreState = {
   notification?: Notification;
+  timer?: ReturnType<typeof setTimeout>;
 }
 
-const NOTIFICATION_DURATION = 2500;
+const NOTIFICATION_DURATION = 3000;
 
 export const useNotificationStore = defineStore("notification", {
   state: ():NotificationStoreState => ({
     notification: undefined,
+    timer: undefined,
   }),
   actions: {
     setNotification(name: keyof typeof Notifications.defaultNotifications): void {
-      console.log(`Setting notification ${name}`);
+      clearTimeout(this.timer);
       this.notification = Notifications.defaultNotifications[name];
-      setTimeout(() => {
+      this.timer = setTimeout(() => {
         this.notification = undefined;
       }, NOTIFICATION_DURATION);
     }

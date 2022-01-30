@@ -2,6 +2,7 @@ import { playerToSavedPlayer } from "./player";
 import { useMainStore } from "@/store";
 import { useTravelStore } from "@/travel/travel-store";
 import { useSceneStore } from "@/scenes/scene-store";
+import { useNotificationStore } from "@/notification/notification-store";
 import { SaveData } from "./save-data";
 import {CreatureImpl} from "@/creatures/creature";
 import { storeToRefs } from "pinia";
@@ -23,6 +24,8 @@ export function save(): void {
       ? travelStore.mapStatus.value.at
       : travelStore.mapStatus.value.from
   }));
+
+  useNotificationStore().setNotification("saved")
 }
 
 export function saveDataExists(): boolean {
@@ -61,9 +64,12 @@ export function load(): void {
     sceneStore.setScene(settlementToScene(saveData.location as Settlement));
     const tickStore = useTickStore();
     tickStore.start(makeRest())
+
+    useNotificationStore().setNotification("loaded")
   }
 }
 
 export function deleteSave(): void {
   localStorage.clear();
+  useNotificationStore().setNotification("deleted")
 }

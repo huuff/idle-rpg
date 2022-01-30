@@ -15,16 +15,7 @@ import { storeToRefs } from "pinia";
 const { notification } = storeToRefs(useNotificationStore());
 
 const colorClass = computed(() => {
-    if (notification?.value?.level === "success")
-        return "is-success";
-    else if (notification?.value?.level === "error")
-        return "is-danger";
-    else if (notification?.value?.level === "warning")
-        return "is-warning";
-    else if (notification?.value?.level === "info")
-        return "is-info";
-    else
-       throw new Error(`Notification ${JSON.stringify(notification)} not handled!`)
+    return notification.value ? `is-${notification?.value.level}` : "is-primary";
 })
 
 function removeNotification() {
