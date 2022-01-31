@@ -10,6 +10,7 @@ import ActionSkills, { ActionSkill } from "@/skills/action-skill";
 import { produce } from "immer";
 
 export interface Creature {
+  readonly id: string;
   readonly species: Species;
   readonly jobClass: JobClass,
   readonly inventory: Inventory,
@@ -17,6 +18,11 @@ export interface Creature {
   readonly name: string;
   readonly currentHealth: number;
   readonly currentExp: number;
+}
+
+// Adding two so it's not possible that this creature is created with none (0) or player (1) ids
+function randomId(): string {
+  return (Math.round(Math.random() * 1_000_000) + 2).toString();
 }
 
 function stats(creature: Creature): Required<Stats> {
@@ -108,17 +114,20 @@ function rename(creature: Creature, newName: string): Creature {
 }
 
 function birth({
+  id = randomId(),
   species,
   name,
   level = 1,
   jobClass = noClass,
 }: {
+  id: string,
   species: Species,
   name?: string,
   level?: number,
   jobClass?: JobClass,
 }): Creature {
-  const creature =  {
+  const creature: Creature =  {
+    id,
     species,
     name: name ?? species.name,
     level,
@@ -137,6 +146,7 @@ function birth({
 
 // Null object pattern
 export const noCreature: Creature = {
+  id: "0",
   species: noSpecies,
   jobClass: noClass,
   name: "None",
@@ -146,12 +156,12 @@ export const noCreature: Creature = {
   currentHealth: 0,
 }
 
-function isNoCreature(creature: Creature) {
-  return creature.name === "None"
-        && creature.level === 0
-        && isNoSpecies(creature.species)
-        && isNoClass(creature.jobClass)
-        ;
+function isNoCreature(creature: Creature): boolean {
+  return creature.id === "0";
+}
+
+function isPlayer(creature: Creature): boolean {
+  return creature.id === "1";
 }
 
 export default {
