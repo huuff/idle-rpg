@@ -9,15 +9,17 @@ import { useTickStore } from "@/ticking/tick-store";
 import { settlementToScene, Settlement } from "@/map/settlements";
 import { makeRest } from "@/tickables/rest";
 import { fixSaveHack } from "./fix-save-hack";
+import { useCreaturesStore } from "@/creatures-store";
 
 const SAVE_PROPERTY = "save";
 
 export function save(): void {
   const store = storeToRefs(useMainStore());
+  const creaturesStore = storeToRefs(useCreaturesStore());
   const travelStore = storeToRefs(useTravelStore());
 
   localStorage.setItem(SAVE_PROPERTY, JSON.stringify({
-    player: playerToSavedPlayer(store.player.value),
+    player: playerToSavedPlayer(creaturesStore.player.value),
     money: store.money.value,
     location: travelStore.mapStatus.value.type === "resting" 
       ? travelStore.mapStatus.value.at
@@ -38,6 +40,7 @@ export function load(): void {
     const saveData = JSON.parse(serializedSave) as SaveData;
 
     const player = {
+      id: "1",
       species: saveData.player.species,
       jobClass: saveData.player.jobClass,
       name: saveData.player.name,
@@ -48,7 +51,8 @@ export function load(): void {
     };
 
     const store = storeToRefs(useMainStore());
-    store.player.value = player;
+    const { creatures } = storeToRefs(useCreaturesStore());
+    creatures.value["1"] = player;
     store.money.value = saveData.money;
 
     fixSaveHack();

@@ -4,6 +4,7 @@ import { extend } from "lodash";
 import Skills from "@/skills/skill";
 import { chooseRandom } from "@/util/random";
 import { last } from "lodash";
+import { useCreaturesStore } from "@/creatures-store";
 
 export type StillStatus = {
     type: "still";
@@ -33,7 +34,7 @@ function match<T>(status: BattleStatus,
 }
 
 export type CreatureWithStatus = {
-    status: BattleStatus;
+    battleStatus: BattleStatus;
 } & Creature;
 
 export type StillCreature = Creature & { status: StillStatus };
@@ -47,25 +48,23 @@ function isStill(status: BattleStatus): status is StillStatus {
     return status.type === "still";
 }
 
-function setup<T extends BattleStatus>(creature: Creature, status: T) {
-    return extend(creature, { status });
+function setup<T extends BattleStatus>(creature: Creature, status: T): void {
+    const { creatures } = useCreaturesStore();
+    creatures[creature.id].battleStatus = status;
 }
 
-type SetupTeams = {
-    goodGuys: StillCreature[],
-    badGuys: StillCreature[],
-}
-function setupTeams(goodGuys: Creature[], badGuys: Creature[], areas: BattleArea[]): SetupTeams {
+
+function setupTeams(goodGuys: Creature[], badGuys: Creature[], areas: BattleArea[]): void {
     // First, choose a random area to be the frontguard
     const front = chooseRandom(areas);
 
     // Setup everyone without initiative in the front
-    const frontGoodGuys: StillCreature[] = goodGuys
+     goodGuys
         .filter(c => !Skills.hasInitiative(c))
-        .map(c => setup(c, { type: "still", in: front }))
-    const frontBadGuys: StillCreature[] = badGuys
+        .forEach(c => setup(c, { type: "still", in: front }))
+    badGuys
         .filter(c => !Skills.hasInitiative(c))
-        .map(c => setup(c, { type: "still", in: front }))
+        .forEach(c => setup(c, { type: "still", in: front }))
 
     // Choose the furthest away area for the guys in the rearguard
     const areasByDistanceToFront = areas
@@ -74,27 +73,22 @@ function setupTeams(goodGuys: Creature[], badGuys: Creature[], areas: BattleArea
         .sort(([_1, dist1], [_2, dist2]) => dist1 - dist2);
 
     const firstRearguard = last(areasByDistanceToFront)![0];
-    const rearguardGoodGuys: StillCreature[] = goodGuys
+    goodGuys
         .filter(Skills.hasInitiative)
-        .map(c => setup(c, { type: "still", in: firstRearguard }))
+        .forEach(c => setup(c, { type: "still", in: firstRearguard }))
 
     // If there are more rearguards, use another for the other team,
     // else just use the same
     const secondRearguard = areasByDistanceToFront.length > 1
         ? last(areasByDistanceToFront.filter(([a, _]) => a.name !== firstRearguard.name))![0]
         : firstRearguard;
-    const rearguardBadGuys: StillCreature[] = badGuys
+    badGuys
         .filter(Skills.hasInitiative)
-        .map(c => setup(c, { type: "still", in: secondRearguard }))
-
-    return {
-        goodGuys: frontGoodGuys.concat(rearguardGoodGuys),
-        badGuys: frontBadGuys.concat(rearguardBadGuys)
-    }
+        .forEach(c => setup(c, { type: "still", in: secondRearguard }))
 }
 
 function currentLocation(creature: CreatureWithStatus): BattleArea {
-    return match(creature.status,
+    return match(creature.battleStatus,
         (still) => still.in,
         (moving) => moving.from
     );

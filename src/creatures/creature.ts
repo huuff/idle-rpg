@@ -1,23 +1,29 @@
 import StatsOps, { Stats } from "./stats";
-import { JobClass, noClass, isNoClass } from "./job-class";
-import { Species, noSpecies, isNoSpecies } from "./species";
-import Inventories, {  Inventory,} from "@/items/inventory";
+import { JobClass, noClass } from "./job-class";
+import { Species, noSpecies } from "./species";
+import Inventories, { Inventory, } from "@/items/inventory";
 import Equipments, { Equipment } from "@/items/equipment";
 import { BattleAction } from "@/battle/battle-action";
 import LoadOps, { Load } from "@/items/load";
 import Skills, { Skill, } from "@/skills/skill";
 import ActionSkills, { ActionSkill } from "@/skills/action-skill";
 import { produce } from "immer";
+import { BattleStatus } from "@/battle/battle-status";
+import { useCreaturesStore } from "@/creatures-store";
+
+// TODO: most of these producers not needed now that everything works by mutating
+// state in the store
 
 export interface Creature {
-  readonly id: string;
-  readonly species: Species;
-  readonly jobClass: JobClass,
-  readonly inventory: Inventory,
-  readonly level: number;
-  readonly name: string;
-  readonly currentHealth: number;
-  readonly currentExp: number;
+  id: string;
+  species: Species;
+  jobClass: JobClass,
+  inventory: Inventory,
+  level: number;
+  name: string;
+  battleStatus?: BattleStatus;
+  currentHealth: number;
+  currentExp: number;
 }
 
 // Adding two so it's not possible that this creature is created with none (0) or player (1) ids
@@ -86,7 +92,7 @@ function addExp(creature: Creature, exp: number): Creature {
       draft.currentHealth += (draft.species.levelProgression.maxHealth ?? 0) + (draft.jobClass.levelProgression.maxHealth ?? 0);
     } else {
       draft.currentExp = newExp;
-    }  
+    }
     return draft;
   })
 }
@@ -120,13 +126,13 @@ function birth({
   level = 1,
   jobClass = noClass,
 }: {
-  id: string,
+  id?: string,
   species: Species,
   name?: string,
   level?: number,
   jobClass?: JobClass,
 }): Creature {
-  const creature: Creature =  {
+  const creature: Creature = {
     id,
     species,
     name: name ?? species.name,
@@ -141,7 +147,13 @@ function birth({
   }
 
   const maxHealth = stats(creature).maxHealth;
-  return withHealth(creature, maxHealth);
+  // TODO: Improve this, maybe make stats take the necessary parts and not a full creature
+  // so it can be built by parts
+  const result = withHealth(creature, maxHealth);
+  const creaturesStore = useCreaturesStore();
+  creaturesStore.register(result);
+
+  return result;
 }
 
 // Null object pattern
@@ -176,6 +188,7 @@ export default {
   isNoCreature,
   withInventory,
   addExp,
+  requiredExp,
   battleActions,
   rename,
   skills,

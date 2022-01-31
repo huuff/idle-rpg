@@ -1,20 +1,26 @@
 import { Tickable } from "@/ticking/async-ticker";
 import Creatures, { Creature } from "@/creatures/creature";
 import { Log } from "@/log";
-import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
 import inventory, { Inventory, singleItem } from "@/items/inventory";
 import { calculateChallenge } from "@/creatures/stats";
-import { useBattleStore } from "@/battle-store";
-
-// TODO: Make it work for several good guys
+import { useCreaturesStore } from "@/creatures-store";
 
 export class Spoils implements Tickable {
   private ticksHad = 0;
+  private readonly winners: Creature[];
+  private readonly losers: Creature[];
 
   constructor(
+    winners: Creature[],
+    losers: Creature[],
     private readonly log: Log,
-  ){}
+  ){
+    const { creatures } = useCreaturesStore();
+    this.winners = winners.map(c => c.id).map(id => creatures[id]); 
+    this.losers = losers.map(c => c.id).map(id => creatures[id]);
+
+  }
   
   public tick(): void {
     if (this.ticksHad === 0) {
@@ -30,21 +36,21 @@ export class Spoils implements Tickable {
   }
 
   private shareExp(): void {
-    const { player } = storeToRefs(useMainStore());
-    const { enemies } = storeToRefs(useBattleStore());
-    const totalExp = enemies.value
+    const totalExp = this.losers
       .map(c => calculateChallenge(Creatures.stats(c)))
       .reduce((a, b) => a + b);
-    player.value = Creatures.addExp(player.value, totalExp);
-    this.log.messages.push(`You earned ${totalExp} totalExp`);
+    const expForEachWinner = totalExp / this.winners.length;
+    for (const winner of this.winners) {
+      winner.currentExp += expForEachWinner;
+    }
+    this.log.messages.push(`You earned ${totalExp} exp`);
   }
 
   private shareDrops(): void {
-    const { player } = storeToRefs(useMainStore());
-    const { enemies } = storeToRefs(useBattleStore());
-    const totalDrops = this.adjustByRarity(inventory.merge(...enemies.value.map(c => c.inventory)));
+    const totalDrops = this.adjustByRarity(inventory.merge(...this.losers.map(c => c.inventory)));
 
-    player.value = Creatures.withInventory(player.value, inventory.merge(player.value.inventory, totalDrops));
+    const { player } = storeToRefs(useCreaturesStore());
+    player.value.inventory = inventory.merge(player.value.inventory, totalDrops)
 
     for (const item of Object.values(totalDrops)) {
       this.log.messages.push(`You found ${item.amount} ${item.name}`);

@@ -51,12 +51,12 @@
 import { ref } from "vue";
 import { JobClass } from "@/creatures/job-class";
 import { baseClasses } from "@/creatures/base-classes";
-import { useMainStore } from "@/store";
-import { storeToRefs } from "pinia";
-import { CreatureImpl } from "@/creatures/creature";
+import { useCreaturesStore } from "@/creatures-store";
 import { basicSpecies } from "@/creatures/basic-species";
+import Creatures from "@/creatures/creature";
 
-const { player } = storeToRefs(useMainStore());
+const creaturesStore = useCreaturesStore();
+
 const playerName = ref("Player");
 
 const props = withDefaults(defineProps<{
@@ -66,11 +66,12 @@ const props = withDefaults(defineProps<{
 });
 
 function createPlayer(jobClass: JobClass): void {
-  player.value = new CreatureImpl({
+  creaturesStore.register(Creatures.birth({
+    id: "1",
     jobClass,
     name: playerName.value,
     species: basicSpecies.human,
-  });
+  }));
 }
 
 </script>

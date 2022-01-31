@@ -5,17 +5,17 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
-import { isNoCreature } from "@/creatures/creature";
+import Creatures from "@/creatures/creature";
 import Game from "@/components/Game.vue";
 import ChooseCharacter from "@/components/modals/ChooseCharacter";
 import NotificationMessage from "./components/NotificationMessage.vue";
+import { useCreaturesStore } from "./creatures-store";
 
-const { player } = storeToRefs(useMainStore());
+const { player } = storeToRefs(useCreaturesStore());
 
 const componentToShow = computed(() => {
-  if (isNoCreature(player.value))
+  if (!player.value || Creatures.isNoCreature(player.value))
     return ChooseCharacter;
   else
     return Game;

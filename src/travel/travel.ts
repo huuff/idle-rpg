@@ -12,13 +12,17 @@ import {DecisionTickable} from "@/ticking/decision-tickable";
 import { newEncounter } from "@/zones/encounter";
 import { useSettingsStore } from "@/settings-store";
 import Zones from "@/zones/zone";
+import { useCreaturesStore } from "@/creatures-store";
 
 export type TravelDecisionMaker = (status: TravellingStatus, player: Creature) => TravelAction;
 
+
+// TODO: Why is this so ugly?
 export class Travel implements Tickable {
   public readonly scene = makeTravelScene();
   private readonly travelStore: ReturnType<typeof useTravelStore>
   private readonly settingsStore: ReturnType<typeof useSettingsStore>
+  private readonly creaturesStore: ReturnType<typeof useCreaturesStore>
   private readonly store: ReturnType<typeof useMainStore>
   private lastAction: TravelAction | undefined;
 
@@ -28,6 +32,7 @@ export class Travel implements Tickable {
     this.travelStore = useTravelStore();
     this.settingsStore = useSettingsStore();
     this.store = useMainStore();
+    this.creaturesStore = useCreaturesStore();
     this.store.travelLog.clear();
   }
 
@@ -48,7 +53,7 @@ export class Travel implements Tickable {
       });
     }
 
-    const action = this.decisionMaker(status, this.store.player);
+    const action = this.decisionMaker(status, this.creaturesStore.player);
 
     if (action.type === "continue") {
       const battle = newEncounter(status.through, status.steps);

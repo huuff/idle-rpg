@@ -1,14 +1,14 @@
 <template>
 <animated-bar 
   :current="creature.currentHealth" 
-  :max="creature.stats.maxHealth" 
+  :max="Creatures.stats(creature).maxHealth" 
   :class="`is-${color}`"
 />
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { Creature } from "@/creatures/creature";
+import Creatures, { Creature } from "@/creatures/creature";
 import AnimatedBar from "@/components/AnimatedBar.vue";
 
 const props = defineProps<{
@@ -16,9 +16,9 @@ const props = defineProps<{
 }>();
 
 const color = computed(() => {
-  if (props.creature.healthRatio < 0.1)
+  if (Creatures.healthRatio(props.creature) < 0.1)
     return "danger";
-  else if (props.creature.healthRatio < 0.25)
+  else if (Creatures.healthRatio(props.creature) < 0.25)
     return "warning";
   else
     return "primary";

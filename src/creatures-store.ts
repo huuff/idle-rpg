@@ -1,24 +1,27 @@
 import { defineStore } from "pinia";
 import { Creature } from "@/creatures/creature";
-import { Mutable } from "type-fest";
-import produce from "immer";
-import { IProduce } from "immer/dist/internal";
 
+// TODO: Why do I have to use string instead of Creature["id"]?
+type StoredCreatures = { [id: string]: Creature }
 type CreaturesStoreState = {
-    creatures: Creature[];
+    creatures: StoredCreatures;
 }
 
 export const useCreaturesStore = defineStore("creatures", {
     state: (): CreaturesStoreState => ({
-        creatures: []
+        creatures: {} as StoredCreatures,
     }),
     getters: {
-        player: (state) => (state.creatures.find(c => c.id === "1")),
+        player: (state) => (state.creatures["1"]),
     },
     actions: {
-        withCreature(creatureId: string, transform: Parameters<typeof produce>[1]) {
-            const index = this.creatures.findIndex(c => c.id === creatureId);
-            this.creatures[index] = produce(this.creatures[index], transform)
-        }
+        register(creature: Creature) {
+            this.creatures[creature.id] = creature;
+        },
     }
 })
+
+export function normalCreaturesToStored(normal: Creature[]): Creature[] {
+    const { creatures } = useCreaturesStore();
+    return normal.map(c => creatures[c.id]);
+}

@@ -24,10 +24,10 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
 ) => {
 
     // If it's moving, can't do anything, keep moving
-    if (originator.status.type === "moving") {
+    if (originator.battleStatus.type === "moving") {
         return Executions.make({
             type: "move",
-            to: originator.status.to
+            to: originator.battleStatus.to
         }, originator)
     }
 
@@ -69,7 +69,7 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
     } else { // No attack possible, so move
         // XXX: Obviously a better solution than moving randomly would be needed if there
         // were more than 2 areas
-        return chooseRandom(BattleAreas.possibleMoves(originator.status.in, areas)
+        return chooseRandom(BattleAreas.possibleMoves(originator.battleStatus.in, areas)
             .map(move => Executions.make(move, originator))
         );
     }

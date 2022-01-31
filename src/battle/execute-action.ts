@@ -9,21 +9,20 @@ import BattleStatuses, { BattleStatus } from "./battle-status";
 import BattleAreas from "./battle-area";
 import inventory from "@/items/inventory";
 import { Log } from "@/log";
-import { withStoreCreature } from "./store-creature";
-import Creatures from "@/creatures/creature";
+import { useCreaturesStore } from "@/creatures-store";
 
 function executeAttack(attack: AttackExecution, logger: Log): void {
-    withStoreCreature(attack.target, creature => Creatures.healthDelta(creature, -attack.damage))
+    const { creatures } = useCreaturesStore();
+    const target = creatures[attack.target.id];
+    target.currentHealth -= attack.damage;
     logger.messages.push(attack.description);
 }
 
 function executeSteal(steal: StealExecution, logger: Log): void {
+    const { creatures } = useCreaturesStore();
+    const thief = creatures[steal.originator.id];
     if (steal.item) {
-            withStoreCreature(steal.originator, creature => Creatures.withInventory(creature,inventory.plus(
-                creature.inventory,
-                inventory.singleItem(steal.item!))
-            )
-        )
+        thief.inventory = inventory.plus(thief.inventory, inventory.singleItem(steal.item))
     }
 
     logger.messages.push(steal.description);
@@ -37,8 +36,10 @@ function executeEscape(escape: EscapeExecution, logger: Log): void {
 }
 
 function executeMove(move: MoveExecution, logger: Log): void {
-    move.originator.status = BattleStatuses.match<BattleStatus>(
-        move.originator.status, 
+    const { creatures } = useCreaturesStore();
+    const creature = creatures[move.originator.id];
+    creature.battleStatus = BattleStatuses.match<BattleStatus>(
+        creature.battleStatus!, //TODO
         (still) => ({
             type: "moving",
             from: still.in,
@@ -58,7 +59,7 @@ function executeMove(move: MoveExecution, logger: Log): void {
         }
     )
     
-    const nextStatus = move.originator.status;
+    const nextStatus = creature.battleStatus;
     if (BattleStatuses.isMoving(nextStatus)) 
         logger.messages.push(`${move.originator.name} moved towards ${nextStatus.to.name}`);
     else if (BattleStatuses.isStill(nextStatus))

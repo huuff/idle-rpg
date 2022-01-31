@@ -6,11 +6,11 @@
   <span>Health</span>
   <health-bar :creature="creature" />
   <span>Experience</span>
-  <animated-bar :current="creature.currentExp" :max="creature.requiredExp" class="is-info"/>
+  <animated-bar :current="creature.currentExp" :max="Creatures.requiredExp(creature)" class="is-info"/>
 </template>
 
 <script setup lang="ts">
-import { Creature } from "@/creatures/creature";
+import Creatures, { Creature } from "@/creatures/creature";
 import HealthBar from "@/components/creatures/HealthBar.vue";
 import AnimatedBar from "@/components/AnimatedBar.vue";
 

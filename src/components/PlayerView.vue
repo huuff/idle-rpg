@@ -13,14 +13,14 @@
 </template>
 
 <script setup lang="ts">
-import { useMainStore } from "@/store";
 import { storeToRefs } from "pinia";
 import TabbedView from "@/components/ui/TabbedView.vue";
 import CreatureStatus from "@/components/creatures/CreatureStatus.vue";
 import StatsView from "@/components/creatures/StatsView.vue";
 import EquipmentView from "@/components/creatures/EquipmentView.vue";
+import { useCreaturesStore } from "@/creatures-store";
 
-const { player } = storeToRefs(useMainStore());
+const { player } = storeToRefs(useCreaturesStore());
 
 enum Tab {
   Main = "Main",
