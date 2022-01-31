@@ -1,4 +1,4 @@
-import { Creature } from "./creature";
+import Creatures, { Creature } from "./creature";
 import { countByType } from "@/util/count-types";
 import mapValues from "lodash/mapValues";
 
@@ -8,12 +8,6 @@ export function renameCreatures(creatures: Creature[]): Creature[] {
   const creaturesByType = countByType(creatures, c => c.name);
   const renamedCreatures = mapValues(creaturesByType, _ => 1);
 
-  for (const creature of creatures) {
-    if (creaturesByType[creature.name] > 1) {
-      creature.name = `${creature.name} ${renamedCreatures[creature.name]++}`
-    }
-  }
-
-  return creatures;
+  return creatures.map(c => Creatures.rename(c, `${c.name} ${renamedCreatures[c.name]++}`));
 }
 

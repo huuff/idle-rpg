@@ -1,4 +1,4 @@
-import { Creature } from "@/creatures/creature";
+import Creatures, { Creature } from "@/creatures/creature";
 
 export type SkillType =
  "armor-mastery" 
@@ -133,7 +133,7 @@ function calculateFromLevel<T extends Skill>(skillSpec: SkillSpec<T>, creatureLe
 }
 
 function hasInitiative(creature: Creature): boolean {
-    return !!creature.skills.find(s => s.type === "initiative");
+    return !!Creatures.skills(creature).find(s => s.type === "initiative");
 }
 
 export default {

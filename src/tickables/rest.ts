@@ -5,6 +5,7 @@ import {useTravelStore} from "@/travel/travel-store";
 import { storeToRefs } from "pinia";
 import { optionsFrom } from "@/map/game-map";
 import { useSettingsStore } from "@/settings-store";
+import Creatures from "@/creatures/creature";
 
 export function makeRest(): Tickable {
   const { player } = storeToRefs(useMainStore());
@@ -13,10 +14,10 @@ export function makeRest(): Tickable {
   const { mapStatus, map } = travelStore;
   return {
     tick: () => {
-      player.value.currentHealth++;
+      player.value = Creatures.healthDelta(player.value, +1);
     },
 
-    isOver: () => player.value.currentHealth >= player.value.stats.maxHealth,
+    isOver: () => player.value.currentHealth >= Creatures.stats(player.value).maxHealth,
 
     // AUTOPLAY
     onEnd: () => {

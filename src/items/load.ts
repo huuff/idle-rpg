@@ -1,6 +1,6 @@
 import { Equipment } from "./equipment";
 import { sum } from "lodash";
-import { Creature } from "@/creatures/creature";
+import Creatures, { Creature } from "@/creatures/creature";
 import Skills from "@/skills/skill";
 
 const LOAD_STRENGTH_MODIFIER = 0.8;
@@ -15,8 +15,8 @@ export function total(equipment: Equipment): number {
 }
 
 export function creatureCapacity(creature: Creature): number {
-    const strengthContribution = creature.stats.strength * LOAD_STRENGTH_MODIFIER;
-    return strengthContribution + (Skills.loadBonus(creature.skills) * strengthContribution);
+    const strengthContribution = Creatures.stats(creature).strength * LOAD_STRENGTH_MODIFIER;
+    return strengthContribution + (Skills.loadBonus(Creatures.skills(creature)) * strengthContribution);
 }
 
 export function proportion(load: Load): number {

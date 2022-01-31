@@ -4,7 +4,6 @@ import { useTravelStore } from "@/travel/travel-store";
 import { useSceneStore } from "@/scenes/scene-store";
 import { useNotificationStore } from "@/notification/notification-store";
 import { SaveData } from "./save-data";
-import {CreatureImpl} from "@/creatures/creature";
 import { storeToRefs } from "pinia";
 import { useTickStore } from "@/ticking/tick-store";
 import { settlementToScene, Settlement } from "@/map/settlements";
@@ -38,16 +37,15 @@ export function load(): void {
   if (serializedSave) {
     const saveData = JSON.parse(serializedSave) as SaveData;
 
-    const player = new CreatureImpl({
+    const player = {
       species: saveData.player.species,
       jobClass: saveData.player.jobClass,
       name: saveData.player.name,
       level: saveData.player.level,
-      items: saveData.player.inventory,
-    })
-
-    player.currentExp = saveData.player.currentExp;
-    player.currentHealth = saveData.player.currentHealth;
+      inventory: saveData.player.inventory,
+      currentExp: saveData.player.currentExp,
+      currentHealth: saveData.player.currentHealth,
+    };
 
     const store = storeToRefs(useMainStore());
     store.player.value = player;

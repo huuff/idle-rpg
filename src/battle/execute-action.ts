@@ -9,17 +9,20 @@ import BattleStatuses, { BattleStatus } from "./battle-status";
 import BattleAreas from "./battle-area";
 import inventory from "@/items/inventory";
 import { Log } from "@/log";
+import { withStoreCreature } from "./store-creature";
+import Creatures from "@/creatures/creature";
 
 function executeAttack(attack: AttackExecution, logger: Log): void {
-    attack.target.currentHealth -= attack.damage;
+    withStoreCreature(attack.target, creature => Creatures.healthDelta(creature, -attack.damage))
     logger.messages.push(attack.description);
 }
 
 function executeSteal(steal: StealExecution, logger: Log): void {
     if (steal.item) {
-        steal.originator.inventory = inventory.plus(
-            steal.originator.inventory,
-            inventory.singleItem(steal.item),
+            withStoreCreature(steal.originator, creature => Creatures.withInventory(creature,inventory.plus(
+                creature.inventory,
+                inventory.singleItem(steal.item!))
+            )
         )
     }
 

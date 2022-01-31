@@ -3,8 +3,9 @@ import { variabilityRandom, chooseRandom } from "@/util/random";
 import { sum, isEmpty } from "lodash";
 import { Stats, StatType } from "@/creatures/stats";
 import BattleActions, { Steal, Attack, BattleAction, Escape, BaseAction, Move } from "./battle-action";
-import BattleStatuses, { CreatureWithStatus, StillCreature } from "./battle-status";
+import BattleStatuses, { CreatureWithStatus } from "./battle-status";
 import { extend } from "lodash";
+import Creatures from "@/creatures/creature";
 
 export type Execution = BaseAction<
 AttackExecution
@@ -83,7 +84,7 @@ function makeAttack(
 ): AttackExecution {
     const damage = calculateDamage(
         action.baseDamage,
-        executor.stats,
+        Creatures.stats(executor),
         action.statVariability, 
         action.generalVariability
     );

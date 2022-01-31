@@ -1,4 +1,4 @@
-import { Creature } from "@/creatures/creature";
+import Creatures, { Creature } from "@/creatures/creature";
 import shuffle from "lodash/shuffle"
 
 // A series of turns is calculated, where each actor has
@@ -8,7 +8,7 @@ export function calculateTurns<T extends Creature>(creatures: T[]): T[] {
   const turns: T[] = [];
 
   for (const creature of creatures) {
-    const turnsOfCreature = new Array<T>(creature.stats.agility).fill(creature); 
+    const turnsOfCreature = new Array<T>(Creatures.stats(creature).agility).fill(creature); 
     turns.push(...turnsOfCreature);
   }
 

@@ -1,6 +1,7 @@
 import { storeToRefs } from "pinia";
 import { useMainStore } from "@/store";
-import equipment from "@/items/equipment";
+import Equipments from "@/items/equipment";
+import Creatures, { Creature } from "@/creatures/creature";
 
 // HACK
 // I don't know what happens nor why (likely because I am using `reactive` in battle for creatures)
@@ -13,8 +14,9 @@ import equipment from "@/items/equipment";
 export function fixSaveHack() {
     const { player } = storeToRefs(useMainStore());
 
-    for (const item of Object.values(player.value.equipment)) {
-        equipment.toggleEquipped(player.value, item.name);
-        equipment.toggleEquipped(player.value, item.name);
+    for (const item of Object.values(Creatures.equipment(player.value))) {
+        // We know it's not an overload since it was already there
+        player.value = Equipments.toggleEquipped(player.value, item.name) as Creature;
+        player.value = Equipments.toggleEquipped(player.value, item.name) as Creature;
     }
 }

@@ -1,6 +1,6 @@
 import { reactive } from "vue";
 import { useMainStore } from "@/store";
-import { Creature, } from "@/creatures/creature";
+import Creatures, { Creature, } from "@/creatures/creature";
 import { calculateTurns } from "./turns";
 import Executions from "./action-execution";
 import Execute from "./execute-action";
@@ -16,7 +16,7 @@ import { BattleArea } from "./battle-area";
 import BattleStatuses, { CreatureWithStatus } from "./battle-status";
 
 function allDead(creatures: Creature[]) {
-  return creatures.every(c => !c.isAlive);
+  return creatures.every(Creatures.isAlive);
 }
 
 export type BattleResult = "lost" | "won" | "escaped";
@@ -50,8 +50,8 @@ export class Battle implements Tickable {
   }
 
   public tick(): void {
-    const aliveGoodGuys = this.goodGuys.filter(a => a.isAlive);
-    const aliveBadGuys = this.badGuys.filter(a => a.isAlive);
+    const aliveGoodGuys = this.goodGuys.filter(Creatures.isAlive);
+    const aliveBadGuys = this.badGuys.filter(Creatures.isAlive);
 
     if (isEmpty(this.turns))
       this.turns = calculateTurns([ ...aliveGoodGuys, ...aliveBadGuys]);
@@ -74,7 +74,7 @@ export class Battle implements Tickable {
         this.result = "escaped";
     } else if (Executions.isAttack(execution)){
       if (execution.target.currentHealth <= 0) {
-        this.turns = this.turns.filter(a => a.isAlive);
+        this.turns = this.turns.filter(Creatures.isAlive);
         this.log.messages.push(`${attacker.name} killed ${execution.target.name}!`)
       }
     }
@@ -91,7 +91,7 @@ export class Battle implements Tickable {
     } else if (allDead(this.badGuys)) {
       this.result = "won";
       this.log.messages.push("You won!");
-      return new Spoils(this.goodGuys, this.badGuys, this.log);
+      return new Spoils(this.log);
     }
   }
 

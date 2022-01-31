@@ -9,6 +9,7 @@ import { useSettingsStore } from "@/settings-store";
 import { CreatureWithStatus } from "./battle-status";
 import BattleAreas, { BattleArea } from "./battle-area";
 import { chooseRandom } from "@/util/random";
+import Creatures from "@/creatures/creature";
 
 export type BattleDecisionMaker = (
     originator: CreatureWithStatus, 
@@ -30,11 +31,11 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
         }, originator)
     }
 
-    const allActions = cloneDeep(originator.possibleActions)
+    const allActions = cloneDeep(Creatures.battleActions(originator))
         .concat();
 
     const { escapeHealth } = storeToRefs(useSettingsStore());
-    if (originator.healthRatio < escapeHealth.value && allActions.some(a => a.type === "escape")) {
+    if (Creatures.healthRatio(originator) < escapeHealth.value && allActions.some(a => a.type === "escape")) {
         // If possible and necessary, escape
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         return Executions.makeEscape(allActions.find(BattleActions.isEscape)!);

@@ -33,10 +33,10 @@ export function battleActions(equipment: Equipment): BattleAction[] {
 
 }
 
-export function toggleEquipped(creature: Creature, itemName: string): void | "overload" {
-  const result = produce<Inventory | "overload">(creature.inventory, draft => {
-    const inventoryDraft = draft as Inventory;
-    const item = inventoryDraft[itemName];
+export function toggleEquipped(creature: Creature, itemName: string): Creature | "overload" {
+  return produce<Creature | "overload">(creature, draft => {
+    const creatureDraft = draft as Creature;
+    const item = creatureDraft.inventory[itemName];
     if (!item) {
       throw new Error(`Trying to toggle equipped on ${itemName}, which is not in the inventory`);
     }
@@ -47,7 +47,7 @@ export function toggleEquipped(creature: Creature, itemName: string): void | "ov
     
     if (!item.isEquipped) {
       
-      const equipment = from(inventoryDraft);
+      const equipment = from(creatureDraft.inventory);
       const previousItemAtSlot = equipment[item.slot];
 
       const loadLeft = load.creatureCapacity(creature) 
@@ -67,12 +67,6 @@ export function toggleEquipped(creature: Creature, itemName: string): void | "ov
       item.isEquipped = false;
     }
   });
-
-  if (result === "overload") {
-    return result;
-  } else {
-    creature.inventory = result;
-  }
 }
 
 export default {
