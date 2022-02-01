@@ -1,17 +1,21 @@
-import { playerToSavedPlayer } from "./player";
 import { useMainStore } from "@/store";
 import { useTravelStore } from "@/travel/travel-store";
 import { useSceneStore } from "@/scenes/scene-store";
 import { useNotificationStore } from "@/notification/notification-store";
-import { SaveData } from "./save-data";
 import { storeToRefs } from "pinia";
 import { useTickStore } from "@/ticking/tick-store";
 import { settlementToScene, Settlement } from "@/map/settlements";
 import { makeRest } from "@/tickables/rest";
-import { fixSaveHack } from "./fix-save-hack";
 import { useCreaturesStore } from "@/creatures-store";
+import { Creature } from "@/creatures/creature";
 
 const SAVE_PROPERTY = "save";
+
+type SaveData = {
+  player: Creature,
+  money: number,
+  location: Settlement,
+}
 
 export function save(): void {
   const store = storeToRefs(useMainStore());
@@ -19,7 +23,7 @@ export function save(): void {
   const travelStore = storeToRefs(useTravelStore());
 
   localStorage.setItem(SAVE_PROPERTY, JSON.stringify({
-    player: playerToSavedPlayer(creaturesStore.player.value),
+    player: creaturesStore.player.value,
     money: store.money.value,
     location: travelStore.mapStatus.value.type === "resting" 
       ? travelStore.mapStatus.value.at
@@ -39,23 +43,10 @@ export function load(): void {
   if (serializedSave) {
     const saveData = JSON.parse(serializedSave) as SaveData;
 
-    const player = {
-      id: "1",
-      species: saveData.player.species,
-      jobClass: saveData.player.jobClass,
-      name: saveData.player.name,
-      level: saveData.player.level,
-      inventory: saveData.player.inventory,
-      currentExp: saveData.player.currentExp,
-      currentHealth: saveData.player.currentHealth,
-    };
-
     const store = storeToRefs(useMainStore());
-    const { creatures } = storeToRefs(useCreaturesStore());
-    creatures.value["1"] = player;
+    const creaturesStore = useCreaturesStore();
+    creaturesStore.register(saveData.player);
     store.money.value = saveData.money;
-
-    fixSaveHack();
 
     const travelStore = useTravelStore();
     travelStore.mapStatus = {
