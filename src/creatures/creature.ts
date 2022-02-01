@@ -7,9 +7,11 @@ import { BattleAction } from "@/battle/battle-action";
 import LoadOps, { Load } from "@/items/load";
 import Skills, { Skill, } from "@/skills/skill";
 import ActionSkills, { ActionSkill } from "@/skills/action-skill";
-import { produce } from "immer";
 import { BattleStatus } from "@/battle/battle-status";
 import { useCreaturesStore } from "@/creatures-store";
+
+export const PLAYER_ID = "1";
+export const NO_CREATURE_ID = "0";
 
 export interface Creature {
   id: string;
@@ -138,7 +140,7 @@ function birth({
 
 // Null object pattern
 export const noCreature: Creature = {
-  id: "0",
+  id: NO_CREATURE_ID,
   species: noSpecies,
   jobClass: noClass,
   name: "None",
@@ -150,11 +152,6 @@ export const noCreature: Creature = {
 
 function isNoCreature(creature: Creature): boolean {
   return creature.id === "0";
-}
-
-// TODO: Use this for the creature store
-function isPlayer(creature: Creature): boolean {
-  return creature.id === "1";
 }
 
 export default {

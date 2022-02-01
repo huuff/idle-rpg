@@ -51,11 +51,8 @@
 import { ref } from "vue";
 import { JobClass } from "@/creatures/job-class";
 import { baseClasses } from "@/creatures/base-classes";
-import { useCreaturesStore } from "@/creatures-store";
 import { basicSpecies } from "@/creatures/basic-species";
-import Creatures from "@/creatures/creature";
-
-const creaturesStore = useCreaturesStore();
+import Creatures, { PLAYER_ID } from "@/creatures/creature";
 
 const playerName = ref("Player");
 
@@ -66,12 +63,12 @@ const props = withDefaults(defineProps<{
 });
 
 function createPlayer(jobClass: JobClass): void {
-  creaturesStore.register(Creatures.birth({
-    id: "1",
+  Creatures.birth({
+    id: PLAYER_ID,
     jobClass,
     name: playerName.value,
     species: basicSpecies.human,
-  }));
+  });
 }
 
 </script>

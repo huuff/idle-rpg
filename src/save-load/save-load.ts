@@ -7,7 +7,7 @@ import { useTickStore } from "@/ticking/tick-store";
 import { settlementToScene, Settlement } from "@/map/settlements";
 import { makeRest } from "@/tickables/rest";
 import { useCreaturesStore } from "@/creatures-store";
-import { Creature } from "@/creatures/creature";
+import { Creature, PLAYER_ID } from "@/creatures/creature";
 
 const SAVE_PROPERTY = "save";
 
@@ -45,6 +45,7 @@ export function load(): void {
 
     const store = storeToRefs(useMainStore());
     const creaturesStore = useCreaturesStore();
+    creaturesStore.remove(PLAYER_ID);
     creaturesStore.register(saveData.player);
     store.money.value = saveData.money;
 

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Creature } from "@/creatures/creature";
+import { Creature, PLAYER_ID } from "@/creatures/creature";
 
 // FUTURE: Why do I have to use string instead of Creature["id"]?
 // Creature["id"] throws a weird error yet my IDE and tools do not care about it
@@ -14,12 +14,18 @@ export const useCreaturesStore = defineStore("creatures", {
         creatures: {} as StoredCreatures,
     }),
     getters: {
-        player: (state) => (state.creatures["1"]),
+        player: (state) => (state.creatures[PLAYER_ID]),
     },
     actions: {
         register(creature: Creature) {
-            this.creatures[creature.id] = creature;
+          if (this.creatures[creature.id]) {
+            throw new Error(`Trying to register a creature with id ${creature.id}, but it already exists!`)
+          }
+          this.creatures[creature.id] = creature;
         },
+        remove(id: string) {
+          delete this.creatures[id];
+        }
     }
 })
 
