@@ -1,6 +1,5 @@
 import { Creature } from "@/creatures/creature";
 import BattleAreas, { BattleArea } from "./battle-area";
-import { extend } from "lodash";
 import Skills from "@/skills/skill";
 import { chooseRandom } from "@/util/random";
 import { last } from "lodash";
