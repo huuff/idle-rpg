@@ -21,8 +21,9 @@
 <script setup lang="ts">
 import { Shop } from "@/locations/shop";
 import { useMainStore } from "@/store";
+import { useCreaturesStore } from "@/creatures-store";
 import { storeToRefs } from "pinia";
-import { sellableValue, withoutSellable } from "@/items/selling";
+import { sellableValue, removeSellable } from "@/items/selling";
 import TabbedView from "@/components/ui/TabbedView.vue";
 import BuyView from "./BuyView.vue";
 import SellView from "./SellView.vue";
@@ -35,7 +36,8 @@ const emit = defineEmits<{
   (event: "back"): void;
 }>();
 
-const { player, money } = storeToRefs(useMainStore());
+const { money } = storeToRefs(useMainStore());
+const { player } = storeToRefs(useCreaturesStore());
 
 enum Tab {
   Buy = "Buy",
@@ -44,7 +46,7 @@ enum Tab {
 
 function sellSpoils() {
   money.value += sellableValue(player.value.inventory);
-  player.value.inventory = withoutSellable(player.value.inventory);
+  removeSellable(player.value.inventory);
 }
 
 </script>

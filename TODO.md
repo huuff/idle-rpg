@@ -6,6 +6,9 @@
 * Levelling up skills by adding points manually
 * Showing in what area everyone is in battle
 * Autoplay option to autosell stuff on arriving to setlements
+* Maybe start passing only IDs instead of full creatures around now that everything goes through the store?
+  * In battle
+* Stop using immer for equipment and do something mutable with the store
 
 # Future
 * I couldn't test `basic-zones` since it has some quite intricate circular dependencies

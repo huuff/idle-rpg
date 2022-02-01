@@ -1,5 +1,5 @@
 <template>
-    <div v-for="skill in creature.skills" class="box" :key="skill.type">
+    <div v-for="skill in Creatures.skills(creature)" class="box" :key="skill.type">
         <div class="level">
             <div class="level-left">
                 <div class="level-item">
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { Creature } from '@/creatures/creature';
+import Creatures, { Creature } from '@/creatures/creature';
 import Skills from '@/skills/skill';
 import { useSettingsStore } from '@/settings-store';
 import { storeToRefs } from 'pinia';

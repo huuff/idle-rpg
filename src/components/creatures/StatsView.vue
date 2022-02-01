@@ -6,17 +6,17 @@
   <strong>Class:</strong> {{ creature.jobClass.name }} <br/>
   <stat-detail 
     name="Max Health"
-    :value="creature.stats.maxHealth"
+    :value="totalStats.maxHealth"
     :details="getDetails('maxHealth')"
   /> <br />
   <stat-detail
     name="Strength"
-    :value="creature.stats.strength"
+    :value="totalStats.strength"
     :details="getDetails('strength')"
   /> <br/>
   <stat-detail
     name="Agility"
-    :value="creature.stats.agility"
+    :value="totalStats.agility"
     :details="getDetails('agility')"
   /> <br />
 </div>
@@ -24,20 +24,22 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { Creature } from "@/creatures/creature";
+import Creatures, { Creature } from "@/creatures/creature";
 import StatDetail from "./StatDetail.vue";
-import equipment from "@/items/equipment";
-import stats from "@/creatures/stats";
+import Equipments from "@/items/equipment";
+import StatsOps from "@/creatures/stats";
 
 const props = defineProps<{
   creature: Creature;
 }>();
 
-const equipmentStats = computed(() => equipment.stats(props.creature.equipment));
-const classStats = computed(() => stats.calculateByLevel(props.creature.jobClass, props.creature.level));
-const speciesStats = computed(() => stats.calculateByLevel(props.creature.species, props.creature.level));
+const equipmentStats = computed(() => Equipments.stats(Creatures.equipment(props.creature)));
+const classStats = computed(() => StatsOps.calculateByLevel(props.creature.jobClass, props.creature.level));
+const speciesStats = computed(() => StatsOps.calculateByLevel(props.creature.species, props.creature.level));
 
-function getDetails(statName: keyof typeof props.creature.stats) {
+const totalStats = computed(() => Creatures.stats(props.creature));
+
+function getDetails(statName: keyof typeof totalStats.value) {
   return {
     Equipment: equipmentStats.value[statName],
     Class: classStats.value[statName],

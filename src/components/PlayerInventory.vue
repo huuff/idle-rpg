@@ -3,13 +3,13 @@
 </template>
 
 <script setup lang="ts">
-import { useMainStore } from '@/store';
 import { useNotificationStore } from '@/notification/notification-store';
 import { storeToRefs } from 'pinia';
 import equipment from '@/items/equipment';
 import InventoryView from './inventory/InventoryView.vue';
+import { useCreaturesStore } from '@/creatures-store';
 
-const { player } = storeToRefs(useMainStore());
+const { player } = storeToRefs(useCreaturesStore());
 const notificationStore = useNotificationStore();
 
 function toggleEquipped(itemName: string): void {

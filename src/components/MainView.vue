@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useSceneStore } from "@/scenes/scene-store";
-import { useMainStore } from "@/store";
+import { useCreaturesStore } from "@/creatures-store";
 import { storeToRefs } from "pinia";
 import TabbedView from "@/components/ui/TabbedView.vue";
 import PlayerInventory from "@/components/PlayerInventory.vue";
@@ -32,7 +32,7 @@ enum Tab {
   Settings = "Settings",
 }
 
-const { player } = storeToRefs(useMainStore());
+const { player } = storeToRefs(useCreaturesStore());
 
 const mainView = computed(() => useSceneStore().mainView);
 </script>
