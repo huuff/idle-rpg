@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
 import { Creature } from "@/creatures/creature";
 
-// TODO: Why do I have to use string instead of Creature["id"]?
+// FUTURE: Why do I have to use string instead of Creature["id"]?
+// Creature["id"] throws a weird error yet my IDE and tools do not care about it
+// is this a weird pinia, TS bug?
 type StoredCreatures = { [id: string]: Creature }
 type CreaturesStoreState = {
     creatures: StoredCreatures;
