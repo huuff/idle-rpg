@@ -11,9 +11,6 @@ import { produce } from "immer";
 import { BattleStatus } from "@/battle/battle-status";
 import { useCreaturesStore } from "@/creatures-store";
 
-// TODO: most of these producers not needed now that everything works by mutating
-// state in the store
-
 export interface Creature {
   id: string;
   species: Species;
