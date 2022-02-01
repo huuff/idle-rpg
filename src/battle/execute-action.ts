@@ -7,7 +7,7 @@ import Executions, {
 } from "./action-execution";
 import BattleStatuses, { BattleStatus } from "./battle-status";
 import BattleAreas from "./battle-area";
-import inventory from "@/items/inventory";
+import Inventories from "@/items/inventory";
 import { Log } from "@/log";
 import { useCreaturesStore } from "@/creatures-store";
 
@@ -22,7 +22,7 @@ function executeSteal(steal: StealExecution, logger: Log): void {
     const { creatures } = useCreaturesStore();
     const thief = creatures[steal.originator.id];
     if (steal.item) {
-        thief.inventory = inventory.plus(thief.inventory, inventory.singleItem(steal.item))
+        Inventories.add(thief.inventory, Inventories.singleItem(steal.item));
     }
 
     logger.messages.push(steal.description);

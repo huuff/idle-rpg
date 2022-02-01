@@ -77,47 +77,23 @@ function battleActions(creature: Creature): BattleAction[] {
 }
 
 // TODO: Handle leveling up several levels at once
-function addExp(creature: Creature, exp: number): Creature {
+function addExp(creature: Creature, exp: number): void {
   if (exp < 0) {
     throw new Error(`Passed negative exp to 'addExp'! Value: ${exp}`)
   }
 
-  return produce(creature, draft => {
-    const newExp = draft.currentExp + exp;
-    const required = requiredExp(draft);
-    if (newExp >= required) {
-      const excedingExp = newExp - required;
-      draft.level++;
-      draft.currentExp = excedingExp;
-      draft.currentHealth += (draft.species.levelProgression.maxHealth ?? 0) + (draft.jobClass.levelProgression.maxHealth ?? 0);
-    } else {
-      draft.currentExp = newExp;
-    }
-    return draft;
-  })
+  const newExp = creature.currentExp + exp;
+  const required = requiredExp(creature);
+  if (newExp >= required) {
+    const excedingExp = newExp - required;
+    creature.level++;
+    creature.currentExp = excedingExp;
+    creature.currentHealth += (creature.species.levelProgression.maxHealth ?? 0) + (creature.jobClass.levelProgression.maxHealth ?? 0);
+  } else {
+    creature.currentExp = newExp;
+  }
 }
 
-function withHealth(creature: Creature, newHealth: number): Creature {
-  return produce(creature, draft => {
-    draft.currentHealth = newHealth;
-  });
-}
-
-function healthDelta(creature: Creature, change: number): Creature {
-  return withHealth(creature, creature.currentHealth + change);
-}
-
-function withInventory(creature: Creature, inventory: Inventory): Creature {
-  return produce(creature, draft => {
-    draft.inventory = inventory;
-  })
-}
-
-function rename(creature: Creature, newName: string): Creature {
-  return produce(creature, draft => {
-    draft.name = newName;
-  });
-}
 
 function birth({
   id = randomId(),
@@ -132,6 +108,15 @@ function birth({
   level?: number,
   jobClass?: JobClass,
 }): Creature {
+  const inventory: Inventory = {};
+  if (species.naturalItems) {
+    Inventories.add(inventory, species.naturalItems);
+  }
+
+  if (jobClass.baseEquipment) {
+    Inventories.add(inventory, jobClass.baseEquipment.map(Inventories.singleItem));
+  }
+
   const creature: Creature = {
     id,
     species,
@@ -139,21 +124,19 @@ function birth({
     level,
     jobClass,
     currentExp: 0,
+    battleStatus: undefined,
     currentHealth: 0,
-    inventory: Inventories.plus(
-      {},
-      (species.naturalItems ?? []).concat(jobClass.baseEquipment?.map(Inventories.singleItem) ?? []),
-    )
+    inventory
   }
 
   const maxHealth = stats(creature).maxHealth;
   // TODO: Improve this, maybe make stats take the necessary parts and not a full creature
   // so it can be built by parts
-  const result = withHealth(creature, maxHealth);
+  creature.currentHealth = maxHealth;
   const creaturesStore = useCreaturesStore();
-  creaturesStore.register(result);
+  creaturesStore.register(creature);
 
-  return result;
+  return creature;
 }
 
 // Null object pattern
@@ -172,6 +155,7 @@ function isNoCreature(creature: Creature): boolean {
   return creature.id === "0";
 }
 
+// TODO: Use this for the creature store
 function isPlayer(creature: Creature): boolean {
   return creature.id === "1";
 }
@@ -182,14 +166,10 @@ export default {
   load,
   birth,
   isAlive,
-  withHealth,
-  healthDelta,
   healthRatio,
   isNoCreature,
-  withInventory,
   addExp,
   requiredExp,
   battleActions,
-  rename,
   skills,
 }

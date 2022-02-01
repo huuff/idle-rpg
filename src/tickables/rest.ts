@@ -14,7 +14,7 @@ export function makeRest(): Tickable {
   const { mapStatus, map } = travelStore;
   return {
     tick: () => {
-      player.value = Creatures.healthDelta(player.value, +1);
+      player.value.currentHealth++;
     },
 
     isOver: () => player.value.currentHealth >= Creatures.stats(player.value).maxHealth,

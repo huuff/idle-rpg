@@ -1,4 +1,3 @@
-import { reactive } from "vue";
 import { useMainStore } from "@/store";
 import Creatures, { Creature, } from "@/creatures/creature";
 import { calculateTurns } from "./turns";
@@ -17,7 +16,7 @@ import BattleStatuses, { CreatureWithStatus } from "./battle-status";
 import { normalCreaturesToStored } from "@/creatures-store";
 
 function allDead(creatures: Creature[]) {
-  return creatures.every(Creatures.isAlive);
+  return creatures.every(c => !Creatures.isAlive(c));
 }
 
 export type BattleResult = "lost" | "won" | "escaped";
@@ -36,9 +35,10 @@ export class Battle implements Tickable {
     private readonly areas: BattleArea[],
   ) {
     this.log.clear();
-    BattleStatuses.setupTeams(goodGuys, renameCreatures(badGuys), this.areas);
-    this.badGuys = normalCreaturesToStored(goodGuys) as CreatureWithStatus[]; // TODO?
-    this.goodGuys = normalCreaturesToStored(badGuys) as CreatureWithStatus[];
+    renameCreatures(badGuys);
+    BattleStatuses.setupTeams(goodGuys, badGuys, this.areas);
+    this.badGuys = normalCreaturesToStored(badGuys) as CreatureWithStatus[]; // TODO?
+    this.goodGuys = normalCreaturesToStored(goodGuys) as CreatureWithStatus[];
     this.turns = calculateTurns([...this.goodGuys, ...this.badGuys]);
     this.scene = makeBattleScene(this.badGuys);
   }

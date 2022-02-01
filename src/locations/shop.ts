@@ -1,4 +1,4 @@
-import inventory, { 
+import Inventories, { 
   Inventory,
 } from "@/items/inventory";
 import { basicEquipments } from "@/items/basic-equipments";
@@ -17,10 +17,10 @@ function createShopInventory({ budget, rarity}: ShopSpecification): Inventory {
   let budgetLeft = budget;
   const possibleItems = Object.values(basicEquipments).filter(i => i.rarity >= rarity);
   
-  let availableItems: Inventory = {};
+  const availableItems: Inventory = {};
   while (budgetLeft > 0) {
     const choosenItem = chooseRandom(possibleItems);
-    availableItems = inventory.plus(availableItems, choosenItem);
+    Inventories.add(availableItems, choosenItem);
     budgetLeft -= choosenItem.avgValue;
   }
   return availableItems;
@@ -37,5 +37,5 @@ export const emptyShop: Shop = {
 };
 
 export function sellItem(shop: Shop, itemName: string) {
-  shop.inventory = inventory.minus(shop.inventory, itemName);
+  Inventories.remove(shop.inventory, itemName);
 }
