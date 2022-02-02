@@ -17,6 +17,7 @@ export const useCreaturesStore = defineStore("creatures", {
         player: (state) => (state.creatures[PLAYER_ID]),
     },
     actions: {
+      // TODO: Object parameter to override the existing creature
         register(creature: Creature) {
           if (this.creatures[creature.id]) {
             throw new Error(`Trying to register a creature with id ${creature.id}, but it already exists!`)

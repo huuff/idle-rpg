@@ -2,7 +2,6 @@
 * I could test some stuff like inventory functions n shiet
 * Now there are areas, but an archer just tries to punch everything to death instead of moving to be able to shoot
 * Unlock escape settings at some level
-* Save autosave settings on save
 * Cleanup dead creatures from the store
 * Use `create-vue`
 * Levelling up skills by adding points manually

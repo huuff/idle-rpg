@@ -8,6 +8,7 @@ import { settlementToScene, Settlement } from "@/map/settlements";
 import { makeRest } from "@/tickables/rest";
 import { useCreaturesStore } from "@/creatures-store";
 import { Creature, PLAYER_ID } from "@/creatures/creature";
+import { useSettingsStore } from "@/settings-store";
 
 const SAVE_PROPERTY = "save";
 
@@ -15,22 +16,28 @@ type SaveData = {
   player: Creature,
   money: number,
   location: Settlement,
+  autosave: boolean;
 }
 
 export function save(): void {
   const store = storeToRefs(useMainStore());
   const creaturesStore = storeToRefs(useCreaturesStore());
   const travelStore = storeToRefs(useTravelStore());
+  const settingsStore = storeToRefs(useSettingsStore());
+  const notificationStore = useNotificationStore();
 
-  localStorage.setItem(SAVE_PROPERTY, JSON.stringify({
+  const saveData: SaveData = {
     player: creaturesStore.player.value,
     money: store.money.value,
     location: travelStore.mapStatus.value.type === "resting" 
       ? travelStore.mapStatus.value.at
-      : travelStore.mapStatus.value.from
-  }));
+      : travelStore.mapStatus.value.from,
+    autosave: settingsStore.autosave.value.isEnabled,
+  }
 
-  useNotificationStore().setNotification("saved")
+  localStorage.setItem(SAVE_PROPERTY, JSON.stringify(saveData));
+
+  notificationStore.setNotification("saved")
 }
 
 export function saveDataExists(): boolean {
@@ -44,21 +51,31 @@ export function load(): void {
 
     const store = storeToRefs(useMainStore());
     const creaturesStore = useCreaturesStore();
+    const sceneStore = useSceneStore();
+    const travelStore = useTravelStore();
+    const tickStore = useTickStore();
+    const settingsStore = useSettingsStore();
+    const notificationStore = useNotificationStore();
+
     creaturesStore.remove(PLAYER_ID);
     creaturesStore.register(saveData.player);
     store.money.value = saveData.money;
 
-    const travelStore = useTravelStore();
     travelStore.mapStatus = {
       "type": "resting",
       at: saveData.location,
     }
-    const sceneStore = useSceneStore();
+
     sceneStore.setScene(settlementToScene(saveData.location as Settlement));
-    const tickStore = useTickStore();
     tickStore.start(makeRest())
 
-    useNotificationStore().setNotification("loaded")
+    if (saveData.autosave) {
+      settingsStore.autosave.start();
+    } else {
+      settingsStore.autosave.stop();
+    }
+
+    notificationStore.setNotification("loaded")
   }
 }
 
