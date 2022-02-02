@@ -1,5 +1,5 @@
 import { Item, } from "./item";
-import { isArray } from "lodash";
+import { isArray, cloneDeep } from "lodash";
 
 export type InventoryItem = {
   amount: number;
@@ -30,7 +30,7 @@ export function add(inventory: Inventory, items: Item | InventoryItem | Inventor
       if (item.name in inventory) {
         inventory[item.name].amount += item.amount;
       } else if (item.amount > 0) {
-        inventory[item.name] = item;
+        inventory[item.name] = cloneDeep(item);
       }
     }
 

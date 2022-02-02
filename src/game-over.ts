@@ -3,7 +3,6 @@ import { storeToRefs } from "pinia";
 import { useSceneStore } from "@/scenes/scene-store";
 import { useTravelStore } from "@/travel/travel-store";
 import { useCreaturesStore } from "./creatures-store";
-import { noCreature } from "@/creatures/creature";
 import basicSettlements from "@/map/basic-settlements.json";
 import { settlementToScene } from "./map/settlements";
 import { useSettingsStore } from "./settings-store";
