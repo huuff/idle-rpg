@@ -57,8 +57,7 @@ export function load(): void {
     const settingsStore = useSettingsStore();
     const notificationStore = useNotificationStore();
 
-    creaturesStore.remove(PLAYER_ID);
-    creaturesStore.register(saveData.player);
+    creaturesStore.register(saveData.player, { override: true });
     store.money.value = saveData.money;
 
     travelStore.mapStatus = {

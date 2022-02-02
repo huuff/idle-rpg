@@ -9,6 +9,10 @@ type CreaturesStoreState = {
     creatures: StoredCreatures;
 }
 
+type RegisterOptions = {
+  override?: boolean;
+}
+
 export const useCreaturesStore = defineStore("creatures", {
     state: (): CreaturesStoreState => ({
         creatures: {} as StoredCreatures,
@@ -17,16 +21,15 @@ export const useCreaturesStore = defineStore("creatures", {
         player: (state) => (state.creatures[PLAYER_ID]),
     },
     actions: {
-      // TODO: Object parameter to override the existing creature
-        register(creature: Creature) {
-          if (this.creatures[creature.id]) {
+        register(creature: Creature, { override = false }: RegisterOptions = {}) {
+          if (this.creatures[creature.id] && !override) {
             throw new Error(`Trying to register a creature with id ${creature.id}, but it already exists!`)
           }
           this.creatures[creature.id] = creature;
         },
         remove(id: string) {
           delete this.creatures[id];
-        }
+        },
     }
 })
 
