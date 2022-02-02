@@ -12,6 +12,7 @@ import ChooseCharacter from "@/components/modals/ChooseCharacter.vue";
 import NotificationMessage from "./components/NotificationMessage.vue";
 import { useCreaturesStore } from "./creatures-store";
 import startAutolevel from "@/autolevel";
+import { saveDataExists, load } from "@/save-load/save-load";
 
 const { player } = storeToRefs(useCreaturesStore());
 
@@ -22,5 +23,11 @@ const componentToShow = computed(() => {
     return Game;
 });
 
-onMounted(() => startAutolevel());
+onMounted(() => {
+  startAutolevel()
+
+  if (saveDataExists()) {
+    load();
+  }
+});
 </script>

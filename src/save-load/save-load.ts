@@ -34,8 +34,7 @@ export function save(): void {
 }
 
 export function saveDataExists(): boolean {
-  const value = !!localStorage.getItem(SAVE_PROPERTY);
-  return value;
+  return !!localStorage.getItem(SAVE_PROPERTY);
 }
 
 export function load(): void {

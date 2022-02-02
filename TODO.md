@@ -2,7 +2,7 @@
 * I could test some stuff like inventory functions n shiet
 * Now there are areas, but an archer just tries to punch everything to death instead of moving to be able to shoot
 * Unlock escape settings at some level
-* Autosave & Autoload
+* Save autosave settings on save
 * Levelling up skills by adding points manually
 * Showing in what area everyone is in battle
 * Autoplay option to autosell stuff on arriving to setlements
