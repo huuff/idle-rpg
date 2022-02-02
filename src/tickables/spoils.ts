@@ -41,7 +41,7 @@ export class Spoils implements Tickable {
       .reduce((a, b) => a + b);
     const expForEachWinner = totalExp / this.winners.length;
     for (const winner of this.winners) {
-      winner.currentExp += expForEachWinner; // TODO: This won't increase levels
+      winner.currentExp += expForEachWinner;
     }
     this.log.messages.push(`You earned ${totalExp} exp`);
   }

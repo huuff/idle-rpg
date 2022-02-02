@@ -75,21 +75,13 @@ function battleActions(creature: Creature): BattleAction[] {
   return equipmentActions.concat(classActions).concat(skillActions).concat(naturalActions);
 }
 
-// TODO: Handle leveling up several levels at once
-function addExp(creature: Creature, exp: number): void {
-  if (exp < 0) {
-    throw new Error(`Passed negative exp to 'addExp'! Value: ${exp}`)
-  }
-
-  const newExp = creature.currentExp + exp;
+function adjustLevel(creature: Creature): void {
   const required = requiredExp(creature);
-  if (newExp >= required) {
-    const excedingExp = newExp - required;
+  if (creature.currentExp >= required) {
+    const excedingExp = creature.currentExp - required;
     creature.level++;
     creature.currentExp = excedingExp;
     creature.currentHealth += (creature.species.levelProgression.maxHealth ?? 0) + (creature.jobClass.levelProgression.maxHealth ?? 0);
-  } else {
-    creature.currentExp = newExp;
   }
 }
 
@@ -162,7 +154,7 @@ export default {
   isAlive,
   healthRatio,
   isNoCreature,
-  addExp,
+  adjustLevel,
   requiredExp,
   battleActions,
   skills,

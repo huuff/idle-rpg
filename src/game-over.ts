@@ -10,13 +10,13 @@ import { useSettingsStore } from "./settings-store";
 
 // FUTURE: Choose a random starting location instead of always prontera
 export function gameOver(): void {
-  const { player } = storeToRefs(useCreaturesStore());
+  const creaturesStore = useCreaturesStore();
   const { autoplay } = storeToRefs(useSettingsStore());
   const { mapStatus } = storeToRefs(useTravelStore());
   const { prontera } = basicSettlements;
   const sceneStore = useSceneStore();
 
-  player.value = noCreature;
+  creaturesStore.remove(creaturesStore.player.id);
   autoplay.value = "disabled";
   mapStatus.value = {
     type: "resting",
