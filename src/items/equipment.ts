@@ -1,10 +1,12 @@
 import { BattleAction } from "@/battle/battle-action";
 import { plus, Stats, zeroStats } from "@/creatures/stats";
 import produce from "immer";
-import { keyBy, pickBy } from "lodash";
+import { pickBy } from "lodash";
 import { Inventory } from "./inventory";
 import { EquipmentItem, EquipmentSlot, isEquipment } from "./item";
 import { Creature } from "@/creatures/creature";
+import { keyBy } from "@/util/util";
+
 import load from "./load";
 
 export type EquipmentInventory<T> = { [ itemName in keyof T ]: EquipmentItem}
@@ -19,9 +21,8 @@ export function equipped(inventory: Inventory): EquipmentInventory<Inventory> {
 
 export type Equipment = {[slotName in EquipmentSlot]: EquipmentItem};
 
-// XXX: Why is the type not inferred? Is it the fault of lodash types? (Dictionary)
 export function from(inventory: Inventory): Equipment {
-  return keyBy(equipped(inventory), "slot") as Equipment;
+  return keyBy(Object.values(equipped(inventory)), "slot");
 }
 
 export function stats(equipment: Equipment): Stats {
