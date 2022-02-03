@@ -1,6 +1,6 @@
 
 import { Zone } from "@/zones/zone";
-import { MapStatus, matchMapStatus } from "@/map/map-status";
+import { MapStatus, matchMapStatus, RestingStatus, TravellingStatus } from "@/map/map-status";
 import { Settlement } from "@/map/settlements";
 
 export type Arrive = {
@@ -46,7 +46,11 @@ function notSupportedError(current: Readonly<MapStatus>, action: Readonly<Travel
   return new Error(`TravelAction '${JSON.stringify(action)}' for status '${current.type}' not handled in resolveNextStatus`);
 }
 
-export function resolveNextStatus(current: Readonly<MapStatus>, action: Readonly<TravelAction>): MapStatus {
+export function resolveNextStatus(current: RestingStatus, action: Depart): TravellingStatus;
+export function resolveNextStatus(current: MapStatus, action: Retreat | Arrive): RestingStatus;
+export function resolveNextStatus(current: TravellingStatus, action: Continue): TravellingStatus;
+export function resolveNextStatus(current: MapStatus, action: TravelAction): MapStatus;
+export function resolveNextStatus(current: MapStatus, action: TravelAction): MapStatus {
   return matchMapStatus<MapStatus>(current,
     (resting) => {
       if (action.type === "depart") {

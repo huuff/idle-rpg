@@ -17,15 +17,11 @@ export type TravelStoreState = {
   map: GameMap;
 };
 
-// FUTURE: I cast the status as the one I *know* they must be.
-// However, in the future it'd be cool if `resolveNextStatus` could give stronger guarantees
-// as to the return type. But I don't know how to do that yet.
-
 const { prontera, aldebaran } = basicSettlements;
 const { plains } = basicZones;
 
 export const useTravelStore = defineStore("travel", {
-  state: () => ({
+  state: (): TravelStoreState => ({
     mapStatus: {
       type: "resting",
       at: prontera,
@@ -36,31 +32,35 @@ export const useTravelStore = defineStore("travel", {
         { locations: [ prontera, aldebaran ], through: plains }
       ],
     },
-  }) as TravelStoreState,
+  }),
   actions: {
     takeAction(action: TravelAction) {
-        this.mapStatus = (resolveNextStatus(this.mapStatus, action));
         const sceneStore = useSceneStore();
         const tickStore = useTickStore();
         const settingsStore = useSettingsStore();
         matchTravelAction<void>(
           action, 
-          (arrive) => {  // eslint-disable-line @typescript-eslint/no-unused-vars
-            const status = this.mapStatus as RestingStatus;
+          (arrive) => {
+            const nextStatus = resolveNextStatus(this.mapStatus, arrive);
+            this.mapStatus = nextStatus;
             tickStore.start(makeRest())
             // AUTOPLAY 
             if (hasDestination(settingsStore.autoplay)
-                && status.at === settingsStore.autoplay.to) {
+                && nextStatus.at === settingsStore.autoplay.to) {
                 settingsStore.autoplay = "disabled";
             }
           }, 
-          (retreat) => {  // eslint-disable-line @typescript-eslint/no-unused-vars
-            const status = this.mapStatus as RestingStatus;
+          (retreat) => { 
+            const nextStatus = resolveNextStatus(this.mapStatus, retreat);
             tickStore.start(makeRest());
-            sceneStore.setScene(settlementToScene(status.at));
+            sceneStore.setScene(settlementToScene(nextStatus.at));
+            this.mapStatus = nextStatus;
           },
-          (cont) => {}, //eslint-disable-line
+          (cont) => {
+            this.mapStatus = resolveNextStatus(this.mapStatus, cont);
+          }, //eslint-disable-line
           (depart) => { // eslint-disable-line @typescript-eslint/no-unused-vars
+            this.mapStatus = resolveNextStatus(this.mapStatus, depart);
             tickStore.stop();
             tickStore.start(new Travel());
           }
