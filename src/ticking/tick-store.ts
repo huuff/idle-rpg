@@ -7,12 +7,12 @@ type TickState = {
 }
 
 export const useTickStore = defineStore("tick", {
-  state: () => ({
+  state: (): TickState => ({
     mainTicker: undefined,
     abortController: undefined,
-  }) as TickState,
+  }),
   actions: {
-    start(tickable: Tickable) {
+    start(tickable: Readonly<Tickable>) {
       this.abortController = new AbortController();
       this.mainTicker = runTickable(tickable, this.abortController.signal);
     },

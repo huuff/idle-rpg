@@ -7,7 +7,7 @@ import { useTickStore } from "@/ticking/tick-store";
 import { settlementToScene, Settlement } from "@/map/settlements";
 import { makeRest } from "@/tickables/rest";
 import { useCreaturesStore } from "@/creatures-store";
-import { Creature, PLAYER_ID } from "@/creatures/creature";
+import { Creature } from "@/creatures/creature";
 import { useSettingsStore } from "@/settings-store";
 
 const SAVE_PROPERTY = "save";

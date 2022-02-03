@@ -70,8 +70,8 @@ function battleActions(creature: Creature): BattleAction[] {
   const equipmentActions = Equipments.battleActions(equipment(creature));
   const classActions = creature.jobClass.battleActions ?? [];
   const skillActions = skills(creature)
-    .filter(ActionSkills.isActionSkill)
-    .map(s => ActionSkills.toBattleAction(s as ActionSkill));
+    .filter((s): s is ActionSkill => ActionSkills.isActionSkill(s))
+    .map(ActionSkills.toBattleAction);
   return equipmentActions.concat(classActions).concat(skillActions).concat(naturalActions);
 }
 

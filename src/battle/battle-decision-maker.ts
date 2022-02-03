@@ -60,7 +60,7 @@ export const defaultBattleDecisionMaker: BattleDecisionMaker = (
     
     if (!isEmpty(allPossibleAttacks)) {
         const possibleOutcomes = allPossibleAttacks
-            .map(e => [e, e.damage] as [AttackExecution, number])
+            .map(e => [e, e.damage] as const)
             .sort(([_1, damage1], [_2, damage2]) => damage1 - damage2)
             ;
 

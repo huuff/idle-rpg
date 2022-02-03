@@ -3,15 +3,15 @@ import { Species } from "@/creatures/species";
 import { normalizeFrequencies, randomByNormalizedFrequency } from "@/util/random";
 
 type EnemyWithLevel = {
-  species: Species;
-  averageLevel: number;
+  readonly species: Species;
+  readonly averageLevel: number;
 }
 
 export type EnemySpecification = {
-  frequency: number;
+  readonly frequency: number;
 } & EnemyWithLevel;
 
-export function createEnemyFactory(spec: EnemySpecification[]): () => Creature {
+export function createEnemyFactory(spec: Readonly<EnemySpecification[]>): () => Creature {
   const normalizedFrequencies = normalizeFrequencies(
     spec.map(e => [ { 
       species: e.species,

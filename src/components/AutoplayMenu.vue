@@ -33,6 +33,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faAngleUp, faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import ProportionSlider from "./ui/ProportionSlider.vue";
+import { Autoplay } from "@/autoplay";
 
 library.add(faAngleUp, faAngleDown);
 
@@ -47,12 +48,15 @@ const checkbox = computed({
   }
 });
 
-const isEngaged = computed(() => autoplay.value !== "disabled" && autoplay.value !== "enabled");
+function isTravelOption(autoplay: Readonly<Autoplay>): autoplay is TravelOption {
+  return autoplay !== "disabled" && autoplay !== "enabled"
+}
+
+const isEngaged = computed(() => isTravelOption(autoplay.value));
 
 const objective = computed(() => {
-  if (isEngaged.value) {
-    const destination = (autoplay.value as TravelOption);
-    return `Go to ${destination.to.name}`;
+  if (isTravelOption(autoplay.value)) {
+    return `Go to ${autoplay.value.to.name}`;
   } else {
     return "";
   }
