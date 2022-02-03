@@ -9,11 +9,11 @@ export interface Shop {
 }
 
 export interface ShopSpecification {
-  budget: number;
-  rarity: number;
+  readonly budget: number;
+  readonly rarity: number;
 }
 
-function createShopInventory({ budget, rarity}: ShopSpecification): Inventory {
+function createShopInventory({ budget, rarity}: Readonly<ShopSpecification>): Inventory {
   let budgetLeft = budget;
   const possibleItems = Object.values(basicEquipments).filter(i => i.rarity >= rarity);
   
@@ -26,7 +26,7 @@ function createShopInventory({ budget, rarity}: ShopSpecification): Inventory {
   return availableItems;
 }
 
-export function createShop({ budget, rarity }: ShopSpecification) {
+export function createShop({ budget, rarity }: Readonly<ShopSpecification>) {
   return {
     inventory: createShopInventory({budget, rarity})
   }

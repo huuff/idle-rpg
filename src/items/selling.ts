@@ -1,10 +1,10 @@
 import inventoryOps, { InventoryItem, Inventory } from "./inventory";
 
-export function findSellable(inventory: Inventory): InventoryItem[] {
+export function findSellable(inventory: Readonly<Inventory>): InventoryItem[] {
   return Object.values(inventory).filter(i => i.type === "stuff");
 }
 
-export function sellableValue(inventory: Inventory): number {
+export function sellableValue(inventory: Readonly<Inventory>): number {
   return findSellable(inventory).reduce((acc, i) => acc + (i.avgValue * i.amount), 0);
 }
 

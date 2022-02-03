@@ -1,10 +1,11 @@
 type NotificationLevel = "warning" | "danger" | "success" | "info";
 
 export type Notification = {
-  message: string;
-  level: NotificationLevel
+  readonly message: string;
+  readonly level: NotificationLevel
 }
 
+// TODO: Is `as const` a solution to these type assertions?
 // XXX: Casting all literals is a bit tiresome, find a way to type
 // this so that keyof typeof this autocompletes the messages
 const defaultNotifications = {

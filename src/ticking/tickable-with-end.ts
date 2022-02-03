@@ -4,7 +4,7 @@ import { Tickable } from "./async-ticker";
 // There must be a better way
 
 // A decorator that takes any tickable and adds an onEnd function
-export function makeTickableWithEnd(tickable: Tickable, end: () => void): Tickable {
+export function makeTickableWithEnd(tickable: Readonly<Tickable>, end: () => void): Tickable {
   return {
     firstTick: () => tickable.firstTick && tickable.firstTick(),
     tick: () => tickable.tick(),

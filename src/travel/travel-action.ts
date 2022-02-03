@@ -4,31 +4,31 @@ import { MapStatus, matchMapStatus } from "@/map/map-status";
 import { Settlement } from "@/map/settlements";
 
 export type Arrive = {
-  type: "arrive",
+  readonly type: "arrive",
 }
 
 export type Retreat = {
-  type: "retreat",
+  readonly type: "retreat",
 }
 
 export type Continue = {
-  type: "continue";
+  readonly type: "continue";
 }
 
 export type Depart = {
-  type: "depart";
-  to: Settlement;
-  through: Zone;
+  readonly type: "depart";
+  readonly to: Settlement;
+  readonly through: Zone;
 };
 
 export type TravelAction = Arrive | Retreat | Continue | Depart;
 
 export function matchTravelAction<T>(
-  action: TravelAction,
-  arriveFunc: (arrive: Arrive) => T,
-  retreatFunc: (retreat: Retreat) => T,
-  continueFunc: (cont: Continue) => T,
-  departFunc: (depart: Depart) => T,
+  action: Readonly<TravelAction>,
+  arriveFunc: (arrive: Readonly<Arrive>) => T,
+  retreatFunc: (retreat: Readonly<Retreat>) => T,
+  continueFunc: (cont: Readonly<Continue>) => T,
+  departFunc: (depart: Readonly<Depart>) => T,
 ): T {
   if (action.type === "arrive")
     return arriveFunc(action);
@@ -42,11 +42,11 @@ export function matchTravelAction<T>(
     throw new Error(`TravelAction of type ${JSON.stringify(action)} not handled in matchTravelAction`)
 }
 
-function notSupportedError(current: MapStatus, action: TravelAction): Error {
+function notSupportedError(current: Readonly<MapStatus>, action: Readonly<TravelAction>): Error {
   return new Error(`TravelAction '${JSON.stringify(action)}' for status '${current.type}' not handled in resolveNextStatus`);
 }
 
-export function resolveNextStatus(current: MapStatus, action: TravelAction): MapStatus {
+export function resolveNextStatus(current: Readonly<MapStatus>, action: Readonly<TravelAction>): MapStatus {
   return matchMapStatus<MapStatus>(current,
     (resting) => {
       if (action.type === "depart") {

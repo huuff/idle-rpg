@@ -5,6 +5,6 @@ import { TravelOption } from "@/map/game-map";
 // objectives. Also, pathfinding for a location objective
 export type Autoplay = "disabled" | "enabled" | TravelOption;
 
-export function hasDestination(autoplay: Autoplay): autoplay is TravelOption {
+export function hasDestination(autoplay: Readonly<Autoplay>): autoplay is TravelOption {
   return autoplay !== "disabled" && autoplay !== "enabled";
 }

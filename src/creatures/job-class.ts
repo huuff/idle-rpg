@@ -4,13 +4,13 @@ import { BattleAction } from "@/battle/battle-action";
 import { SkillSpec, Skill } from "@/skills/skill";
 
 export interface JobClass {
-  name: string;
-  baseStats: Stats;
-  levelProgression: Stats;
-  description: string;
-  baseEquipment?: EquipmentItem[];
-  battleActions?: BattleAction[];
-  skills?: SkillSpec<Skill>[];
+  readonly name: string;
+  readonly baseStats: Stats;
+  readonly levelProgression: Stats;
+  readonly description: string;
+  readonly baseEquipment?: EquipmentItem[];
+  readonly battleActions?: BattleAction[];
+  readonly skills?: SkillSpec<Skill>[];
 }
 
 export const noClass: JobClass =  {

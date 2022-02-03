@@ -9,7 +9,7 @@ export interface Settlement extends MapLocation {
   readonly shop: ShopSpecification,
 }
 
-export function settlementToScene(settlement: Settlement): Scene {
+export function settlementToScene(settlement: Readonly<Settlement>): Scene {
   return {
     mainView: () => h(SettlementView, { location: settlement }),
     sideView: () => h(RestingOptions, {}),

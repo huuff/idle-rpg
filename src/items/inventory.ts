@@ -5,16 +5,17 @@ export type InventoryItem = {
   amount: number;
 } & Item;
 
-export function isInventoryItem(item: Item): item is InventoryItem {
+export function isInventoryItem(item: Readonly<Item>): item is InventoryItem {
   return "amount" in item;
 }
 
 export type Inventory = { [itemName: string]: InventoryItem };
 
-export function singleItem(item: Item): InventoryItem {
+export function singleItem(item: Readonly<Item>): InventoryItem {
   return { ...item, amount: 1 };
 }
 
+// TODO: Can I make this readonly in any way?
 export function add(inventory: Inventory, item: Item): void;
 export function add(inventory: Inventory, item: InventoryItem): void;
 export function add(inventory: Inventory, items: InventoryItem[]): void;
@@ -36,7 +37,7 @@ export function add(inventory: Inventory, items: Item | InventoryItem | Inventor
 
 }
 
-export function merge(...inventories: Inventory[]): Inventory {
+export function merge(...inventories: Readonly<Inventory[]>): Inventory {
   const result: Inventory = {};
 
   for (const inventory of inventories)

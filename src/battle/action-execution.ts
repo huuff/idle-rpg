@@ -40,8 +40,8 @@ export type MoveExecution = Move & {
 
 function calculateDamage(
     baseDamage: number,
-    stats: Stats,
-    statVariability: Partial<Stats>,
+    stats: Readonly<Stats>,
+    statVariability: Readonly<Partial<Stats>>,
     generalVariability: number,
     ): number {
     const statContribution = sum(
@@ -116,9 +116,9 @@ function canExecute(
 }
 
 function makeSteal(
-    action: Steal,
-    executor: CreatureWithStatus,
-    target: CreatureWithStatus,
+    action: Readonly<Steal>,
+    executor: Readonly<CreatureWithStatus>,
+    target: Readonly<CreatureWithStatus>,
 ): StealExecution {
     const targetItems = Object.values(target.inventory);
     const itemToSteal = !isEmpty(targetItems) ? chooseRandom(targetItems) : undefined;
@@ -144,34 +144,34 @@ function makeSteal(
     }
 }
 
-function makeEscape(escape: Escape): EscapeExecution {
+function makeEscape(escape: Readonly<Escape>): EscapeExecution {
     return {
         type: "escape",
         success: Math.random() < escape.chance,
     }
 }
 
-function isEscape(execution: Execution): execution is EscapeExecution {
+function isEscape(execution: Readonly<Execution>): execution is EscapeExecution {
     return execution.type === "escape";
 }
 
-function isAttack(execution: Execution): execution is AttackExecution {
+function isAttack(execution: Readonly<Execution>): execution is AttackExecution {
     return execution.type === "attack";
 }
 
 function make(action: Escape): Execution
 function make(
-    action: Exclude<BattleAction, Escape | Move>, 
-    originator: CreatureWithStatus,
-    target: CreatureWithStatus): Execution
+    action: Readonly<Exclude<BattleAction, Escape | Move>>, 
+    originator: Readonly<CreatureWithStatus>,
+    target: Readonly<CreatureWithStatus>): Execution
 function make(
-    action: Move,
-    originator: CreatureWithStatus,
+    action: Readonly<Move>,
+    originator: Readonly<CreatureWithStatus>,
 ): Execution
 function make(
-    action: BattleAction, 
-    originator?: CreatureWithStatus, 
-    target?: CreatureWithStatus): Execution {
+    action: Readonly<BattleAction>, 
+    originator?: Readonly<CreatureWithStatus>, 
+    target?: Readonly<CreatureWithStatus>): Execution {
     return BattleActions.match<Execution>(action,
             (attack) => makeAttack(attack, originator!, target!), // eslint-disable-line @typescript-eslint/no-non-null-assertion
             (steal) => makeSteal(steal, originator!, target!), // eslint-disable-line @typescript-eslint/no-non-null-assertion

@@ -14,9 +14,9 @@ export const PLAYER_ID = "1";
 export const NO_CREATURE_ID = "0";
 
 export interface Creature {
-  id: string;
-  species: Species;
-  jobClass: JobClass,
+  readonly id: string;
+  readonly species: Species;
+  readonly jobClass: JobClass,
   inventory: Inventory,
   level: number;
   name: string;

@@ -11,25 +11,25 @@ import load from "./load";
 
 export type EquipmentInventory<T> = { [ itemName in keyof T ]: EquipmentItem}
 
-export function equipmentItems(inventory: Inventory): EquipmentInventory<Inventory> {
-  return pickBy(inventory, isEquipment) as EquipmentInventory<Inventory>;
+export function equipmentItems(inventory: Readonly<Inventory>): EquipmentInventory<Inventory> {
+  return pickBy(inventory, isEquipment) as EquipmentInventory<Inventory>; // TODO: My own pickby implementation
 }
 
-export function equipped(inventory: Inventory): EquipmentInventory<Inventory> {
+export function equipped(inventory: Readonly<Inventory>): EquipmentInventory<Inventory> {
   return pickBy(equipmentItems(inventory), i => i.isEquipped) as EquipmentInventory<Inventory>;
 }
 
 export type Equipment = {[slotName in EquipmentSlot]: EquipmentItem};
 
-export function from(inventory: Inventory): Equipment {
+export function from(inventory: Readonly<Inventory>): Equipment {
   return keyBy(Object.values(equipped(inventory)), "slot");
 }
 
-export function stats(equipment: Equipment): Stats {
+export function stats(equipment: Readonly<Equipment>): Stats {
   return plus(...Object.values(equipment).map(e => e.stats ?? zeroStats));
 }
 
-export function battleActions(equipment: Equipment): BattleAction[] {
+export function battleActions(equipment: Readonly<Equipment>): BattleAction[] {
   return Object.values(equipment).flatMap(e => e.battleActions ?? []);
 
 }

@@ -33,26 +33,26 @@ export interface Move {
     to: BattleArea,
 }
 
-function isEscape(action: BattleAction): action is Escape {
+function isEscape(action: Readonly<BattleAction>): action is Escape {
     return action.type === "escape";
 }
 
-function isSteal(action: BattleAction): action is Steal {
+function isSteal(action: Readonly<BattleAction>): action is Steal {
     return action.type === "steal";
 }
 
-function isAttack(action: BattleAction): action is Attack {
+function isAttack(action: Readonly<BattleAction>): action is Attack {
     return action.type === "attack";
 }
 
-export type BattleAction = BaseAction<Attack | Steal | Escape | Move>;
+export type BattleAction = Readonly<BaseAction<Attack | Steal | Escape | Move>>;
 
 function match<T>(
-    action: BattleAction, 
-    onAttack: (attack: Attack) => T,
-    onSteal: (steal: Steal) => T,
-    onEscape: (escape: Escape) => T,
-    onMove: (move: Move) => T,
+    action: Readonly<BattleAction>, 
+    onAttack: (attack: Readonly<Attack>) => T,
+    onSteal: (steal: Readonly<Steal>) => T,
+    onEscape: (escape: Readonly<Escape>) => T,
+    onMove: (move: Readonly<Move>) => T,
 ) {
     if (action.type === "attack") {
         return onAttack(action);

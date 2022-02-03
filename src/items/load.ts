@@ -6,20 +6,20 @@ import Skills from "@/skills/skill";
 const LOAD_STRENGTH_MODIFIER = 0.8;
 
 export type Load = {
-    current: number;
-    max: number;
+    readonly current: number;
+    readonly max: number;
 }
 
-export function total(equipment: Equipment): number {
+export function total(equipment: Readonly<Equipment>): number {
     return sum(Object.values(equipment).map(e => e.weight));
 }
 
-export function creatureCapacity(creature: Creature): number {
+export function creatureCapacity(creature: Readonly<Creature>): number {
     const strengthContribution = Creatures.stats(creature).strength * LOAD_STRENGTH_MODIFIER;
     return strengthContribution + (Skills.loadBonus(Creatures.skills(creature)) * strengthContribution);
 }
 
-export function proportion(load: Load): number {
+export function proportion(load: Readonly<Load>): number {
     return load.current / load.max;
 }
 

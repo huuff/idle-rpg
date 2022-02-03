@@ -81,6 +81,7 @@ const archer: JobClass = {
   ]
 };
 
+// TODO: Use my keyBy implementation
 export const baseClasses: { [className: string]: JobClass} = {
   "Swordsman": swordsman,
   "Thief": thief,

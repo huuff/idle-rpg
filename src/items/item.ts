@@ -28,7 +28,7 @@ export type EquipmentItem = {
 
 export type Item = StuffItem | EquipmentItem;
 
-export function isEquipment(item: Item): item is EquipmentItem {
+export function isEquipment(item: Readonly<Item>): item is EquipmentItem {
   return item.type === "equipment";
 }
 
