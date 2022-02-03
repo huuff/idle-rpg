@@ -2,6 +2,10 @@ import { omit, sum, mapValues } from "lodash";
 
 export type StatType = "maxHealth" | "strength" | "agility";
 
+function isStatType(value: string): value is StatType {
+  return [ "maxHealth", "strength", "agility" ].includes(value);
+}
+
 export type Stats = {
   readonly [type in StatType]?: number;
 }
@@ -74,5 +78,6 @@ export default {
   totalize,
   round,
   calculateByLevel,
-  carryingCapacity
+  carryingCapacity,
+  isStatType,
 }

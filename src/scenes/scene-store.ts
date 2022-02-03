@@ -13,9 +13,9 @@ const fakeScene: Scene = {
 }
 
 export const useSceneStore = defineStore("scene", {
-  state: () => ({
+  state: (): SceneState => ({
     internalScene: fakeScene,
-  }) as SceneState,
+  }),
   getters: {
     scene: (state) => {
       const travelStore = useTravelStore(); 

@@ -27,7 +27,7 @@ export function randomByNormalizedFrequency<T>(optionsToFrequencies: readonly [T
   const accumulatedFrequencies = accumulate(
     optionsToFrequencies, 
     opt => opt[1],
-    (opt, freq) => [opt[0], freq] as [T, number]
+    (opt, freq) => [opt[0], freq] as [T, number],
   );
 
   const target = Math.random();

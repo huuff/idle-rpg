@@ -1,7 +1,7 @@
 import { Item } from "@/items/item";
 import { variabilityRandom, chooseRandom } from "@/util/random";
 import { sum, isEmpty } from "lodash";
-import { Stats, StatType } from "@/creatures/stats";
+import StatsOps, { Stats, StatType } from "@/creatures/stats";
 import BattleActions, { Steal, Attack, BattleAction, Escape, BaseAction, Move } from "./battle-action";
 import BattleStatuses, { CreatureWithStatus } from "./battle-status";
 import { extend } from "lodash";
@@ -50,7 +50,7 @@ function calculateDamage(
         .map(([statName, contrib]) => {
             // Latest installment of "filter won't narrow my fucking types"
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            return variabilityRandom((stats[statName as StatType] ?? 0) * contrib!, generalVariability)
+            return variabilityRandom((stats[statName as StatType]?? 0) * contrib!, generalVariability)
         })
     );
 
