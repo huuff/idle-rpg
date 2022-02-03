@@ -48,9 +48,7 @@ function calculateDamage(
         Object.entries(statVariability)
         .filter((nameAndContrib): nameAndContrib is [string, number] => !!nameAndContrib[1])
         .filter((nameAndContrib): nameAndContrib is [StatType, number] => StatsOps.isStatType(nameAndContrib[0]))
-        .map(([statName, contrib]) => {
-            return variabilityRandom((stats[statName]?? 0) * contrib, generalVariability)
-        })
+        .map(([statName, contrib]) => variabilityRandom((stats[statName]?? 0) * contrib, generalVariability))
     );
 
     return variabilityRandom(baseDamage, generalVariability) + statContribution;
