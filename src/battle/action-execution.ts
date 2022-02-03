@@ -46,11 +46,10 @@ function calculateDamage(
     ): number {
     const statContribution = sum(
         Object.entries(statVariability)
-        .filter(([_, contrib]) => !!contrib)
+        .filter((nameAndContrib): nameAndContrib is [string, number] => !!nameAndContrib[1])
+        .filter((nameAndContrib): nameAndContrib is [StatType, number] => StatsOps.isStatType(nameAndContrib[0]))
         .map(([statName, contrib]) => {
-            // Latest installment of "filter won't narrow my fucking types"
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            return variabilityRandom((stats[statName as StatType]?? 0) * contrib!, generalVariability)
+            return variabilityRandom((stats[statName]?? 0) * contrib, generalVariability)
         })
     );
 
