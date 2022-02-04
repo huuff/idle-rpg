@@ -47,9 +47,8 @@ function isStill(status: Readonly<BattleStatus>): status is StillStatus {
     return status.type === "still";
 }
 
-function setup<T extends BattleStatus>(creature: Readonly<Creature>, status: T): void {
-    const { creatures } = useCreaturesStore();
-    creatures[creature.id].battleStatus = status;
+function setup<T extends BattleStatus>(creature: Creature, status: T): void {
+    creature.battleStatus = status;
 }
 
 function assertHasStatus(creature: Creature): creature is CreatureWithStatus {

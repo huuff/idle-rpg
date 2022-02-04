@@ -9,20 +9,15 @@ import BattleStatuses, { BattleStatus } from "./battle-status";
 import BattleAreas from "./battle-area";
 import Inventories from "@/items/inventory";
 import { Log } from "@/log";
-import { useCreaturesStore } from "@/creatures-store";
 
-function executeAttack(attack: Readonly<AttackExecution>, logger: Readonly<Log>): void {
-    const { creatures } = useCreaturesStore();
-    const target = creatures[attack.target.id];
-    target.currentHealth -= attack.damage;
+function executeAttack(attack: AttackExecution, logger: Readonly<Log>): void {
+    attack.target.currentHealth -= attack.damage;
     logger.messages.push(attack.description);
 }
 
-function executeSteal(steal: Readonly<StealExecution>, logger: Readonly<Log>): void {
-    const { creatures } = useCreaturesStore();
-    const thief = creatures[steal.originator.id];
+function executeSteal(steal: StealExecution, logger: Readonly<Log>): void {
     if (steal.item) {
-        Inventories.add(thief.inventory, Inventories.singleItem(steal.item));
+        Inventories.add(steal.originator.inventory, Inventories.singleItem(steal.item));
     }
 
     logger.messages.push(steal.description);
@@ -35,11 +30,10 @@ function executeEscape(escape: Readonly<EscapeExecution>, logger: Readonly<Log>)
         logger.messages.push("You try to escape the battle but have no success!");
 }
 
-function executeMove(move: Readonly<MoveExecution>, logger: Readonly<Log>): void {
-    const { creatures } = useCreaturesStore();
-    const creature = creatures[move.originator.id];
+function executeMove(move: MoveExecution, logger: Readonly<Log>): void {
+    const creature = move.originator;
     creature.battleStatus = BattleStatuses.match<BattleStatus>(
-        creature.battleStatus!, //TODO
+        creature.battleStatus,
         (still) => ({
             type: "moving",
             from: still.in,

@@ -8,9 +8,6 @@
 * Levelling up skills by adding points manually
 * Showing in what area everyone is in battle
 * Autoplay option to autosell stuff on arriving to setlements
-* Maybe start passing only IDs instead of full creatures around now that everything goes through the store?
-  * In battle
-  * In views? just get the ID and retrieve it from the store? At leas this way it wouldn't be an antipattern to edit them
 * Maybe give settlements ids too? That way one wouldn't need to compare by name
 * Money as an item?
 * Maybe also ids for shops? I think my logic for selling/buying on them it's not too sound. These could be mutable and in the store and modify them as necessary (such as restocking etc)
