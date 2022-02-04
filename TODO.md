@@ -8,7 +8,6 @@
 * Levelling up skills by adding points manually
 * Showing in what area everyone is in battle
 * Autoplay option to autosell stuff on arriving to setlements
-* Maybe give settlements ids too? That way one wouldn't need to compare by name
 * Money as an item?
 * Maybe also ids for shops? I think my logic for selling/buying on them it's not too sound. These could be mutable and in the store and modify them as necessary (such as restocking etc)
 * An animation for notifications?

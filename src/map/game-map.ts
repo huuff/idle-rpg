@@ -1,5 +1,6 @@
 import { Zone } from "@/zones/zone";
 import { Settlement } from "./settlements";
+import { isEqual} from "lodash";
 
 export interface MapLocation {
   readonly name: string;
@@ -22,9 +23,9 @@ export interface GameMap {
 
 export function optionsFrom(map: Readonly<GameMap>, location: Readonly<Settlement>) {
   return map.connections
-  .filter(conn => conn.locations.some(loc => loc.name === location.name))
+  .filter(conn => conn.locations.some(l => isEqual(l, location)))
   .map(conn => ({
-    to: conn.locations[0].name === location.name ? conn.locations[1] : conn.locations[0],
+    to: isEqual(conn.locations[0], location) ? conn.locations[1] : conn.locations[0],
     through: conn.through,
   }));
 }
