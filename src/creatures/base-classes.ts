@@ -1,5 +1,6 @@
 import { basicEquipments } from "@/items/basic-equipments";
 import { JobClass } from "./job-class";
+import { keyBy } from "@/util/util";
 
 const { woodenSword, ironKnife, woodenBow } = basicEquipments;
 
@@ -81,9 +82,4 @@ const archer: JobClass = {
   ]
 };
 
-// TODO: Use my keyBy implementation
-export const baseClasses: { [className: string]: JobClass} = {
-  "Swordsman": swordsman,
-  "Thief": thief,
-  "Archer": archer,
-}
+export const baseClasses: { [className: string]: JobClass} = keyBy([swordsman, thief, archer], "name");
