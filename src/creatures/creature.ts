@@ -30,7 +30,7 @@ function randomId(): string {
   return (Math.round(Math.random() * 1_000_000) + 2).toString();
 }
 
-function stats(creature: Creature): Required<Stats> {
+function stats(creature: Pick<Creature, "species" | "jobClass" | "level" | "inventory">): Required<Stats> {
   return StatsOps.totalize(StatsOps.round(StatsOps.plus(
     StatsOps.calculateByLevel(creature.species, creature.level),
     StatsOps.calculateByLevel(creature.jobClass, creature.level),
@@ -38,7 +38,7 @@ function stats(creature: Creature): Required<Stats> {
   )));
 }
 
-function equipment(creature: Creature): Equipment {
+function equipment(creature: Pick<Creature, "inventory">): Equipment {
   return Equipments.from(creature.inventory);
 }
 
@@ -108,22 +108,23 @@ function birth({
     Inventories.add(inventory, jobClass.baseEquipment.map(Inventories.singleItem));
   }
 
-  const creature: Creature = {
-    id,
+  const baseCreature = {
     species,
-    name: name ?? species.name,
-    level,
     jobClass,
-    currentExp: 0,
-    battleStatus: undefined,
-    currentHealth: 0,
+    level,
     inventory
   }
 
-  const maxHealth = stats(creature).maxHealth;
-  // TODO: Improve this, maybe make stats take the necessary parts and not a full creature
-  // so it can be built by parts
-  creature.currentHealth = maxHealth;
+
+  const maxHealth = stats(baseCreature).maxHealth;
+  const creature: Creature = {
+    ...baseCreature,
+    id,
+    name: name ?? species.name,
+    currentHealth: maxHealth,
+    currentExp: 0,
+    battleStatus: undefined,
+  }
   const creaturesStore = useCreaturesStore();
   creaturesStore.register(creature);
 
