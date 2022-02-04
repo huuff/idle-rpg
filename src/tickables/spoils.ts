@@ -8,19 +8,12 @@ import { useCreaturesStore } from "@/creatures-store";
 
 export class Spoils implements Tickable {
   private ticksHad = 0;
-  private readonly winners: Creature[];
-  private readonly losers: Creature[];
 
   constructor(
-    winners: Creature[],
-    losers: Creature[],
+    private readonly winners: Creature[],
+    private readonly losers: Creature[],
     private readonly log: Log,
-  ){
-    const { creatures } = useCreaturesStore();
-    this.winners = winners.map(c => c.id).map(id => creatures[id]); 
-    this.losers = losers.map(c => c.id).map(id => creatures[id]);
-
-  }
+  ){  }
   
   public tick(): void {
     if (this.ticksHad === 0) {
