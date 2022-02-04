@@ -1,6 +1,5 @@
 import { BattleAction } from "@/battle/battle-action";
 import { plus, Stats, zeroStats } from "@/creatures/stats";
-import produce from "immer";
 import { pickBy } from "lodash";
 import { Inventory } from "./inventory";
 import { EquipmentItem, EquipmentSlot, isEquipment } from "./item";
@@ -34,10 +33,8 @@ export function battleActions(equipment: Readonly<Equipment>): BattleAction[] {
 
 }
 
-export function toggleEquipped(creature: Creature, itemName: string): Creature | "overload" {
-  return produce<Creature | "overload">(creature, draft => {
-    const creatureDraft = draft as Creature;
-    const item = creatureDraft.inventory[itemName];
+export function toggleEquipped(creature: Creature, itemName: string): void | "overload" {
+    const item = creature.inventory[itemName];
     if (!item) {
       throw new Error(`Trying to toggle equipped on ${itemName}, which is not in the inventory`);
     }
@@ -48,7 +45,7 @@ export function toggleEquipped(creature: Creature, itemName: string): Creature |
     
     if (!item.isEquipped) {
       
-      const equipment = from(creatureDraft.inventory);
+      const equipment = from(creature.inventory);
       const previousItemAtSlot = equipment[item.slot];
 
       const loadLeft = load.creatureCapacity(creature) 
@@ -67,7 +64,6 @@ export function toggleEquipped(creature: Creature, itemName: string): Creature |
     } else {
       item.isEquipped = false;
     }
-  });
 }
 
 export default {

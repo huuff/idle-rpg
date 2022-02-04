@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { GameMap } from "@/map/game-map";
-import { MapStatus, RestingStatus } from "@/map/map-status";
+import { MapStatus, } from "@/map/map-status";
 import { TravelAction, resolveNextStatus, matchTravelAction } from "./travel-action";
 import { makeRest } from "@/tickables/rest";
 import { Travel } from "@/travel/travel";
