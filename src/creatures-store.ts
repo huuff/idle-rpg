@@ -21,19 +21,15 @@ export const useCreaturesStore = defineStore("creatures", {
         player: (state) => (state.creatures[PLAYER_ID]),
     },
     actions: {
-        register(creature: Creature, { override = false }: RegisterOptions = {}) {
+        register(creature: Creature, { override = false }: RegisterOptions = {}): Creature {
           if (this.creatures[creature.id] && !override) {
             throw new Error(`Trying to register a creature with id ${creature.id}, but it already exists!`)
           }
           this.creatures[creature.id] = creature;
+          return this.creatures[creature.id];
         },
         remove(id: string) {
           delete this.creatures[id];
         },
     }
 })
-
-export function normalCreaturesToStored(normal: Creature[]): Creature[] {
-    const { creatures } = useCreaturesStore();
-    return normal.map(c => creatures[c.id]);
-}

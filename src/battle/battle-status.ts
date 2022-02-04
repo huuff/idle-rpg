@@ -52,6 +52,15 @@ function setup<T extends BattleStatus>(creature: Readonly<Creature>, status: T):
     creatures[creature.id].battleStatus = status;
 }
 
+function assertHasStatus(creature: Creature): creature is CreatureWithStatus {
+    const result = !!creature.battleStatus;
+    if (!result) {
+        throw new Error(`Tried to assert that creature ${creature.name} has a battle status, but it doesn't`);
+    } else {
+        return true;
+    }
+}
+
 
 function setupTeams(goodGuys: Readonly<Creature[]>, badGuys: Readonly<Creature[]>, areas: Readonly<BattleArea[]>): void {
     // First, choose a random area to be the frontguard
@@ -99,4 +108,5 @@ export default {
     setupTeams,
     match,
     currentLocation,
+    assertHasStatus,
 }

@@ -13,7 +13,6 @@ import { defaultBattleDecisionMaker } from "./battle-decision-maker";
 import { isEmpty } from "lodash";
 import { BattleArea } from "./battle-area";
 import BattleStatuses, { CreatureWithStatus } from "./battle-status";
-import { normalCreaturesToStored } from "@/creatures-store";
 
 function allDead(creatures: Creature[]) {
   return creatures.every(c => !Creatures.isAlive(c));
@@ -36,9 +35,10 @@ export class Battle implements Tickable {
   ) {
     this.log.clear();
     renameCreatures(badGuys);
+
     BattleStatuses.setupTeams(goodGuys, badGuys, this.areas);
-    this.badGuys = normalCreaturesToStored(badGuys) as CreatureWithStatus[]; // TODO?
-    this.goodGuys = normalCreaturesToStored(goodGuys) as CreatureWithStatus[];
+    this.badGuys = badGuys.filter(BattleStatuses.assertHasStatus);
+    this.goodGuys = goodGuys.filter(BattleStatuses.assertHasStatus);
     this.turns = calculateTurns([...this.goodGuys, ...this.badGuys]);
     this.scene = makeBattleScene(this.badGuys);
   }

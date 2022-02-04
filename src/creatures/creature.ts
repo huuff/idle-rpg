@@ -126,9 +126,7 @@ function birth({
     battleStatus: undefined,
   }
   const creaturesStore = useCreaturesStore();
-  creaturesStore.register(creature);
-
-  return creature;
+  return creaturesStore.register(creature);
 }
 
 // Null object pattern
