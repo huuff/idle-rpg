@@ -1,8 +1,8 @@
 import { BattleAction } from "@/battle/battle-action";
 import { plus, Stats, zeroStats } from "@/creatures/stats";
-import { pickBy } from "lodash";
 import { Inventory } from "./inventory";
-import { EquipmentItem, EquipmentSlot, isEquipment } from "./item";
+import { EquipmentItem, EquipmentSlot, isEquipment, Item } from "./item";
+import { pickBy } from "lodash";
 import { Creature } from "@/creatures/creature";
 import { keyBy } from "@/util/util";
 
@@ -10,8 +10,19 @@ import load from "./load";
 
 export type EquipmentInventory<T> = { [ itemName in keyof T ]: EquipmentItem}
 
-export function equipmentItems(inventory: Readonly<Inventory>): EquipmentInventory<Inventory> {
-  return pickBy(inventory, isEquipment) as EquipmentInventory<Inventory>; // TODO: My own pickby implementation
+// TODO: Do with `equipped` as i did with equipmentItems (that is, write my own implementation
+// that gives the correct type instead of a `Dictionary`). Maybe some day I manage to get
+// a generic `pickBy` implementation that does it for any type, but I'm hopeless about it
+// right now
+
+export function equipmentItems(inventory: Inventory): EquipmentInventory<typeof inventory> {
+  return Object.entries(inventory)
+    .map<[string, Item]>(item => item)
+    .filter((tuple): tuple is [string, EquipmentItem] => isEquipment(tuple[1]))
+    .reduce((acc, [k, v]) => {
+      acc[k] = v;
+      return acc;
+    }, {} as EquipmentInventory<typeof inventory>) ;
 }
 
 export function equipped(inventory: Readonly<Inventory>): EquipmentInventory<Inventory> {
