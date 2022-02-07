@@ -3,7 +3,6 @@ import BattleAreas, { BattleArea } from "./battle-area";
 import Skills from "@/skills/skill";
 import { chooseRandom } from "@/util/random";
 import { last } from "lodash";
-import { useCreaturesStore } from "@/creatures-store";
 
 export type StillStatus = {
     readonly type: "still";
