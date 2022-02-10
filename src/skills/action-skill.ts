@@ -3,25 +3,25 @@ import { Escape, Steal } from "@/battle/battle-action";
 
 export type ActionSkill = Skill & { action: true };
 
-function isActionSkill(skill: Readonly<Skill>): skill is ActionSkill {
+function isActionSkill(skill: Skill): skill is ActionSkill {
     return ("action" in skill) && skill.action;
 }
 
-function stealToBattleAction(skill: Readonly<StealSkill>): Steal {
+function stealToBattleAction(skill: StealSkill): Steal {
     return {
         type: "steal",
         chance: Skills.stealChance(skill),
     }
 }
 
-function escapeToBattleAction(skill: Readonly<EscapeSkill>): Escape {
+function escapeToBattleAction(skill: EscapeSkill): Escape {
     return {
         type: "escape",
         chance: Skills.escapeChance(skill)
     }
 }
 
-function toBattleAction(skill: Readonly<ActionSkill>) {
+function toBattleAction(skill: ActionSkill) {
     if (skill.type === "steal") {
         return stealToBattleAction(skill);
     } else if (skill.type === "escape") {

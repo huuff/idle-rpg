@@ -50,11 +50,11 @@ export type Skill = BaseSkill<
      progress?: number // Progress to next level
  };
 
-function match<T>(skill: Readonly<Skill>,
-    onArmorMastery: (armorMastery: Readonly<ArmorMastery>) => T,
-    onSteal: (steal: Readonly<StealSkill>) => T,
-    onEscape: (escape: Readonly<EscapeSkill>) => T,
-    onInitiative: (rearguard: Readonly<InitiativeSkill>) => T,
+function match<T>(skill: Skill,
+    onArmorMastery: (armorMastery: ArmorMastery) => T,
+    onSteal: (steal: StealSkill) => T,
+    onEscape: (escape: EscapeSkill) => T,
+    onInitiative: (rearguard: InitiativeSkill) => T,
 ): T {
     if (skill.type === "armor-mastery") {
         return onArmorMastery(skill);
@@ -69,28 +69,28 @@ function match<T>(skill: Readonly<Skill>,
     }
 }
 
-function isArmorMastery(skill: Readonly<Skill>): skill is ArmorMastery {
+function isArmorMastery(skill: Skill): skill is ArmorMastery {
     return skill.type === "armor-mastery";
 }
 
 export const AMOR_MASTERY_MODIFIER = 0.1;
-function loadBonus(skills: Readonly<Skill[]>): number {
+function loadBonus(skills: Skill[]): number {
     return (skills.find(isArmorMastery)?.level ?? 0) * AMOR_MASTERY_MODIFIER;
 }
 
 export const STEAL_MODIFIER = 0.1;
-function stealChance(steal: Readonly<StealSkill>): number {
+function stealChance(steal: StealSkill): number {
     return steal.level * STEAL_MODIFIER;
 }
 
 export const ESCAPE_CHANCE_MODIFIER = 0.1;
 export const ESCAPE_MIN_CHANCE = 0.5;
-function escapeChance(escape: Readonly<EscapeSkill>): number {
+function escapeChance(escape: EscapeSkill): number {
     return ESCAPE_MIN_CHANCE + (escape.level * ESCAPE_CHANCE_MODIFIER);
 }
 
 
-function describe(skill: Readonly<Skill>): string {
+function describe(skill: Skill): string {
     return match(skill,
         (armorMastery) => `Load capacity +${(armorMastery.level * AMOR_MASTERY_MODIFIER) * 100}%`,
         (steal) => `Steal chance +${(stealChance(steal)) * 100}%`,
@@ -111,7 +111,7 @@ export type SkillSpec<T extends Skill> = DistributedOmit<T, "level" | "progress"
 // so I'd need overloads and maybe got with `any`s for the implementation? No option seems
 // especially good, but I enjoy coming here and spending a whole afternoon trying to remove
 // the type assertions.
-function calculateFromLevel<T extends Skill>(skillSpec: Readonly<SkillSpec<T>>, creatureLevel: number): Skill {
+function calculateFromLevel<T extends Skill>(skillSpec: SkillSpec<T>, creatureLevel: number): Skill {
     const { levelProgression, ...res } = skillSpec;
 
     if (levelProgression === "MAX") {
@@ -132,7 +132,7 @@ function calculateFromLevel<T extends Skill>(skillSpec: Readonly<SkillSpec<T>>, 
     }
 }
 
-function hasInitiative(creature: Readonly<Creature>): boolean {
+function hasInitiative(creature: Creature): boolean {
     return !!Creatures.skills(creature).find(s => s.type === "initiative");
 }
 

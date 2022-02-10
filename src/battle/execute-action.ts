@@ -10,12 +10,12 @@ import BattleAreas from "./battle-area";
 import Inventories from "@/items/inventory";
 import { Log } from "@/log";
 
-function executeAttack(attack: AttackExecution, logger: Readonly<Log>): void {
+function executeAttack(attack: AttackExecution, logger: Log): void {
     attack.target.currentHealth -= attack.damage;
     logger.messages.push(attack.description);
 }
 
-function executeSteal(steal: StealExecution, logger: Readonly<Log>): void {
+function executeSteal(steal: StealExecution, logger: Log): void {
     if (steal.item) {
         Inventories.add(steal.originator.inventory, Inventories.singleItem(steal.item));
     }
@@ -23,14 +23,14 @@ function executeSteal(steal: StealExecution, logger: Readonly<Log>): void {
     logger.messages.push(steal.description);
 }
 
-function executeEscape(escape: Readonly<EscapeExecution>, logger: Readonly<Log>): void {
+function executeEscape(escape: EscapeExecution, logger: Log): void {
     if (escape.success)
         logger.messages.push("You escape the battle!");
     else
         logger.messages.push("You try to escape the battle but have no success!");
 }
 
-function executeMove(move: MoveExecution, logger: Readonly<Log>): void {
+function executeMove(move: MoveExecution, logger: Log): void {
     const creature = move.originator;
     creature.battleStatus = BattleStatuses.match<BattleStatus>(
         creature.battleStatus,
@@ -60,7 +60,7 @@ function executeMove(move: MoveExecution, logger: Readonly<Log>): void {
         logger.messages.push(`${move.originator.name} arrived at ${nextStatus.in.name}`)
 }
 
-function execute(execution: Readonly<Execution>, logger: Readonly<Log>): void {
+function execute(execution: Execution, logger: Log): void {
     return Executions.match(execution,
         (attack) => executeAttack(attack, logger),
         (steal) => executeSteal(steal, logger),

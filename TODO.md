@@ -3,7 +3,7 @@
 * Now there are areas, but an archer just tries to punch everything to death instead of moving to be able to shoot
 * Unlock escape settings at some level
 * Cleanup dead creatures from the store
-* I've used `Readonly<>` everywhere and it's quite insignifficant. Use `DeepReadonly` (any implementation) wherever I can, and where I can't, well, that's because there's mutation in there
+* Use `type-fest`'s `ReadonlyDeep` everywhere I can
 * Use `create-vue`
 * Levelling up skills by adding points manually
 * Showing in what area everyone is in battle

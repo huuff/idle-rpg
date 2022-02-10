@@ -10,14 +10,14 @@ export type BattleArea = {
     readonly coordinates: Coordinates;
 }
 
-function distance(first: Readonly<Coordinates>, second: Readonly<Coordinates>) {
+function distance(first: Coordinates, second: Coordinates) {
     return Math.round(Math.sqrt(
         Math.pow(second.x - first.x, 2)
         + Math.pow(second.y - first.y, 2)
     ))
 }
 
-function possibleMoves(currentArea: Readonly<BattleArea>, allAreas: Readonly<BattleArea[]>): Move[] {
+function possibleMoves(currentArea: BattleArea, allAreas: BattleArea[]): Move[] {
     return allAreas.filter(a => a.name !== currentArea.name)
         .map(a => ({
             type: "move",

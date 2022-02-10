@@ -11,7 +11,7 @@ export type EquipmentInventory<T> = { [ itemName in keyof T ]: EquipmentItem}
 
 // FUTURE: This is just my own `pickBy` implementation that types the result with something other than a `Dictionary`
 // However, this is not generic. See if I am able to do it generically in the future.
-export function equipmentItems(inventory: Readonly<Inventory>): EquipmentInventory<typeof inventory> {
+export function equipmentItems(inventory: Inventory): EquipmentInventory<typeof inventory> {
   return Object.entries(inventory)
     .map<[string, Item]>(item => item)
     .filter((tuple): tuple is [string, EquipmentItem] => isEquipment(tuple[1]))
@@ -21,7 +21,7 @@ export function equipmentItems(inventory: Readonly<Inventory>): EquipmentInvento
     }, {} as EquipmentInventory<typeof inventory>);
 }
 
-export function equipped(inventory: Readonly<Inventory>): EquipmentInventory<typeof inventory> {
+export function equipped(inventory: Inventory): EquipmentInventory<typeof inventory> {
   return Object.entries(equipmentItems(inventory))
       .filter(([_, item]) => item.isEquipped)
       .reduce((acc, [k, v]) => {
@@ -32,15 +32,15 @@ export function equipped(inventory: Readonly<Inventory>): EquipmentInventory<typ
 
 export type Equipment = {[slotName in EquipmentSlot]: EquipmentItem};
 
-export function from(inventory: Readonly<Inventory>): Equipment {
+export function from(inventory: Inventory): Equipment {
   return keyBy(Object.values(equipped(inventory)), "slot");
 }
 
-export function stats(equipment: Readonly<Equipment>): Stats {
+export function stats(equipment: Equipment): Stats {
   return plus(...Object.values(equipment).map(e => e.stats ?? zeroStats));
 }
 
-export function battleActions(equipment: Readonly<Equipment>): BattleAction[] {
+export function battleActions(equipment: Equipment): BattleAction[] {
   return Object.values(equipment).flatMap(e => e.battleActions ?? []);
 
 }

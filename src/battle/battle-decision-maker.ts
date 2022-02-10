@@ -12,15 +12,15 @@ import { chooseRandom } from "@/util/random";
 import Creatures from "@/creatures/creature";
 
 export type BattleDecisionMaker = (
-    originator: Readonly<CreatureWithStatus>, 
-    rivals: Readonly<CreatureWithStatus[]>,
-    areas: Readonly<BattleArea[]>,
+    originator: CreatureWithStatus, 
+    rivals: CreatureWithStatus[],
+    areas: BattleArea[],
     ) => Execution;
 
 export const defaultBattleDecisionMaker: BattleDecisionMaker = (
-    originator: Readonly<CreatureWithStatus>,
-    rivals: Readonly<CreatureWithStatus[]>,
-    areas: Readonly<BattleArea[]>,
+    originator: CreatureWithStatus,
+    rivals: CreatureWithStatus[],
+    areas: BattleArea[],
 ) => {
 
     // If it's moving, can't do anything, keep moving

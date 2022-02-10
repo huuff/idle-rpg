@@ -21,7 +21,7 @@ export interface GameMap {
   readonly connections: LocationConnection[];
 }
 
-export function optionsFrom(map: Readonly<GameMap>, location: Readonly<Settlement>) {
+export function optionsFrom(map: GameMap, location: Settlement) {
   return map.connections
   .filter(conn => conn.locations.some(l => isEqual(l, location)))
   .map(conn => ({

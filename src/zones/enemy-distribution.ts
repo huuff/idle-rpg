@@ -11,7 +11,7 @@ export type EnemySpecification = {
   readonly frequency: number;
 } & EnemyWithLevel;
 
-export function createEnemyFactory(spec: Readonly<EnemySpecification[]>): () => Creature {
+export function createEnemyFactory(spec: EnemySpecification[]): () => Creature {
   const normalizedFrequencies = normalizeFrequencies(
     spec.map(e => [ { 
       species: e.species,

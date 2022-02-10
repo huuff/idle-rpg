@@ -19,9 +19,9 @@ export type RestingStatus = {
 export type MapStatus = TravellingStatus | RestingStatus;
 
 export function matchMapStatus<T>(
-  status: Readonly<MapStatus>,
-  restingFunc: (s: Readonly<RestingStatus>) => T,
-  travellingFunc: (s: Readonly<TravellingStatus>) => T,
+  status: MapStatus,
+  restingFunc: (s: RestingStatus) => T,
+  travellingFunc: (s: TravellingStatus) => T,
 ): T {
   if (status.type === "resting")
     return restingFunc(status);

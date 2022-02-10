@@ -10,16 +10,16 @@ export type Load = {
     readonly max: number;
 }
 
-export function total(equipment: Readonly<Equipment>): number {
+export function total(equipment: Equipment): number {
     return sum(Object.values(equipment).map(e => e.weight));
 }
 
-export function creatureCapacity(creature: Readonly<Creature>): number {
+export function creatureCapacity(creature: Creature): number {
     const strengthContribution = Creatures.stats(creature).strength * LOAD_STRENGTH_MODIFIER;
     return strengthContribution + (Skills.loadBonus(Creatures.skills(creature)) * strengthContribution);
 }
 
-export function proportion(load: Readonly<Load>): number {
+export function proportion(load: Load): number {
     return load.current / load.max;
 }
 

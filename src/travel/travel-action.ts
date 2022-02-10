@@ -24,11 +24,11 @@ export type Depart = {
 export type TravelAction = Arrive | Retreat | Continue | Depart;
 
 export function matchTravelAction<T>(
-  action: Readonly<TravelAction>,
-  arriveFunc: (arrive: Readonly<Arrive>) => T,
-  retreatFunc: (retreat: Readonly<Retreat>) => T,
-  continueFunc: (cont: Readonly<Continue>) => T,
-  departFunc: (depart: Readonly<Depart>) => T,
+  action: TravelAction,
+  arriveFunc: (arrive: Arrive) => T,
+  retreatFunc: (retreat: Retreat) => T,
+  continueFunc: (cont: Continue) => T,
+  departFunc: (depart: Depart) => T,
 ): T {
   if (action.type === "arrive")
     return arriveFunc(action);
@@ -42,7 +42,7 @@ export function matchTravelAction<T>(
     throw new Error(`TravelAction of type ${JSON.stringify(action)} not handled in matchTravelAction`)
 }
 
-function notSupportedError(current: Readonly<MapStatus>, action: Readonly<TravelAction>): Error {
+function notSupportedError(current: MapStatus, action: TravelAction): Error {
   return new Error(`TravelAction '${JSON.stringify(action)}' for status '${current.type}' not handled in resolveNextStatus`);
 }
 
