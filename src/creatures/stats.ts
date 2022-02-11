@@ -1,4 +1,5 @@
 import { omit, sum, mapValues } from "lodash";
+import { ReadonlyDeep } from "type-fest";
 
 export type StatType = "maxHealth" | "strength" | "agility";
 
@@ -17,21 +18,21 @@ export const zeroStats: Stats = {
   agility: 0,
 };
 
-export function areZeroStats(stats: Stats) {
+export function areZeroStats(stats: ReadonlyDeep<Stats>) {
   return stats.maxHealth === 0
         && stats.strength === 0
         && stats.agility === 0
         ;
 }
 
-export function calculateChallenge(stats: Stats) {
+export function calculateChallenge(stats: ReadonlyDeep<Stats>) {
   const nonHealthStats = omit(stats, "maxHealth");
   const healthChallenge = stats.maxHealth ? stats.maxHealth / 10 : 0;
 
   return sum(Object.values(nonHealthStats)) + healthChallenge;
 }
 
-export function plus(...stats: Stats[]) {
+export function plus(...stats: ReadonlyDeep<Stats[]>) {
   return {
     maxHealth: sum(stats.map(s => s.maxHealth ?? 0)),
     strength: sum(stats.map(s => s.strength ?? 0)),
@@ -39,7 +40,7 @@ export function plus(...stats: Stats[]) {
   }
 }
 
-export function times(stats: Stats, factor: number) {
+export function times(stats: ReadonlyDeep<Stats>, factor: number) {
   return {
     maxHealth: (stats.maxHealth ?? 0) * factor,
     strength: (stats.strength ?? 0) * factor,
@@ -52,15 +53,15 @@ export interface LevelableStats {
   readonly levelProgression: Stats,
 }
 
-export function calculateByLevel(stats: LevelableStats, level: number) {
+export function calculateByLevel(stats: ReadonlyDeep<LevelableStats>, level: number) {
   return plus(stats.baseStats, times(stats.levelProgression, level));
 }
 
-export function round(stats: Stats): Stats {
+export function round(stats: ReadonlyDeep<Stats>): Stats {
   return mapValues(stats, v => Math.round(v ?? 0));
 }
 
-export function totalize(stats: Stats): Required<Stats> {
+export function totalize(stats: ReadonlyDeep<Stats>): Required<Stats> {
   return {
     maxHealth: stats.maxHealth ?? 0,
     strength: stats.strength ?? 0,

@@ -9,6 +9,7 @@ import Skills, { Skill, } from "@/skills/skill";
 import ActionSkills, { ActionSkill } from "@/skills/action-skill";
 import { BattleStatus } from "@/battle/battle-status";
 import { useCreaturesStore } from "@/creatures-store";
+import { ReadonlyDeep } from "type-fest";
 
 export const PLAYER_ID = "1";
 export const NO_CREATURE_ID = "0";
@@ -141,7 +142,7 @@ export const noCreature: Creature = {
   currentHealth: 0,
 }
 
-function isNoCreature(creature: Creature): boolean {
+function isNoCreature(creature: ReadonlyDeep<Creature>): boolean {
   return creature.id === "0";
 }
 
