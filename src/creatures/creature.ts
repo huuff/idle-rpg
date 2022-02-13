@@ -31,7 +31,8 @@ function randomId(): string {
   return (Math.round(Math.random() * 1_000_000) + 2).toString();
 }
 
-function stats(creature: Pick<Creature, "species" | "jobClass" | "level" | "inventory">): Required<Stats> {
+function stats(creature: ReadonlyDeep<Pick<Creature, "species" | "jobClass" | "level" | "inventory">>)
+: Required<Stats> {
   return StatsOps.totalize(StatsOps.round(StatsOps.plus(
     StatsOps.calculateByLevel(creature.species, creature.level),
     StatsOps.calculateByLevel(creature.jobClass, creature.level),
@@ -39,7 +40,7 @@ function stats(creature: Pick<Creature, "species" | "jobClass" | "level" | "inve
   )));
 }
 
-function equipment(creature: Pick<Creature, "inventory">): Equipment {
+function equipment(creature: ReadonlyDeep<Pick<Creature, "inventory">>): Equipment {
   return Equipments.from(creature.inventory);
 }
 
