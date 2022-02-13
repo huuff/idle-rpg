@@ -141,6 +141,7 @@
     "slot": "weapon",
     "rarity": 0.92,
     "avgValue": 500,
+    "weight": 3,
     "battleActions": [
       {
         "type": "attack",

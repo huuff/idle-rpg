@@ -11,7 +11,7 @@ export type EquipmentInventory<T> = { [ itemName in keyof T ]: EquipmentItem}
 
 // FUTURE: This is just my own `pickBy` implementation that types the result with something other than a `Dictionary`
 // However, this is not generic. See if I am able to do it generically in the future.
-export function equipmentItems(inventory: Inventory): EquipmentInventory<typeof inventory> {
+export function equipmentItems(inventory: ReadonlyDeep<Inventory>): EquipmentInventory<typeof inventory> {
   return Object.entries(inventory)
     .map<[string, Item]>(item => item)
     .filter((tuple): tuple is [string, EquipmentItem] => isEquipment(tuple[1]))
@@ -21,7 +21,7 @@ export function equipmentItems(inventory: Inventory): EquipmentInventory<typeof 
     }, {} as EquipmentInventory<typeof inventory>);
 }
 
-export function equipped(inventory: Inventory): EquipmentInventory<typeof inventory> {
+export function equipped(inventory: ReadonlyDeep<Inventory>): EquipmentInventory<typeof inventory> {
   return Object.entries(equipmentItems(inventory))
       .filter(([_, item]) => item.isEquipped)
       .reduce((acc, [k, v]) => {
@@ -32,7 +32,7 @@ export function equipped(inventory: Inventory): EquipmentInventory<typeof invent
 
 export type Equipment = {[slotName in EquipmentSlot]: EquipmentItem};
 
-export function from(inventory: Inventory): Equipment {
+export function from(inventory: ReadonlyDeep<Inventory>): Equipment {
   return keyBy(Object.values(equipped(inventory)), "slot");
 }
 

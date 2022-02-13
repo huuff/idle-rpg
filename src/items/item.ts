@@ -22,7 +22,7 @@ export type EquipmentItem = {
   readonly type: "equipment";
   readonly slot: EquipmentSlot;
   readonly stats?: Stats;
-  readonly battleActions?: BattleAction[],
+  readonly battleActions?: readonly BattleAction[],
   isEquipped?: boolean;
 } & BaseItem;
 
