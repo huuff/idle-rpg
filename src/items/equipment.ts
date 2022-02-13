@@ -5,7 +5,7 @@ import { EquipmentItem, EquipmentSlot, isEquipment, Item } from "./item";
 import { pickBy } from "lodash";
 import { Creature } from "@/creatures/creature";
 import { keyBy } from "@/util/util";
-
+import { ReadonlyDeep } from "type-fest";
 import load from "./load";
 
 export type EquipmentInventory<T> = { [ itemName in keyof T ]: EquipmentItem}
@@ -35,11 +35,11 @@ export function from(inventory: Readonly<Inventory>): Equipment {
   return keyBy(Object.values(equipped(inventory)), "slot");
 }
 
-export function stats(equipment: Readonly<Equipment>): Stats {
+export function stats(equipment: ReadonlyDeep<Equipment>): Stats {
   return plus(...Object.values(equipment).map(e => e.stats ?? zeroStats));
 }
 
-export function battleActions(equipment: Readonly<Equipment>): BattleAction[] {
+export function battleActions(equipment: ReadonlyDeep<Equipment>): BattleAction[] {
   return Object.values(equipment).flatMap(e => e.battleActions ?? []);
 
 }

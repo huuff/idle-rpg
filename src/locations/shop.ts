@@ -3,6 +3,7 @@ import Inventories, {
 } from "@/items/inventory";
 import { basicEquipments } from "@/items/basic-equipments";
 import {chooseRandom} from "@/util/random";
+import { ReadonlyDeep } from "type-fest";
 
 export interface Shop {
   inventory: Inventory; 
@@ -13,7 +14,7 @@ export interface ShopSpecification {
   readonly rarity: number;
 }
 
-function createShopInventory({ budget, rarity}: Readonly<ShopSpecification>): Inventory {
+function createShopInventory({ budget, rarity}: ReadonlyDeep<ShopSpecification>): Inventory {
   let budgetLeft = budget;
   const possibleItems = Object.values(basicEquipments).filter(i => i.rarity >= rarity);
   
@@ -26,7 +27,7 @@ function createShopInventory({ budget, rarity}: Readonly<ShopSpecification>): In
   return availableItems;
 }
 
-export function createShop({ budget, rarity }: Readonly<ShopSpecification>) {
+export function createShop({ budget, rarity }: ReadonlyDeep<ShopSpecification>) {
   return {
     inventory: createShopInventory({budget, rarity})
   }
