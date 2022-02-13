@@ -44,30 +44,30 @@ function equipment(creature: ReadonlyDeep<Pick<Creature, "inventory">>): Equipme
   return Equipments.from(creature.inventory);
 }
 
-function healthRatio(creature: Creature): number {
+function healthRatio(creature: ReadonlyDeep<Creature>): number {
   return creature.currentHealth / stats(creature).maxHealth;
 }
 
-function isAlive(creature: Creature): boolean {
+function isAlive(creature: ReadonlyDeep<Creature>): boolean {
   return creature.currentHealth > 0;
 }
 
-function skills(creature: Creature): Skill[] {
+function skills(creature: ReadonlyDeep<Creature>): Skill[] {
   return creature.jobClass.skills?.map(s => Skills.calculateFromLevel(s, creature.level)) ?? []
 }
 
-function load(creature: Creature): Load {
+function load(creature: ReadonlyDeep<Creature>): Load {
   return {
     current: LoadOps.total(equipment(creature)),
     max: LoadOps.creatureCapacity(creature),
   }
 }
 
-function requiredExp(creature: Creature): number {
+function requiredExp(creature: ReadonlyDeep<Creature>): number {
   return creature.level * 100;
 }
 
-function battleActions(creature: Creature): BattleAction[] {
+function battleActions(creature: ReadonlyDeep<Creature>): BattleAction[] {
   const naturalActions = creature.species.naturalActions;
   const equipmentActions = Equipments.battleActions(equipment(creature));
   const classActions = creature.jobClass.battleActions ?? [];
