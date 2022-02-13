@@ -1,17 +1,18 @@
 import { Item, } from "./item";
 import { isArray, cloneDeep } from "lodash";
+import { ReadonlyDeep } from "type-fest";
 
 export type InventoryItem = {
   amount: number;
 } & Item;
 
-export function isInventoryItem(item: Item): item is InventoryItem {
+export function isInventoryItem(item: ReadonlyDeep<Item>): item is InventoryItem {
   return "amount" in item;
 }
 
 export type Inventory = { [itemName: string]: InventoryItem };
 
-export function singleItem(item: Item): InventoryItem {
+export function singleItem(item: ReadonlyDeep<Item>): InventoryItem {
   return { ...item, amount: 1 };
 }
 
@@ -37,7 +38,7 @@ export function add(inventory: Inventory, items: Item | InventoryItem | Inventor
 
 }
 
-export function merge(...inventories: Inventory[]): Inventory {
+export function merge(...inventories: readonly ReadonlyDeep<Inventory>[]): Inventory {
   const result: Inventory = {};
 
   for (const inventory of inventories)
