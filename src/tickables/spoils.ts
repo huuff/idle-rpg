@@ -53,7 +53,7 @@ export class Spoils implements Tickable {
   // Makes it so drops are only dropped according to rarity
   // It throws a random for each item and if it's under the rarity
   // of the item, it's added to the final drops
-  private adjustByRarity(drops: Readonly<Inventory>): Inventory {
+  private adjustByRarity(drops: Inventory): Inventory {
     const resultInventory: Inventory = {};
     for (const item of Object.values(drops)) {
       for (let i = 0; i < item.amount; i++) {

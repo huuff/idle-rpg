@@ -12,7 +12,7 @@ export const useTickStore = defineStore("tick", {
     abortController: undefined,
   }),
   actions: {
-    start(tickable: Readonly<Tickable>) {
+    start(tickable: Tickable) {
       this.abortController = new AbortController();
       this.mainTicker = runTickable(tickable, this.abortController.signal);
     },

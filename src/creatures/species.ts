@@ -1,6 +1,7 @@
 import { areZeroStats, Stats, zeroStats } from "@/creatures/stats";
 import { BattleAction } from "@/battle/battle-action";
 import { InventoryItem } from "@/items/inventory";
+import { ReadonlyDeep } from "type-fest";
 
 export interface Species {
   readonly name: string;
@@ -18,7 +19,7 @@ export const noSpecies: Species = {
   naturalActions: [],
 }
 
-export function isNoSpecies(species: Species) {
+export function isNoSpecies(species: ReadonlyDeep<Species>) {
   return species.name === "None"
     && areZeroStats(species.baseStats)
     && areZeroStats(species.levelProgression)

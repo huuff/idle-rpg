@@ -15,7 +15,7 @@ export function total(equipment: ReadonlyDeep<Equipment>): number {
     return sum(Object.values(equipment).map(e => e.weight));
 }
 
-export function creatureCapacity(creature: Readonly<Creature>): number {
+export function creatureCapacity(creature: Creature): number {
     const strengthContribution = Creatures.stats(creature).strength * LOAD_STRENGTH_MODIFIER;
     return strengthContribution + (Skills.loadBonus(Creatures.skills(creature)) * strengthContribution);
 }

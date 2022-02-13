@@ -2,6 +2,7 @@ import { Stats, zeroStats, areZeroStats } from "./stats"
 import { EquipmentItem } from "@/items/item";
 import { BattleAction } from "@/battle/battle-action";
 import { SkillSpec, Skill } from "@/skills/skill";
+import { ReadonlyDeep } from "type-fest";
 
 export interface JobClass {
   readonly name: string;
@@ -20,7 +21,7 @@ export const noClass: JobClass =  {
   levelProgression: zeroStats,
 }
 
-export function isNoClass(jobClass: JobClass): boolean {
+export function isNoClass(jobClass: ReadonlyDeep<JobClass>): boolean {
   return jobClass.name === "None"
         && areZeroStats(jobClass.baseStats)
         && areZeroStats(jobClass.levelProgression)

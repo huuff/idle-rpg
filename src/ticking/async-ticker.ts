@@ -14,7 +14,7 @@ export interface Tickable {
   onEnd?: () => void;
 }
 
-export async function runTickable(tickable: Readonly<Tickable>, signal?: Readonly<AbortSignal>): Promise<void> {
+export async function runTickable(tickable: Tickable, signal?: AbortSignal): Promise<void> {
   if (tickable.firstTick) {
     tickable.firstTick();
     setTickableScene(tickable);
@@ -46,7 +46,7 @@ export async function runTickable(tickable: Readonly<Tickable>, signal?: Readonl
   tickable.onEnd && tickable.onEnd();
 }
 
-function setTickableScene(tickable: Readonly<Tickable>) {
+function setTickableScene(tickable: Tickable) {
   if (tickable.scene) {
     const sceneStore = useSceneStore();
 

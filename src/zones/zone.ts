@@ -9,19 +9,19 @@ export interface Zone {
   areas: BattleArea[];
 }
 
-function accumulateStagesBySteps(stages: Readonly<Stage[]>): Stage[] {
+function accumulateStagesBySteps(stages: Stage[]): Stage[] {
   return accumulate(
       stages,
       (s) => s.steps + 1, // One for the checkpoint
       (s, accSteps) => ({ ...s, steps: accSteps }));
 }
 
-function totalSteps(zone: Readonly<Zone>): number {
+function totalSteps(zone: Zone): number {
   // Sum all stages' steps and add one for each for a checkpoint
   return sum(zone.stages.map(s => s.steps)) + zone.stages.length
 }
 
-function isComplete(zone: Readonly<Zone>, steps: number): boolean {
+function isComplete(zone: Zone, steps: number): boolean {
   return steps >= totalSteps(zone);
 }
 
@@ -30,7 +30,7 @@ export type StageAndIndex = {
   index: number;
 }
 
-function currentStage(zone: Readonly<Zone>, steps: number): StageAndIndex {
+function currentStage(zone: Zone, steps: number): StageAndIndex {
   const index = accumulateStagesBySteps(zone.stages).findIndex(s => steps < s.steps);
   return {
     stage: zone.stages[index],
@@ -38,7 +38,7 @@ function currentStage(zone: Readonly<Zone>, steps: number): StageAndIndex {
   }
 }
 
-function isCheckpoint(zone: Readonly<Zone>, steps: number): boolean {
+function isCheckpoint(zone: Zone, steps: number): boolean {
   return accumulateStagesBySteps(zone.stages).some(s => s.steps === steps);
 }
 

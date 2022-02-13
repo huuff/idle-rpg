@@ -3,7 +3,6 @@ import BattleAreas, { BattleArea } from "./battle-area";
 import Skills from "@/skills/skill";
 import { chooseRandom } from "@/util/random";
 import { last } from "lodash";
-import { useCreaturesStore } from "@/creatures-store";
 
 export type StillStatus = {
     readonly type: "still";
@@ -19,9 +18,9 @@ export type MovingStatus = {
 
 export type BattleStatus = StillStatus | MovingStatus;
 
-function match<T>(status: Readonly<BattleStatus>,
-    onStill: (still: Readonly<StillStatus>) => T,
-    onMoving: (moving: Readonly<MovingStatus>) => T,
+function match<T>(status: BattleStatus,
+    onStill: (still: StillStatus) => T,
+    onMoving: (moving: MovingStatus) => T,
 ) {
     if (status.type === "still") {
         return onStill(status);
@@ -39,11 +38,11 @@ export type CreatureWithStatus = {
 export type StillCreature = Creature & { status: StillStatus };
 export type MovingCreature = Creature & { status: MovingStatus };
 
-function isMoving(status: Readonly<BattleStatus>): status is MovingStatus {
+function isMoving(status: BattleStatus): status is MovingStatus {
     return status.type === "moving";
 }
 
-function isStill(status: Readonly<BattleStatus>): status is StillStatus {
+function isStill(status: BattleStatus): status is StillStatus {
     return status.type === "still";
 }
 
@@ -61,7 +60,7 @@ function assertHasStatus(creature: Creature): creature is CreatureWithStatus {
 }
 
 
-function setupTeams(goodGuys: Readonly<Creature[]>, badGuys: Readonly<Creature[]>, areas: Readonly<BattleArea[]>): void {
+function setupTeams(goodGuys: Creature[], badGuys: Creature[], areas: BattleArea[]): void {
     // First, choose a random area to be the frontguard
     const front = chooseRandom(areas);
 
@@ -94,7 +93,7 @@ function setupTeams(goodGuys: Readonly<Creature[]>, badGuys: Readonly<Creature[]
         .forEach(c => setup(c, { type: "still", in: secondRearguard }))
 }
 
-function currentLocation(creature: Readonly<CreatureWithStatus>): BattleArea {
+function currentLocation(creature: CreatureWithStatus): BattleArea {
     return match(creature.battleStatus,
         (still) => still.in,
         (moving) => moving.from
