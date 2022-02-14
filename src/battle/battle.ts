@@ -31,7 +31,7 @@ export class Battle implements Tickable {
   constructor(
     goodGuys: Creature[],
     badGuys: Creature[],
-    private readonly areas: BattleArea[],
+    private readonly areas: readonly BattleArea[],
   ) {
     this.log.clear();
     renameCreatures(badGuys);

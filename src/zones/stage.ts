@@ -1,6 +1,6 @@
 import { EnemySpecification } from "./enemy-distribution";
 
 export interface Stage {
-  steps: number;
-  enemies: EnemySpecification[];
+  readonly steps: number;
+  readonly enemies: readonly EnemySpecification[];
 }

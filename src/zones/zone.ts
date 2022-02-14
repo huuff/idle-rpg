@@ -2,14 +2,15 @@ import { Stage, } from "./stage";
 import { accumulate } from "@/util/accumulate";
 import { sum } from "lodash";
 import { BattleArea } from "@/battle/battle-area";
+import { ReadonlyDeep } from "type-fest";
 
 export interface Zone {
-  name: string;
-  stages: Stage[];
-  areas: BattleArea[];
+  readonly name: string;
+  readonly stages: readonly Stage[];
+  readonly areas: readonly BattleArea[];
 }
 
-function accumulateStagesBySteps(stages: Stage[]): Stage[] {
+function accumulateStagesBySteps(stages: readonly ReadonlyDeep<Stage>[]): Stage[] {
   return accumulate(
       stages,
       (s) => s.steps + 1, // One for the checkpoint
@@ -26,8 +27,8 @@ function isComplete(zone: Zone, steps: number): boolean {
 }
 
 export type StageAndIndex = {
-  stage: Stage;
-  index: number;
+  readonly stage: Stage;
+  readonly index: number;
 }
 
 function currentStage(zone: Zone, steps: number): StageAndIndex {

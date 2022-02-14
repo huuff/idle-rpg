@@ -17,7 +17,7 @@ function distance(first: Coordinates, second: Coordinates) {
     ))
 }
 
-function possibleMoves(currentArea: BattleArea, allAreas: BattleArea[]): Move[] {
+function possibleMoves(currentArea: BattleArea, allAreas: readonly BattleArea[]): Move[] {
     return allAreas.filter(a => a.name !== currentArea.name)
         .map(a => ({
             type: "move",

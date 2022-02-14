@@ -1,5 +1,6 @@
 import { Stats } from "@/creatures/stats";
 import { BattleAction } from "@/battle/battle-action";
+import { ReadonlyDeep } from "type-fest";
 
 export type BaseItem = {
   readonly name: string;
@@ -28,7 +29,7 @@ export type EquipmentItem = {
 
 export type Item = StuffItem | EquipmentItem;
 
-export function isEquipment(item: Readonly<Item>): item is EquipmentItem {
+export function isEquipment(item: ReadonlyDeep<Item>): item is EquipmentItem {
   return item.type === "equipment";
 }
 

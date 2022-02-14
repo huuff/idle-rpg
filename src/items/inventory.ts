@@ -17,15 +17,17 @@ export function singleItem(item: ReadonlyDeep<Item>): InventoryItem {
 }
 
 // TODO: Can I make this readonly in any way?
+// update: got some immutability at the price of type casts.
+// `isArray` doesn't seem to correctly narrow `items` type to non-array
 export function add(inventory: Inventory, item: Item): void;
 export function add(inventory: Inventory, item: InventoryItem): void;
-export function add(inventory: Inventory, items: InventoryItem[]): void;
-export function add(inventory: Inventory, items: Item | InventoryItem | InventoryItem[]): void {
+export function add(inventory: Inventory, items: readonly InventoryItem[]): void;
+export function add(inventory: Inventory, items: Item | InventoryItem | readonly InventoryItem[]): void {
   const itemsToAdd = isArray(items)
     ? items
-    : isInventoryItem(items)
+    : isInventoryItem(items as Item)
       ? [items]
-      : [singleItem(items)]
+      : [singleItem(items as Item)]
     ;
 
     for (const item of itemsToAdd) {

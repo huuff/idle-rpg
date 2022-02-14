@@ -1,6 +1,7 @@
 import { Zone } from "@/zones/zone";
 import { Settlement } from "./settlements";
 import { isEqual} from "lodash";
+import { ReadonlyDeep } from "type-fest";
 
 export interface MapLocation {
   readonly name: string;
@@ -21,7 +22,7 @@ export interface GameMap {
   readonly connections: LocationConnection[];
 }
 
-export function optionsFrom(map: GameMap, location: Settlement) {
+export function optionsFrom(map: ReadonlyDeep<GameMap>, location: ReadonlyDeep<Settlement>) {
   return map.connections
   .filter(conn => conn.locations.some(l => isEqual(l, location)))
   .map(conn => ({

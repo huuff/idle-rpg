@@ -4,6 +4,7 @@ import {EnemySpecification} from "./enemy-distribution";
 import { basicSpecies, isBasicSpeciesName } from "@/creatures/basic-species";
 import {mapValues} from "lodash";
 import { Stage } from "@/zones/stage";
+import { BattleArea } from "@/battle/battle-area";
 
 type ZoneName = keyof typeof basicZonesJson;
 
@@ -15,6 +16,7 @@ type JsonStage = {
 type JsonZone = {
   name: string;
   stages: JsonStage[];
+  areas: BattleArea[];
 }
 
 type JsonType = {[zoneName in ZoneName]: JsonZone};

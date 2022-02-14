@@ -60,7 +60,7 @@ function assertHasStatus(creature: Creature): creature is CreatureWithStatus {
 }
 
 
-function setupTeams(goodGuys: Creature[], badGuys: Creature[], areas: BattleArea[]): void {
+function setupTeams(goodGuys: Creature[], badGuys: Creature[], areas: readonly BattleArea[]): void {
     // First, choose a random area to be the frontguard
     const front = chooseRandom(areas);
 

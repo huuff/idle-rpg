@@ -14,13 +14,13 @@ import Creatures from "@/creatures/creature";
 export type BattleDecisionMaker = (
     originator: CreatureWithStatus, 
     rivals: CreatureWithStatus[],
-    areas: BattleArea[],
+    areas: readonly BattleArea[],
     ) => Execution;
 
 export const defaultBattleDecisionMaker: BattleDecisionMaker = (
     originator: CreatureWithStatus,
     rivals: CreatureWithStatus[],
-    areas: BattleArea[],
+    areas: readonly BattleArea[],
 ) => {
 
     // If it's moving, can't do anything, keep moving

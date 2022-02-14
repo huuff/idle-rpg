@@ -7,8 +7,8 @@ export interface Species {
   readonly name: string;
   readonly baseStats: Stats;
   readonly levelProgression: Stats;
-  readonly naturalActions:  BattleAction[];
-  readonly naturalItems?: InventoryItem[];
+  readonly naturalActions:  readonly BattleAction[];
+  readonly naturalItems?: readonly InventoryItem[];
 }
 
 // Null object
